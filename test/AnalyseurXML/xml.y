@@ -41,8 +41,14 @@ declaration
  ;
 
 xml_element
- : start empty_or_content 
+ : start attribut_opt empty_or_content 
  ;
+
+attribut_opt
+ : attribut_opt IDENT EQ STRING
+ | /*empty*/
+ ;
+ 
 start
  : START		
  | NSSTART	
@@ -66,7 +72,7 @@ int main(int argc, char **argv)
 {
   int err;
 
-  yydebug = 1; // pour enlever l'affichage de l'éxécution du parser, commenter cette ligne
+  //yydebug = 1; // pour enlever l'affichage de l'éxécution du parser, commenter cette ligne
 
   err = yyparse();
   if (err != 0) printf("Parse ended with %d error(s)\n", err);
