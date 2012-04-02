@@ -1,0 +1,8 @@
+<!ATTLIST element_nonexistant
+        method CDATA #FIXED "POST"
+>
+
+<!ELEMENT element_doublon ANY>
+<!ELEMENT element_doublon EMPTY>
+
+<!ELEMENT element_container_faux (element_nonexistant)+>
