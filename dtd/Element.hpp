@@ -1,3 +1,6 @@
+#ifndef DTD_ELEMENT_H
+#define DTD_ELEMENT_H
+
 #include<string>
 #include<list>
 #include<iostream>
@@ -51,3 +54,5 @@ namespace dtd {
 			std::string name;
 	};
 }
+
+#endif
