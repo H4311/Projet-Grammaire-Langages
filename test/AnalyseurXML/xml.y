@@ -41,8 +41,14 @@ declaration
  ;
 
 xml_element
- : start empty_or_content 
+ : start attribut_opt empty_or_content 
  ;
+
+attribut_opt
+ : attribut_opt IDENT EQ STRING
+ | /*empty*/
+ ;
+ 
 start
  : START		
  | NSSTART	
@@ -62,7 +68,7 @@ content_opt
  ;
 %%
 
-int main(int argc, char **argv)
+int parseXML()
 {
   int err;
 
@@ -72,6 +78,11 @@ int main(int argc, char **argv)
   if (err != 0) printf("Parse ended with %d error(s)\n", err);
   	else  printf("Parse ended with success\n", err);
   return 0;
+}
+
+int main(int argc, char **argv)
+{
+  return parseXML();
 }
 int yywrap(void)
 {

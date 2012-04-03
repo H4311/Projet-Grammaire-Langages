@@ -3,7 +3,7 @@
 %{
 #include <ctype.h>
 #include <string.h>
-#include "yy.tab.h"
+#include "dtd.tab.h"
 
 static char* skipSpace(char *s) {
   char *buf;
@@ -18,7 +18,7 @@ static char* skipSpace(char *s) {
 }
   
 /* affecte la valeur de la chaine de caractère et renvoie le token */
-#define stringreturn(tokenval) yylval.s=skipSpace(yytext);return(tokenval)
+#define stringreturn(tokenval) dtdlval.s=skipSpace(yytext);return(tokenval)
 
 %}
 %option noyywrap
@@ -62,9 +62,9 @@ any "ANY"
 <INITIAL>{ws}		            { /* skip */}
 <INITIAL>{element}            { BEGIN(INSIDE); return ELEMENT; }
 <INITIAL>{attlist}            { BEGIN(INSIDE); return ATTLIST; }
-<INSIDE>{close}               { BEGIN(INITIAL); return CLOSE; }
+<INSIDE>{ws}?{close}          { BEGIN(INITIAL); return CLOSE; }
 <INSIDE>{openpar}             { return OPENPAR; }
-<INSIDE>{closepar}{ws}?       { return CLOSEPAR; }
+<INSIDE>{closepar}		      { return CLOSEPAR; }
 <INSIDE>{comma}{ws}?          { return COMMA; }
 <INSIDE>{pipe}{ws}?           { return PIPE; }
 <INSIDE>{declaration}         { stringreturn(DECLARATION); }

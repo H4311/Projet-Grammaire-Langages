@@ -1,3 +1,5 @@
+
+
 <!ELEMENT rapport (titre, auteur+, resume, chapitre+) >
 <!ELEMENT titre (#PCDATA)>
 <!ELEMENT auteur (nom, prenom)>
@@ -24,4 +26,9 @@
 <!ELEMENT form (#PCDATA)>
 <!ATTLIST form
         method CDATA #FIXED "POST"
+	type (type1|type2 | type3) "type2"
 >
+
+<!ELEMENT container ANY>
+<!ELEMENT spec ((a, p)*, form+, (a|p)?, ((form| a)+ | p?))>
+<!ELEMENT spec2 (((((a, p)*, form+, (a|p)?, ((form| a)+ | p?)))))>
