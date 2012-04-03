@@ -9,6 +9,7 @@ namespace Xml {
 
 	public:
 		virtual ostream& toString(ostream& stream) = 0;
+		virtual ~Content() {}
 	};
 }
 

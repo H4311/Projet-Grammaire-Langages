@@ -32,6 +32,7 @@ ostream& Element::toString(ostream& stream)
 	{
 		Content* currentContent = *it;
 		currentContent->toString(current);
+		current << endl;
 	}
 	current << "</";
 	if (!name.first.empty())
