@@ -28,7 +28,7 @@ static char* word(char *s)
 {
   char *buf;
   int i, k;
-  for (k = 0; isspace(s[k]) || s[k] == '<'; k++) ;
+  for (k = 0; isspace(s[k]) || s[k] == '<' || s[k] == '/' ; k++) ;
   for (i = k; s[i] && ! isspace(s[i]); i++) ;
   buf = (char *) malloc((i - k + 1) * sizeof(char));
   strncpy(buf, &s[k], i - k);
@@ -40,7 +40,7 @@ static char * nameSpace(char *s)  /* extrait la première partie, l'espace de no
 {
    char *name;
    int i,k;
-   for (k = 0; isspace(s[k]) || s[k] == '<'; k++) ;
+   for (k = 0; isspace(s[k]) || s[k] == '<' || s[k] == '/' ; k++) ;
    for (i=k;s[i]!=':';i++) ;
    name = (char*) malloc((i-k+1)*sizeof(char));
    strncpy(name,s+k,i-k);
