@@ -1,5 +1,5 @@
 analyseXML
-lex.yy.c
+lex.*.c
 *.output
 *.tab.c
 *.tab.h

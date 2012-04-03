@@ -68,8 +68,7 @@ content_opt
  ;
 %%
 
-int main(int argc, char **argv)
-{
+int parse() {
   int err;
 
   yydebug = 1; // pour enlever l'affichage de l'éxécution du parser, commenter cette ligne
@@ -78,6 +77,11 @@ int main(int argc, char **argv)
   if (err != 0) printf("Parse ended with %d error(s)\n", err);
   	else  printf("Parse ended with success\n", err);
   return 0;
+}
+
+int main(int argc, char **argv)
+{
+  return parse();
 }
 int yywrap(void)
 {
