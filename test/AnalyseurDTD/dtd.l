@@ -62,9 +62,9 @@ any "ANY"
 <INITIAL>{ws}		            { /* skip */}
 <INITIAL>{element}            { BEGIN(INSIDE); return ELEMENT; }
 <INITIAL>{attlist}            { BEGIN(INSIDE); return ATTLIST; }
-<INSIDE>{close}               { BEGIN(INITIAL); return CLOSE; }
+<INSIDE>{ws}?{close}          { BEGIN(INITIAL); return CLOSE; }
 <INSIDE>{openpar}             { return OPENPAR; }
-<INSIDE>{closepar}{ws}?       { return CLOSEPAR; }
+<INSIDE>{closepar}		      { return CLOSEPAR; }
 <INSIDE>{comma}{ws}?          { return COMMA; }
 <INSIDE>{pipe}{ws}?           { return PIPE; }
 <INSIDE>{declaration}         { stringreturn(DECLARATION); }
