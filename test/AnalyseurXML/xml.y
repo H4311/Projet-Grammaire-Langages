@@ -68,7 +68,8 @@ content_opt
  ;
 %%
 
-int parse() {
+int parseXML()
+{
   int err;
 
   yydebug = 1; // pour enlever l'affichage de l'éxécution du parser, commenter cette ligne
@@ -81,7 +82,7 @@ int parse() {
 
 int main(int argc, char **argv)
 {
-  return parse();
+  return parseXML();
 }
 int yywrap(void)
 {
