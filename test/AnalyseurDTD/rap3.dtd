@@ -1,4 +1,4 @@
-<!ELEMENT rapport (titre, auteur+, resume, chapitre+)>
+<!ELEMENT rapport (titre, auteur+, resume, chapitre+) >
 <!ELEMENT titre (#PCDATA)>
 <!ELEMENT auteur (nom, prenom)>
 <!ELEMENT nom (#PCDATA)>
@@ -11,5 +11,17 @@
 <!ELEMENT section (p)+>
 <!ATTLIST section
         titre CDATA #IMPLIED
+	auteur CDATA #IMPLIED
 >
 <!ELEMENT p (#PCDATA)>
+<!ELEMENT a (#PCDATA)>
+<!ELEMENT p (#PCDATA | a)* >
+<!ELEMENT a (#PCDATA)>
+<!ATTLIST a
+        target (blank|self) #IMPLIED
+	href CDATA #REQUIRED
+>
+<!ELEMENT form (#PCDATA)>
+<!ATTLIST form
+        method CDATA #FIXED "POST"
+>
