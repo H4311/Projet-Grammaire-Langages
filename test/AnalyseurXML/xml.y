@@ -4,7 +4,7 @@ using namespace std;
 #include "commun.h"
 
 int xmlwrap(void);
-void yyerror(char *msg);
+void xmlerror(char *msg);
 int yylex(void);
 
 %}
@@ -80,7 +80,7 @@ int parseXML(const char* file)
 
   if (xmlin != NULL)
   {
-    err = yyparse();
+    err = xmlparse();
     if (err != 0) printf("Parse ended with %d error(s)\n", err);
         else  printf("Parse ended with success\n", err);
     fclose(xmlin);
@@ -94,7 +94,7 @@ int xmlwrap(void)
   return 1;
 }
 
-void yyerror(char *msg)
+void xmlerror(char *msg)
 {
   fprintf(stderr, "%s\n", msg);
 }

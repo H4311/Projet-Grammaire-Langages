@@ -65,20 +65,20 @@ any "ANY"{ws}?
 <INITIAL>{attlist}            { BEGIN(INSIDE); return ATTLIST; }
 <INSIDE>{ws}?{close}          { BEGIN(INITIAL); return CLOSE; }
 <INSIDE>{openpar}             { return OPENPAR; }
-<INSIDE>{colon}             	{ return COLON; }
-<INSIDE>{closepar}		{ return CLOSEPAR; }
+<INSIDE>{colon}               { return COLON; }
+<INSIDE>{closepar}{ws}?		  { return CLOSEPAR; }
 <INSIDE>{comma}{ws}?          { return COMMA; }
 <INSIDE>{pipe}{ws}?           { return PIPE; }
 <INSIDE>{declaration}         { stringreturn(DECLARATION); }
 <INSIDE>{fixed}               { return FIXED; }
-<INSIDE>{ast}                 { return AST ; }
+<INSIDE>{ast}{ws}?            { return AST ; }
 <INSIDE>{qmark}               { return QMARK ; }
-<INSIDE>{plus}                { return PLUS ; }
+<INSIDE>{plus}{ws}?           { return PLUS ; }
 <INSIDE>{empty}               { return EMPTY; }
-<INSIDE>{any}                 { return ANY; }
-<INSIDE>{pcdata}              { return PCDATA; }
+<INSIDE>{any}{ws}?            { return ANY; }
+<INSIDE>{pcdata}{ws}?         { return PCDATA; }
 <INSIDE>{cdata}               { return CDATA; }
-<INSIDE>{string}              { stringreturn(STRING); }
+<INSIDE>{string}{ws}?              { stringreturn(STRING); }
 <INSIDE>{tokentype}{ws}?      { stringreturn(TOKENTYPE); }
 <INSIDE>{name}{ws}?           { stringreturn(IDENT); }
 {comment}		               { /* skip comments stringreturn(COMMENT); */ }
