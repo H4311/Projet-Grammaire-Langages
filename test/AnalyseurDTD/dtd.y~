@@ -1,8 +1,7 @@
 %{
-#include <stdio.h>
+
 void yyerror(char *msg);
-int dtdwrap(void);
-void dtdrestart(FILE *);
+int yywrap(void);
 int yylex(void);
 %}
 
@@ -34,7 +33,7 @@ att_definition_opt
 ;
 
 attribute
-: ident att_type default_declaration
+: IDENT att_type default_declaration
 ;
 
 att_type
@@ -57,7 +56,7 @@ enum_list
 ;
 
 item_enum
-: ident
+: IDENT
 ;
 
 default_declaration
@@ -126,29 +125,22 @@ list_mixed
 
 %%
 
-extern FILE *dtdin;
-
-int parseDTD(const char * file)
-{
+int parseDTD() {
   int err;
-  
-  dtdin = fopen(file, "r");
-  dtdrestart(dtdin);
 
-  //yydebug = 1; // pour désactiver l'affichage de l'exécution du parser LALR, commenter cette ligne
+  yydebug = 1; // pour désactiver l'affichage de l'exécution du parser LALR, commenter cette ligne
 
-  if (dtdin != NULL)
-  {
-    err = yyparse();
-    if (err != 0) printf("Parse ended with %d error(s)\n", err);
+  err = yyparse();
+  if (err != 0) printf("Parse ended with %d error(s)\n", err);
         else  printf("Parse ended with success\n", err);
-    fclose(dtdin);
-  }
-  
   return 0;
 }
 
-int dtdwrap(void)
+int main(int argc, char **argv)
+{
+  return parseDTD();
+}
+int yywrap(void)
 {
   return 1;
 }

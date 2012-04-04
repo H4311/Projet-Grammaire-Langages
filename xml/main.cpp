@@ -1,30 +1,37 @@
 # include <iostream>
 using namespace std;
 
-# include "Element.h"
-# include "Data.h"
-# include "Comment.h"
-# include "SpecialElement.h"
+# include "Element.hpp"
+# include "Data.hpp"
+# include "Comment.hpp"
+# include "ProcessingInstruction.hpp"
+# include "Document.hpp"
 
 int main(int argc, char**argv)
 {
-	Xml::Element* root = new Xml::Element("body");
+	xml::Document doc;
 
-	Xml::SpecialElement* se = new Xml::SpecialElement("xml");
+	xml::ProcessingInstruction* se = new xml::ProcessingInstruction("xml");
 	se->AddAttribute("version", "2.0");
-	root->AddChild(se);
+	doc.setXmlProlog(se);	
 
-	Xml::Element* element = new Xml::Element("a");
+	xml::Element* root = new xml::Element("html");
+	doc.setRoot(root);
+
+	xml::Element* body = new xml::Element("body");
+	root->AddChild(body);
+
+	xml::Element* element = new xml::Element("a");
 	element->AddAttribute("alt", "Google.fr");
 	element->AddAttribute("href", "http://www.google.fr/");
-	Xml::Data* data = new Xml::Data("Mon petit lien");
+	xml::Data* data = new xml::Data("Mon petit lien");
 	element->AddChild(data);
 
-	Xml::Comment* comment = new Xml::Comment("Ceci est un commentaire.");
+	xml::Comment* comment = new xml::Comment("Ceci est un commentaire.");
 	element->AddChild(comment);
 
-	root->AddChild(element);
-	cout << root << endl;
-	delete root;
+	body->AddChild(element);
+
+	cout << doc << endl;
 }
 

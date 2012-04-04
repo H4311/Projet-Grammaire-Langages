@@ -1,0 +1,773 @@
+Grammaire
+
+    0 $accept: main $end
+
+    1 main: dtd_list_opt
+
+    2 ident: IDENT
+    3      | IDENT COLON IDENT
+
+    4 dtd_list_opt: dtd_list_opt ATTLIST ident att_definition_opt CLOSE
+    5             | dtd_list_opt ELEMENT ident contentspec CLOSE
+    6             | /* vide */
+
+    7 att_definition_opt: att_definition_opt attribute
+    8                   | /* vide */
+
+    9 attribute: ident att_type default_declaration
+
+   10 att_type: CDATA
+   11         | TOKENTYPE
+   12         | enumerate
+
+   13 enumerate: OPENPAR enum_list_plus CLOSEPAR
+
+   14 enum_list_plus: enum_list PIPE item_enum
+
+   15 enum_list: item_enum
+   16          | enum_list PIPE item_enum
+
+   17 item_enum: ident
+
+   18 default_declaration: DECLARATION
+   19                    | STRING
+   20                    | FIXED STRING
+
+   21 contentspec: EMPTY
+   22            | ANY
+   23            | children
+   24            | mixed
+
+   25 card_opt: QMARK
+   26         | AST
+   27         | PLUS
+   28         | /* vide */
+
+   29 children: choice card_opt
+   30         | seq card_opt
+
+   31 cp: children
+   32   | IDENT card_opt
+
+   33 choice: OPENPAR cp list_choice CLOSEPAR
+
+   34 list_choice: list_choice PIPE cp
+   35            | PIPE cp
+
+   36 seq: OPENPAR cp list_seq_opt CLOSEPAR
+
+   37 list_seq_opt: list_seq_opt COMMA cp
+   38             | /* vide */
+
+   39 mixed: OPENPAR PCDATA list_mixed CLOSEPAR AST
+   40      | OPENPAR PCDATA CLOSEPAR ast_opt
+
+   41 ast_opt: AST
+   42        | /* vide */
+
+   43 list_mixed: list_mixed PIPE IDENT
+   44           | PIPE IDENT
+
+
+Terminaux, suivis des règles où ils apparaissent
+
+$end (0) 0
+error (256)
+ELEMENT (258) 5
+ATTLIST (259) 4
+CLOSE (260) 4 5
+OPENPAR (261) 13 33 36 39 40
+CLOSEPAR (262) 13 33 36 39 40
+COMMA (263) 37
+PIPE (264) 14 16 34 35 43 44
+FIXED (265) 20
+EMPTY (266) 21
+ANY (267) 22
+PCDATA (268) 39 40
+AST (269) 26 39 41
+QMARK (270) 25
+PLUS (271) 27
+CDATA (272) 10
+COLON (273) 3
+IDENT (274) 2 3 32 43 44
+TOKENTYPE (275) 11
+DECLARATION (276) 18
+STRING (277) 19 20
+
+
+Non-terminaux, suivis des règles où ils apparaissent
+
+$accept (23)
+    à gauche: 0
+main (24)
+    à gauche: 1, à droite: 0
+ident (25)
+    à gauche: 2 3, à droite: 4 5 9 17
+dtd_list_opt (26)
+    à gauche: 4 5 6, à droite: 1 4 5
+att_definition_opt (27)
+    à gauche: 7 8, à droite: 4 7
+attribute (28)
+    à gauche: 9, à droite: 7
+att_type (29)
+    à gauche: 10 11 12, à droite: 9
+enumerate (30)
+    à gauche: 13, à droite: 12
+enum_list_plus (31)
+    à gauche: 14, à droite: 13
+enum_list (32)
+    à gauche: 15 16, à droite: 14 16
+item_enum (33)
+    à gauche: 17, à droite: 14 15 16
+default_declaration (34)
+    à gauche: 18 19 20, à droite: 9
+contentspec (35)
+    à gauche: 21 22 23 24, à droite: 5
+card_opt (36)
+    à gauche: 25 26 27 28, à droite: 29 30 32
+children (37)
+    à gauche: 29 30, à droite: 23 31
+cp (38)
+    à gauche: 31 32, à droite: 33 34 35 36 37
+choice (39)
+    à gauche: 33, à droite: 29
+list_choice (40)
+    à gauche: 34 35, à droite: 33 34
+seq (41)
+    à gauche: 36, à droite: 30
+list_seq_opt (42)
+    à gauche: 37 38, à droite: 36 37
+mixed (43)
+    à gauche: 39 40, à droite: 24
+ast_opt (44)
+    à gauche: 41 42, à droite: 40
+list_mixed (45)
+    à gauche: 43 44, à droite: 39 43
+
+
+état 0
+
+    0 $accept: . main $end
+
+    $défaut  réduction par utilisation de la règle 6 (dtd_list_opt)
+
+    main          aller à l'état 1
+    dtd_list_opt  aller à l'état 2
+
+
+état 1
+
+    0 $accept: main . $end
+
+    $end  décalage et aller à l'état 3
+
+
+état 2
+
+    1 main: dtd_list_opt .
+    4 dtd_list_opt: dtd_list_opt . ATTLIST ident att_definition_opt CLOSE
+    5             | dtd_list_opt . ELEMENT ident contentspec CLOSE
+
+    ELEMENT  décalage et aller à l'état 4
+    ATTLIST  décalage et aller à l'état 5
+
+    $défaut  réduction par utilisation de la règle 1 (main)
+
+
+état 3
+
+    0 $accept: main $end .
+
+    $défaut  accepter
+
+
+état 4
+
+    5 dtd_list_opt: dtd_list_opt ELEMENT . ident contentspec CLOSE
+
+    IDENT  décalage et aller à l'état 6
+
+    ident  aller à l'état 7
+
+
+état 5
+
+    4 dtd_list_opt: dtd_list_opt ATTLIST . ident att_definition_opt CLOSE
+
+    IDENT  décalage et aller à l'état 6
+
+    ident  aller à l'état 8
+
+
+état 6
+
+    2 ident: IDENT .
+    3      | IDENT . COLON IDENT
+
+    COLON  décalage et aller à l'état 9
+
+    $défaut  réduction par utilisation de la règle 2 (ident)
+
+
+état 7
+
+    5 dtd_list_opt: dtd_list_opt ELEMENT ident . contentspec CLOSE
+
+    OPENPAR  décalage et aller à l'état 10
+    EMPTY    décalage et aller à l'état 11
+    ANY      décalage et aller à l'état 12
+
+    contentspec  aller à l'état 13
+    children     aller à l'état 14
+    choice       aller à l'état 15
+    seq          aller à l'état 16
+    mixed        aller à l'état 17
+
+
+état 8
+
+    4 dtd_list_opt: dtd_list_opt ATTLIST ident . att_definition_opt CLOSE
+
+    $défaut  réduction par utilisation de la règle 8 (att_definition_opt)
+
+    att_definition_opt  aller à l'état 18
+
+
+état 9
+
+    3 ident: IDENT COLON . IDENT
+
+    IDENT  décalage et aller à l'état 19
+
+
+état 10
+
+   33 choice: OPENPAR . cp list_choice CLOSEPAR
+   36 seq: OPENPAR . cp list_seq_opt CLOSEPAR
+   39 mixed: OPENPAR . PCDATA list_mixed CLOSEPAR AST
+   40      | OPENPAR . PCDATA CLOSEPAR ast_opt
+
+    OPENPAR  décalage et aller à l'état 20
+    PCDATA   décalage et aller à l'état 21
+    IDENT    décalage et aller à l'état 22
+
+    children  aller à l'état 23
+    cp        aller à l'état 24
+    choice    aller à l'état 15
+    seq       aller à l'état 16
+
+
+état 11
+
+   21 contentspec: EMPTY .
+
+    $défaut  réduction par utilisation de la règle 21 (contentspec)
+
+
+état 12
+
+   22 contentspec: ANY .
+
+    $défaut  réduction par utilisation de la règle 22 (contentspec)
+
+
+état 13
+
+    5 dtd_list_opt: dtd_list_opt ELEMENT ident contentspec . CLOSE
+
+    CLOSE  décalage et aller à l'état 25
+
+
+état 14
+
+   23 contentspec: children .
+
+    $défaut  réduction par utilisation de la règle 23 (contentspec)
+
+
+état 15
+
+   29 children: choice . card_opt
+
+    AST    décalage et aller à l'état 26
+    QMARK  décalage et aller à l'état 27
+    PLUS   décalage et aller à l'état 28
+
+    $défaut  réduction par utilisation de la règle 28 (card_opt)
+
+    card_opt  aller à l'état 29
+
+
+état 16
+
+   30 children: seq . card_opt
+
+    AST    décalage et aller à l'état 26
+    QMARK  décalage et aller à l'état 27
+    PLUS   décalage et aller à l'état 28
+
+    $défaut  réduction par utilisation de la règle 28 (card_opt)
+
+    card_opt  aller à l'état 30
+
+
+état 17
+
+   24 contentspec: mixed .
+
+    $défaut  réduction par utilisation de la règle 24 (contentspec)
+
+
+état 18
+
+    4 dtd_list_opt: dtd_list_opt ATTLIST ident att_definition_opt . CLOSE
+    7 att_definition_opt: att_definition_opt . attribute
+
+    CLOSE  décalage et aller à l'état 31
+    IDENT  décalage et aller à l'état 6
+
+    ident      aller à l'état 32
+    attribute  aller à l'état 33
+
+
+état 19
+
+    3 ident: IDENT COLON IDENT .
+
+    $défaut  réduction par utilisation de la règle 3 (ident)
+
+
+état 20
+
+   33 choice: OPENPAR . cp list_choice CLOSEPAR
+   36 seq: OPENPAR . cp list_seq_opt CLOSEPAR
+
+    OPENPAR  décalage et aller à l'état 20
+    IDENT    décalage et aller à l'état 22
+
+    children  aller à l'état 23
+    cp        aller à l'état 24
+    choice    aller à l'état 15
+    seq       aller à l'état 16
+
+
+état 21
+
+   39 mixed: OPENPAR PCDATA . list_mixed CLOSEPAR AST
+   40      | OPENPAR PCDATA . CLOSEPAR ast_opt
+
+    CLOSEPAR  décalage et aller à l'état 34
+    PIPE      décalage et aller à l'état 35
+
+    list_mixed  aller à l'état 36
+
+
+état 22
+
+   32 cp: IDENT . card_opt
+
+    AST    décalage et aller à l'état 26
+    QMARK  décalage et aller à l'état 27
+    PLUS   décalage et aller à l'état 28
+
+    $défaut  réduction par utilisation de la règle 28 (card_opt)
+
+    card_opt  aller à l'état 37
+
+
+état 23
+
+   31 cp: children .
+
+    $défaut  réduction par utilisation de la règle 31 (cp)
+
+
+état 24
+
+   33 choice: OPENPAR cp . list_choice CLOSEPAR
+   36 seq: OPENPAR cp . list_seq_opt CLOSEPAR
+
+    PIPE  décalage et aller à l'état 38
+
+    $défaut  réduction par utilisation de la règle 38 (list_seq_opt)
+
+    list_choice   aller à l'état 39
+    list_seq_opt  aller à l'état 40
+
+
+état 25
+
+    5 dtd_list_opt: dtd_list_opt ELEMENT ident contentspec CLOSE .
+
+    $défaut  réduction par utilisation de la règle 5 (dtd_list_opt)
+
+
+état 26
+
+   26 card_opt: AST .
+
+    $défaut  réduction par utilisation de la règle 26 (card_opt)
+
+
+état 27
+
+   25 card_opt: QMARK .
+
+    $défaut  réduction par utilisation de la règle 25 (card_opt)
+
+
+état 28
+
+   27 card_opt: PLUS .
+
+    $défaut  réduction par utilisation de la règle 27 (card_opt)
+
+
+état 29
+
+   29 children: choice card_opt .
+
+    $défaut  réduction par utilisation de la règle 29 (children)
+
+
+état 30
+
+   30 children: seq card_opt .
+
+    $défaut  réduction par utilisation de la règle 30 (children)
+
+
+état 31
+
+    4 dtd_list_opt: dtd_list_opt ATTLIST ident att_definition_opt CLOSE .
+
+    $défaut  réduction par utilisation de la règle 4 (dtd_list_opt)
+
+
+état 32
+
+    9 attribute: ident . att_type default_declaration
+
+    OPENPAR    décalage et aller à l'état 41
+    CDATA      décalage et aller à l'état 42
+    TOKENTYPE  décalage et aller à l'état 43
+
+    att_type   aller à l'état 44
+    enumerate  aller à l'état 45
+
+
+état 33
+
+    7 att_definition_opt: att_definition_opt attribute .
+
+    $défaut  réduction par utilisation de la règle 7 (att_definition_opt)
+
+
+état 34
+
+   40 mixed: OPENPAR PCDATA CLOSEPAR . ast_opt
+
+    AST  décalage et aller à l'état 46
+
+    $défaut  réduction par utilisation de la règle 42 (ast_opt)
+
+    ast_opt  aller à l'état 47
+
+
+état 35
+
+   44 list_mixed: PIPE . IDENT
+
+    IDENT  décalage et aller à l'état 48
+
+
+état 36
+
+   39 mixed: OPENPAR PCDATA list_mixed . CLOSEPAR AST
+   43 list_mixed: list_mixed . PIPE IDENT
+
+    CLOSEPAR  décalage et aller à l'état 49
+    PIPE      décalage et aller à l'état 50
+
+
+état 37
+
+   32 cp: IDENT card_opt .
+
+    $défaut  réduction par utilisation de la règle 32 (cp)
+
+
+état 38
+
+   35 list_choice: PIPE . cp
+
+    OPENPAR  décalage et aller à l'état 20
+    IDENT    décalage et aller à l'état 22
+
+    children  aller à l'état 23
+    cp        aller à l'état 51
+    choice    aller à l'état 15
+    seq       aller à l'état 16
+
+
+état 39
+
+   33 choice: OPENPAR cp list_choice . CLOSEPAR
+   34 list_choice: list_choice . PIPE cp
+
+    CLOSEPAR  décalage et aller à l'état 52
+    PIPE      décalage et aller à l'état 53
+
+
+état 40
+
+   36 seq: OPENPAR cp list_seq_opt . CLOSEPAR
+   37 list_seq_opt: list_seq_opt . COMMA cp
+
+    CLOSEPAR  décalage et aller à l'état 54
+    COMMA     décalage et aller à l'état 55
+
+
+état 41
+
+   13 enumerate: OPENPAR . enum_list_plus CLOSEPAR
+
+    IDENT  décalage et aller à l'état 6
+
+    ident           aller à l'état 56
+    enum_list_plus  aller à l'état 57
+    enum_list       aller à l'état 58
+    item_enum       aller à l'état 59
+
+
+état 42
+
+   10 att_type: CDATA .
+
+    $défaut  réduction par utilisation de la règle 10 (att_type)
+
+
+état 43
+
+   11 att_type: TOKENTYPE .
+
+    $défaut  réduction par utilisation de la règle 11 (att_type)
+
+
+état 44
+
+    9 attribute: ident att_type . default_declaration
+
+    FIXED        décalage et aller à l'état 60
+    DECLARATION  décalage et aller à l'état 61
+    STRING       décalage et aller à l'état 62
+
+    default_declaration  aller à l'état 63
+
+
+état 45
+
+   12 att_type: enumerate .
+
+    $défaut  réduction par utilisation de la règle 12 (att_type)
+
+
+état 46
+
+   41 ast_opt: AST .
+
+    $défaut  réduction par utilisation de la règle 41 (ast_opt)
+
+
+état 47
+
+   40 mixed: OPENPAR PCDATA CLOSEPAR ast_opt .
+
+    $défaut  réduction par utilisation de la règle 40 (mixed)
+
+
+état 48
+
+   44 list_mixed: PIPE IDENT .
+
+    $défaut  réduction par utilisation de la règle 44 (list_mixed)
+
+
+état 49
+
+   39 mixed: OPENPAR PCDATA list_mixed CLOSEPAR . AST
+
+    AST  décalage et aller à l'état 64
+
+
+état 50
+
+   43 list_mixed: list_mixed PIPE . IDENT
+
+    IDENT  décalage et aller à l'état 65
+
+
+état 51
+
+   35 list_choice: PIPE cp .
+
+    $défaut  réduction par utilisation de la règle 35 (list_choice)
+
+
+état 52
+
+   33 choice: OPENPAR cp list_choice CLOSEPAR .
+
+    $défaut  réduction par utilisation de la règle 33 (choice)
+
+
+état 53
+
+   34 list_choice: list_choice PIPE . cp
+
+    OPENPAR  décalage et aller à l'état 20
+    IDENT    décalage et aller à l'état 22
+
+    children  aller à l'état 23
+    cp        aller à l'état 66
+    choice    aller à l'état 15
+    seq       aller à l'état 16
+
+
+état 54
+
+   36 seq: OPENPAR cp list_seq_opt CLOSEPAR .
+
+    $défaut  réduction par utilisation de la règle 36 (seq)
+
+
+état 55
+
+   37 list_seq_opt: list_seq_opt COMMA . cp
+
+    OPENPAR  décalage et aller à l'état 20
+    IDENT    décalage et aller à l'état 22
+
+    children  aller à l'état 23
+    cp        aller à l'état 67
+    choice    aller à l'état 15
+    seq       aller à l'état 16
+
+
+état 56
+
+   17 item_enum: ident .
+
+    $défaut  réduction par utilisation de la règle 17 (item_enum)
+
+
+état 57
+
+   13 enumerate: OPENPAR enum_list_plus . CLOSEPAR
+
+    CLOSEPAR  décalage et aller à l'état 68
+
+
+état 58
+
+   14 enum_list_plus: enum_list . PIPE item_enum
+   16 enum_list: enum_list . PIPE item_enum
+
+    PIPE  décalage et aller à l'état 69
+
+
+état 59
+
+   15 enum_list: item_enum .
+
+    $défaut  réduction par utilisation de la règle 15 (enum_list)
+
+
+état 60
+
+   20 default_declaration: FIXED . STRING
+
+    STRING  décalage et aller à l'état 70
+
+
+état 61
+
+   18 default_declaration: DECLARATION .
+
+    $défaut  réduction par utilisation de la règle 18 (default_declaration)
+
+
+état 62
+
+   19 default_declaration: STRING .
+
+    $défaut  réduction par utilisation de la règle 19 (default_declaration)
+
+
+état 63
+
+    9 attribute: ident att_type default_declaration .
+
+    $défaut  réduction par utilisation de la règle 9 (attribute)
+
+
+état 64
+
+   39 mixed: OPENPAR PCDATA list_mixed CLOSEPAR AST .
+
+    $défaut  réduction par utilisation de la règle 39 (mixed)
+
+
+état 65
+
+   43 list_mixed: list_mixed PIPE IDENT .
+
+    $défaut  réduction par utilisation de la règle 43 (list_mixed)
+
+
+état 66
+
+   34 list_choice: list_choice PIPE cp .
+
+    $défaut  réduction par utilisation de la règle 34 (list_choice)
+
+
+état 67
+
+   37 list_seq_opt: list_seq_opt COMMA cp .
+
+    $défaut  réduction par utilisation de la règle 37 (list_seq_opt)
+
+
+état 68
+
+   13 enumerate: OPENPAR enum_list_plus CLOSEPAR .
+
+    $défaut  réduction par utilisation de la règle 13 (enumerate)
+
+
+état 69
+
+   14 enum_list_plus: enum_list PIPE . item_enum
+   16 enum_list: enum_list PIPE . item_enum
+
+    IDENT  décalage et aller à l'état 6
+
+    ident      aller à l'état 56
+    item_enum  aller à l'état 71
+
+
+état 70
+
+   20 default_declaration: FIXED STRING .
+
+    $défaut  réduction par utilisation de la règle 20 (default_declaration)
+
+
+état 71
+
+   14 enum_list_plus: enum_list PIPE item_enum .
+   16 enum_list: enum_list PIPE item_enum .
+
+    PIPE      réduction par utilisation de la règle 16 (enum_list)
+    $défaut  réduction par utilisation de la règle 14 (enum_list_plus)

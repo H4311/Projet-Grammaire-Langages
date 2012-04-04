@@ -1,13 +1,13 @@
 #ifndef __XML_EMPTY_ELEMENT_H__
 #define __XML_EMPTY_ELEMENT_H__
 
-# include "Content.h"
+# include "Content.hpp"
 # include "commun.h"
 
 # include <string>
 using namespace std;
 
-namespace Xml {
+namespace xml {
 	class EmptyElement : public Content {
 	protected:
 		AttList attributes;
@@ -22,7 +22,7 @@ namespace Xml {
 		EmptyElement(string _name);
 
 		void AddAttribute(string _name, string _value);
-		virtual ostream& toString(ostream& stream);
+		virtual ostream& toString(ostream& stream, int depth);
 	};
 }
 
