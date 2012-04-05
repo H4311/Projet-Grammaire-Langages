@@ -1,10 +1,11 @@
-# include "Data.h"
+# include "Data.hpp"
 
-namespace Xml
+namespace xml
 {
 
-ostream& Data::toString(ostream& stream)
+ostream& Data::toString(ostream& stream, int depth)
 {
+	printTabs(stream, depth);
 	stream << data;
 	return stream; 
 }

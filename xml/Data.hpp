@@ -1,11 +1,11 @@
 #ifndef __XML_DATA_H__
 #define __XML_DATA_H__
 
-# include "Content.h"
+# include "Content.hpp"
 # include <string>
 using namespace std;
 
-namespace Xml {
+namespace xml {
 	class Data : public Content {
 	private:
 		string data;
@@ -13,7 +13,7 @@ namespace Xml {
 	public:
 		Data(string _d) : data(_d) { /* empty */ } 
 		
-		virtual ostream& toString(ostream& stream);
+		virtual ostream& toString(ostream& stream, int depth);
 	};
 }
 #endif

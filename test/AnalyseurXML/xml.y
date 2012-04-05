@@ -68,21 +68,31 @@ content_opt
  ;
 %%
 
-int parseXML()
+extern FILE *xmlin;
+
+int parseXML(char* file)
 {
   int err;
+  
+  xmlin = fopen(file, "r");
 
-  yydebug = 1; // pour enlever l'affichage de l'éxécution du parser, commenter cette ligne
+  yydebug = 1; // pour désactiver l'affichage de l'exécution du parser LALR, commenter cette ligne
 
-  err = yyparse();
-  if (err != 0) printf("Parse ended with %d error(s)\n", err);
-  	else  printf("Parse ended with success\n", err);
+  if (xmlin != NULL)
+  {
+    err = yyparse();
+    if (err != 0) printf("Parse ended with %d error(s)\n", err);
+        else  printf("Parse ended with success\n", err);
+    fclose(xmlin);
+  }
+  
   return 0;
 }
 
 int main(int argc, char **argv)
 {
-  return parseXML();
+  char * file = "rap1.xml";
+  return parseXML(file);
 }
 int yywrap(void)
 {
