@@ -65,8 +65,7 @@ any "ANY"{ws}?
 <INITIAL>{attlist}            { BEGIN(INSIDE); return ATTLIST; }
 <INSIDE>{ws}?{close}          { BEGIN(INITIAL); return CLOSE; }
 <INSIDE>{openpar}             { return OPENPAR; }
-<INSIDE>{colon}             	{ return COLON; }
-<INSIDE>{closepar}		{ return CLOSEPAR; }
+<INSIDE>{closepar}		      { return CLOSEPAR; }
 <INSIDE>{comma}{ws}?          { return COMMA; }
 <INSIDE>{pipe}{ws}?           { return PIPE; }
 <INSIDE>{declaration}         { stringreturn(DECLARATION); }

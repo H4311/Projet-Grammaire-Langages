@@ -1,0 +1,5 @@
+analyseDTD
+lex.*.c
+*.output
+*.tab.c
+*.tab.h
