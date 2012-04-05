@@ -41,9 +41,7 @@ int main() {
 	
 	std::cout << d << std::endl;
 	
-	//delete e;
-	//delete a;
-	//delete d;
+	delete d;
 	
 	return 0;
 	

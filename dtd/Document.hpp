@@ -21,6 +21,7 @@ namespace dtd {
 	
 	class Declaration {
 		public:
+			virtual ~Declaration();
 			virtual std::ostream& put(std::ostream& out) = 0;
 	};
 }

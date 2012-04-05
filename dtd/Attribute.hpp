@@ -13,6 +13,7 @@ namespace dtd {
 	class Attribute : public Declaration {
 		public:
 			Attribute(std::string _name = "", std::list<std::string> _attDefs = NULL);
+			virtual ~Attribute();
 			virtual std::ostream& put(std::ostream& out);
 
 		protected:

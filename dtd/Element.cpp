@@ -7,7 +7,7 @@ std::ostream& operator<<(std::ostream& out, dtd::ContentSpec* c) {
 namespace dtd {
 
 	Element::Element(std::string _name, ContentSpec* _content)
-		: name(_name), content(_content) {};
+		: name(_name), content(_content) {}
 	
 	Element::~Element() {
 		delete content;
@@ -18,11 +18,15 @@ namespace dtd {
 		return out;
 	}
 	
+	ContentSpec::~ContentSpec() {}
+	
 	Children::Children(char _card)
-		: card(_card) {};
+		: card(_card) {}
+	
+	Children::~Children() {}
 		
 	ChoiceSeq::ChoiceSeq(std::list<Children*> _children)
-		: children(_children) {};
+		: children(_children) {}
 	
 	ChoiceSeq::~ChoiceSeq() {
 		std::list<Children*>::iterator it;
@@ -47,21 +51,27 @@ namespace dtd {
 	}
 	
 	Choice::Choice(std::list<Children*> _children)
-		: ChoiceSeq(_children) {};
+		: ChoiceSeq(_children) {}
+	
+	Choice::~Choice() {}
 	
 	char Choice::getSep() {
 		return '|';
 	}
 		
 	Seq::Seq(std::list<Children*> _children)
-		: ChoiceSeq(_children) {};
+		: ChoiceSeq(_children) {}
+	
+	Seq::~Seq() {}
 	
 	char Seq::getSep() {
 		return ',';
 	}
 	
 	Name::Name(std::string _name)
-		: name(_name) {};
+		: name(_name) {}
+	
+	Name::~Name() {}
 	
 	std::ostream& Name::put(std::ostream& out) {
 		out << name << card;
