@@ -33,7 +33,7 @@ att_definition_opt
 ;
 
 attribute
-: ident att_type default_declaration
+: IDENT att_type default_declaration
 ;
 
 att_type
@@ -56,7 +56,7 @@ enum_list
 ;
 
 item_enum
-: ident
+: IDENT
 ;
 
 default_declaration
