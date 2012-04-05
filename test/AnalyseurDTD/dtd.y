@@ -1,7 +1,8 @@
 %{
-
+#include <stdio.h>
 void yyerror(char *msg);
-int yywrap(void);
+int dtdwrap(void);
+void dtdrestart(FILE *);
 int yylex(void);
 %}
 
@@ -127,13 +128,14 @@ list_mixed
 
 extern FILE *dtdin;
 
-int parseDTD(char * file)
+int parseDTD(const char * file)
 {
   int err;
   
   dtdin = fopen(file, "r");
+  dtdrestart(dtdin);
 
-  yydebug = 1; // pour désactiver l'affichage de l'exécution du parser LALR, commenter cette ligne
+  //yydebug = 1; // pour désactiver l'affichage de l'exécution du parser LALR, commenter cette ligne
 
   if (dtdin != NULL)
   {
@@ -146,12 +148,7 @@ int parseDTD(char * file)
   return 0;
 }
 
-int main(int argc, char **argv)
-{
-  char* file = "rap1.dtd";
-  return parseDTD(file);
-}
-int yywrap(void)
+int dtdwrap(void)
 {
   return 1;
 }
