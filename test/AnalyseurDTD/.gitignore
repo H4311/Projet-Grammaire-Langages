@@ -1,4 +1,5 @@
 analyseDTD
+*~
 lex.*.c
 *.output
 *.tab.c
