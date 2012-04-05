@@ -14,7 +14,7 @@ namespace xml {
 		string endCharacter();
 
 	public:
-		ProcessingInstruction(string _name) : EmptyElement(_name) { /* empty */ }
+		ProcessingInstruction(ElementName _name) : EmptyElement(_name) { /* empty */ }
 	};
 }
 #endif

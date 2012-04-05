@@ -17,11 +17,16 @@ xml::Document::~Document()
 
 ostream& xml::Document::toString(ostream& stream)
 {
-	stream << doctype << "\n";
+	if (!doctype.empty())
+	{
+		stream << "<!DOCTYPE " << doctype << ">\n";
+	}
+
 	if (xmlProlog)
 	{
 		stream << xmlProlog << "\n";	
 	}
+
 	if (root)
 	{
 		stream << root;

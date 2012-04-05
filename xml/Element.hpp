@@ -16,8 +16,7 @@ namespace xml {
 		Element(Element& copied);
 		Element& operator= (Element& affected);
 	public:
-		Element(string _ns, string _name) : EmptyElement(_ns, _name) { } // empty 
-		Element(string _name) : EmptyElement(_name) { } // empty
+		Element(Attribut _a) : EmptyElement(_a) { /* empty */ }
 		~Element();
 
 		void AddChild(Content* _content);

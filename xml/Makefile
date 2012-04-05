@@ -1,7 +1,7 @@
 CXX = g++
 LD = g++
 EXE = xml
-CXXFLAGS = -g
+CXXFLAGS = -g -Wall
 LDFLAGS =
 
 all: xml

@@ -18,10 +18,9 @@ namespace xml {
 		virtual string endCharacter(); 
 		virtual string beginCharacter();
 	public:
-		EmptyElement(string _ns, string _name); 
-		EmptyElement(string _name);
+		EmptyElement(ElementName _en) : name(_en) { /* empty */ }
 
-		void AddAttribute(string _name, string _value);
+		void AddAttribute(Attribut _a);
 		virtual ostream& toString(ostream& stream, int depth);
 	};
 }
