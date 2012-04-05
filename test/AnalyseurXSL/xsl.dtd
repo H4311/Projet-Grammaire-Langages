@@ -13,11 +13,3 @@
 <!ELEMENT value-of EMPTY>
 <!ATTLIST value-of select CDATA #REQUIRED>
 
-<!ELEMENT html (head, body)>
-<!ELEMENT body (h1 | h2 | h3 | h4 | a | small | div)+>
-<!ATTLIST body
-	class CDATA #IMPLIED
-	style CDATA #IMPLIED
->
-
-<!ATTLIST a data-dismiss CDATA #IMPLIED>
