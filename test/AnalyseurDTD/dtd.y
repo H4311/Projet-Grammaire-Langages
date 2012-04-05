@@ -139,7 +139,7 @@ int parseDTD(const char * file)
 
   if (dtdin != NULL)
   {
-    err = yyparse();
+    err = dtdparse();
     if (err != 0) printf("Parse ended with %d error(s)\n", err);
         else  printf("Parse ended with success\n", err);
     fclose(dtdin);
