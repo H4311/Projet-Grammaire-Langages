@@ -47,8 +47,8 @@ cdata "CDATA"{ws}?
 qmark "?"
 ast "*"
 plus "+"
-empty "EMPTY"
-any "ANY"
+empty "EMPTY"{ws}?
+any "ANY"{ws}?
 
 %s INSIDE
 
