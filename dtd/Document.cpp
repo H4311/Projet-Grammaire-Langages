@@ -11,13 +11,16 @@ std::ostream& operator<<(std::ostream& out, dtd::Declaration* d) {
 
 namespace dtd {
 
+	// --------------------------------------------------------- Class Document
+
 	Document::Document(std::list<Declaration*> _declarations)
-		: declarations(_declarations) {};
+		: declarations(_declarations) {}
 	
 	Document::~Document() {
 		std::list<Declaration*>::iterator it;
-		for(it=declarations.begin(); it!=declarations.end(); it++)
+		for(it=declarations.begin(); it!=declarations.end(); it++) {
 			delete *it;
+		}
 	}
 	
 	std::ostream& Document::put(std::ostream& out) {
@@ -27,5 +30,9 @@ namespace dtd {
 		}
 		return out;
 	}
+	
+	// ------------------------------------------------------ Class Declaration
+	
+	Declaration::~Declaration() {}
 
 }

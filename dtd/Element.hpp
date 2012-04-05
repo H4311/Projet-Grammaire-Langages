@@ -23,12 +23,14 @@ namespace dtd {
 	
 	class ContentSpec {
 		public:
+			virtual ~ContentSpec();
 			virtual std::ostream& put(std::ostream& out) = 0;
 	};
 	
 	class Children : public ContentSpec {
 		public:
 			Children(char _card = 0);
+			virtual ~Children();
 			virtual std::ostream& put(std::ostream& out) = 0;
 		
 		protected:
@@ -49,18 +51,21 @@ namespace dtd {
 	class Choice : public ChoiceSeq {
 		public:
 			Choice(std::list<Children*> _children = NULL);
+			virtual ~Choice();
 			char getSep();
 	};
 	
 	class Seq : public ChoiceSeq {
 		public:
 			Seq(std::list<Children*> _children = NULL);
+			virtual ~Seq();
 			char getSep();
 	};
 	
 	class Name : public Children {
 		public:
 			Name(std::string _name = "");
+			virtual ~Name();
 			std::ostream& put(std::ostream& out);
 		
 		protected:

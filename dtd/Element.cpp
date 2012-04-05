@@ -6,8 +6,10 @@ std::ostream& operator<<(std::ostream& out, dtd::ContentSpec* c) {
 
 namespace dtd {
 
+	// ---------------------------------------------------------- Class Element
+
 	Element::Element(std::string _name, ContentSpec* _content)
-		: name(_name), content(_content) {};
+		: name(_name), content(_content) {}
 	
 	Element::~Element() {
 		delete content;
@@ -18,11 +20,21 @@ namespace dtd {
 		return out;
 	}
 	
+	// ------------------------------------------------------ Class ContentSpec
+	
+	ContentSpec::~ContentSpec() {}
+	
+	// --------------------------------------------------------- Class Children
+	
 	Children::Children(char _card)
-		: card(_card) {};
+		: card(_card) {}
+	
+	Children::~Children() {}
+	
+	// -------------------------------------------------------- Class ChoiceSeq
 		
 	ChoiceSeq::ChoiceSeq(std::list<Children*> _children)
-		: children(_children) {};
+		: children(_children) {}
 	
 	ChoiceSeq::~ChoiceSeq() {
 		std::list<Children*>::iterator it;
@@ -46,22 +58,34 @@ namespace dtd {
     	return out;
 	}
 	
+	// ----------------------------------------------------------- Class Choice
+	
 	Choice::Choice(std::list<Children*> _children)
-		: ChoiceSeq(_children) {};
+		: ChoiceSeq(_children) {}
+	
+	Choice::~Choice() {}
 	
 	char Choice::getSep() {
 		return '|';
 	}
+	
+	// -------------------------------------------------------------- Class Seq
 		
 	Seq::Seq(std::list<Children*> _children)
-		: ChoiceSeq(_children) {};
+		: ChoiceSeq(_children) {}
+	
+	Seq::~Seq() {}
 	
 	char Seq::getSep() {
 		return ',';
 	}
 	
+	// ------------------------------------------------------------- Class Name
+	
 	Name::Name(std::string _name)
-		: name(_name) {};
+		: name(_name) {}
+	
+	Name::~Name() {}
 	
 	std::ostream& Name::put(std::ostream& out) {
 		out << name << card;
