@@ -11,6 +11,8 @@ std::ostream& operator<<(std::ostream& out, dtd::Declaration* d) {
 
 namespace dtd {
 
+	// --------------------------------------------------------- Class Document
+
 	Document::Document(std::list<Declaration*> _declarations)
 		: declarations(_declarations) {}
 	
@@ -28,6 +30,8 @@ namespace dtd {
 		}
 		return out;
 	}
+	
+	// ------------------------------------------------------ Class Declaration
 	
 	Declaration::~Declaration() {}
 

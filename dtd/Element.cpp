@@ -6,6 +6,8 @@ std::ostream& operator<<(std::ostream& out, dtd::ContentSpec* c) {
 
 namespace dtd {
 
+	// ---------------------------------------------------------- Class Element
+
 	Element::Element(std::string _name, ContentSpec* _content)
 		: name(_name), content(_content) {}
 	
@@ -18,12 +20,18 @@ namespace dtd {
 		return out;
 	}
 	
+	// ------------------------------------------------------ Class ContentSpec
+	
 	ContentSpec::~ContentSpec() {}
+	
+	// --------------------------------------------------------- Class Children
 	
 	Children::Children(char _card)
 		: card(_card) {}
 	
 	Children::~Children() {}
+	
+	// -------------------------------------------------------- Class ChoiceSeq
 		
 	ChoiceSeq::ChoiceSeq(std::list<Children*> _children)
 		: children(_children) {}
@@ -50,6 +58,8 @@ namespace dtd {
     	return out;
 	}
 	
+	// ----------------------------------------------------------- Class Choice
+	
 	Choice::Choice(std::list<Children*> _children)
 		: ChoiceSeq(_children) {}
 	
@@ -58,6 +68,8 @@ namespace dtd {
 	char Choice::getSep() {
 		return '|';
 	}
+	
+	// -------------------------------------------------------------- Class Seq
 		
 	Seq::Seq(std::list<Children*> _children)
 		: ChoiceSeq(_children) {}
@@ -67,6 +79,8 @@ namespace dtd {
 	char Seq::getSep() {
 		return ',';
 	}
+	
+	// ------------------------------------------------------------- Class Name
 	
 	Name::Name(std::string _name)
 		: name(_name) {}
