@@ -3,8 +3,8 @@
 using namespace std;
 #include "commun.h"
 
-int yywrap(void);
-void yyerror(char *msg);
+int xmlwrap(void);
+void xmlerror(char *msg);
 int yylex(void);
 
 %}
@@ -70,17 +70,17 @@ content_opt
 
 extern FILE *xmlin;
 
-int parseXML(char* file)
+int parseXML(const char* file)
 {
   int err;
   
   xmlin = fopen(file, "r");
 
-  yydebug = 1; // pour désactiver l'affichage de l'exécution du parser LALR, commenter cette ligne
+  //yydebug = 1; // pour désactiver l'affichage de l'exécution du parser LALR, commenter cette ligne
 
   if (xmlin != NULL)
   {
-    err = yyparse();
+    err = xmlparse();
     if (err != 0) printf("Parse ended with %d error(s)\n", err);
         else  printf("Parse ended with success\n", err);
     fclose(xmlin);
@@ -89,17 +89,12 @@ int parseXML(char* file)
   return 0;
 }
 
-int main(int argc, char **argv)
-{
-  char * file = "rap1.xml";
-  return parseXML(file);
-}
-int yywrap(void)
+int xmlwrap(void)
 {
   return 1;
 }
 
-void yyerror(char *msg)
+void xmlerror(char *msg)
 {
   fprintf(stderr, "%s\n", msg);
 }

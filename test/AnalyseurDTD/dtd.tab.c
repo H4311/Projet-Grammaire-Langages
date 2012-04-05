@@ -78,14 +78,15 @@
 /* Line 189 of yacc.c  */
 #line 1 "dtd.y"
 
-
+#include <stdio.h>
 void yyerror(char *msg);
-int yywrap(void);
+int dtdwrap(void);
+void dtdrestart(FILE *);
 int yylex(void);
 
 
 /* Line 189 of yacc.c  */
-#line 89 "dtd.tab.c"
+#line 90 "dtd.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -142,14 +143,14 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 8 "dtd.y"
+#line 9 "dtd.y"
  
    char *s; 
    
 
 
 /* Line 214 of yacc.c  */
-#line 153 "dtd.tab.c"
+#line 154 "dtd.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -161,7 +162,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 165 "dtd.tab.c"
+#line 166 "dtd.tab.c"
 
 #ifdef short
 # undef short
@@ -460,11 +461,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    16,    16,    20,    21,    25,    26,    27,    31,    32,
-      36,    40,    41,    42,    46,    50,    54,    55,    59,    63,
-      64,    65,    70,    71,    72,    73,    77,    78,    79,    80,
-      84,    85,    89,    90,    94,    98,    99,   103,   107,   108,
-     112,   113,   117,   118,   122,   123
+       0,    17,    17,    21,    22,    26,    27,    28,    32,    33,
+      37,    41,    42,    43,    47,    51,    55,    56,    60,    64,
+      65,    66,    71,    72,    73,    74,    78,    79,    80,    81,
+      85,    86,    90,    91,    95,    99,   100,   104,   108,   109,
+     113,   114,   118,   119,   123,   124
 };
 #endif
 
@@ -1411,7 +1412,7 @@ yyreduce:
       
 
 /* Line 1455 of yacc.c  */
-#line 1415 "dtd.tab.c"
+#line 1416 "dtd.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1623,22 +1624,23 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 126 "dtd.y"
+#line 127 "dtd.y"
 
 
 extern FILE *dtdin;
 
-int parseDTD(char * file)
+int parseDTD(const char * file)
 {
   int err;
   
   dtdin = fopen(file, "r");
+  dtdrestart(dtdin);
 
-  yydebug = 1; // pour désactiver l'affichage de l'exécution du parser LALR, commenter cette ligne
+  //yydebug = 1; // pour désactiver l'affichage de l'exécution du parser LALR, commenter cette ligne
 
   if (dtdin != NULL)
   {
-    err = yyparse();
+    err = dtdparse();
     if (err != 0) printf("Parse ended with %d error(s)\n", err);
         else  printf("Parse ended with success\n", err);
     fclose(dtdin);
@@ -1647,12 +1649,7 @@ int parseDTD(char * file)
   return 0;
 }
 
-int main(int argc, char **argv)
-{
-  char* file = "rap1.dtd";
-  return parseDTD(file);
-}
-int yywrap(void)
+int dtdwrap(void)
 {
   return 1;
 }
