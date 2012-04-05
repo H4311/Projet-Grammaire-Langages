@@ -10,19 +10,12 @@ namespace dtd {
 
 	class Attribute {
 		public:
-			virtual std::ostream& put(std::ostream& out);
-
-		protected:
-			std::string name;
-			std::list<AttDef*> attDefs;
-	};
-	
-	class AttDef {
-		public:
+			Attribute(std::string _name = "", std::list<std::string> _attDefs = NULL);
 			std::ostream& put(std::ostream& out);
 
 		protected:
 			std::string name;
+			std::list<std::string> attDefs;
 	};
 }
 
