@@ -1,12 +1,12 @@
 #ifndef __XML_ELEMENT_H__
 #define __XML_ELEMENT_H__
 
-# include "EmptyElement.h"
+# include "EmptyElement.hpp"
 
 # include <list>
 using namespace std;
 
-namespace Xml {
+namespace xml {
 	class Element : public EmptyElement {
 	private:
 		list<Content*> childs;
@@ -21,7 +21,7 @@ namespace Xml {
 		~Element();
 
 		void AddChild(Content* _content);
-		virtual ostream& toString(ostream& stream);
+		virtual ostream& toString(ostream& stream, int depth);
 	};
 }
 #endif

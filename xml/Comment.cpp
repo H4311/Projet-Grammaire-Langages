@@ -1,10 +1,11 @@
-# include "Comment.h"
+# include "Comment.hpp"
 
-namespace Xml
+namespace xml
 {
 
-ostream& Comment::toString(ostream& stream)
+ostream& Comment::toString(ostream& stream, int depth)
 {
+	printTabs(stream, depth);
 	stream << "<!-- " << comment << " -->";
 	return stream; 
 }

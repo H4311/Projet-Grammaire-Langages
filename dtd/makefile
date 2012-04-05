@@ -1,13 +1,13 @@
 CXX = g++
 LD = g++
-EXE = xml
+EXE = dtd
 CXXFLAGS = -g
 LDFLAGS =
 
 all: xml
 	
 
-xml: Data.o Element.o EmptyElement.o Content.o main.o Comment.o ProcessingInstruction.o Document.o
+xml: Document.o Attribute.o Element.o TestPut.o
 	$(LD) -o $(EXE) $^ $(LDFLAGS)
 
 %.o: %.cpp %.hpp

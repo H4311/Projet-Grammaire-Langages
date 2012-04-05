@@ -1,7 +1,8 @@
 %{
-
+#include <stdio.h>
 void yyerror(char *msg);
-int yywrap(void);
+int dtdwrap(void);
+void dtdrestart(FILE *);
 int yylex(void);
 %}
 
@@ -9,16 +10,21 @@ int yylex(void);
    char *s; 
    }
 
-%token ELEMENT ATTLIST CLOSE OPENPAR CLOSEPAR COMMA PIPE FIXED EMPTY ANY PCDATA AST QMARK PLUS CDATA
+%token ELEMENT ATTLIST CLOSE OPENPAR CLOSEPAR COMMA PIPE FIXED EMPTY ANY PCDATA AST QMARK PLUS CDATA COLON
 %token <s> IDENT TOKENTYPE DECLARATION STRING
 %%
 
 main: dtd_list_opt 
     ;
 
+ident
+: IDENT
+| IDENT COLON IDENT
+;
+
 dtd_list_opt
-: dtd_list_opt ATTLIST IDENT att_definition_opt CLOSE
-| dtd_list_opt ELEMENT IDENT contentspec CLOSE            
+: dtd_list_opt ATTLIST ident att_definition_opt CLOSE
+| dtd_list_opt ELEMENT ident contentspec CLOSE            
 | /* empty */                     
 ;
 
@@ -28,7 +34,7 @@ att_definition_opt
 ;
 
 attribute
-: IDENT att_type default_declaration
+: ident att_type default_declaration
 ;
 
 att_type
@@ -51,7 +57,7 @@ enum_list
 ;
 
 item_enum
-: IDENT
+: ident
 ;
 
 default_declaration
@@ -120,22 +126,29 @@ list_mixed
 
 %%
 
-int parseDTD() {
+extern FILE *dtdin;
+
+int parseDTD(const char * file)
+{
   int err;
+  
+  dtdin = fopen(file, "r");
+  dtdrestart(dtdin);
 
-  yydebug = 1; // pour désactiver l'affichage de l'exécution du parser LALR, commenter cette ligne
+  //yydebug = 1; // pour désactiver l'affichage de l'exécution du parser LALR, commenter cette ligne
 
-  err = yyparse();
-  if (err != 0) printf("Parse ended with %d error(s)\n", err);
+  if (dtdin != NULL)
+  {
+    err = dtdparse();
+    if (err != 0) printf("Parse ended with %d error(s)\n", err);
         else  printf("Parse ended with success\n", err);
+    fclose(dtdin);
+  }
+  
   return 0;
 }
 
-int main(int argc, char **argv)
-{
-  return parseDTD();
-}
-int yywrap(void)
+int dtdwrap(void)
 {
   return 1;
 }

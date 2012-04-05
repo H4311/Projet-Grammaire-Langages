@@ -1,0 +1,23 @@
+<!ELEMENT stylesheet ANY >
+<!ATTLIST stylesheet
+	version CDATA #IMPLIED
+	xmlns:xsl CDATA #FIXED "http://www.w3.org/1999/XSL/Transform"
+>
+
+<!ELEMENT template (apply-template | value-of | PCDATA)* >
+<!ATTLIST template match CDATA #REQUIRED>
+
+
+<!ELEMENT apply-template EMPTY>
+
+<!ELEMENT value-of EMPTY>
+<!ATTLIST value-of select CDATA #REQUIRED>
+
+<!ELEMENT html (head, body)>
+<!ELEMENT body (h1 | h2 | h3 | h4 | a | small | div)+>
+<!ATTLIST body
+	class CDATA #IMPLIED
+	style CDATA #IMPLIED
+>
+
+<!ATTLIST a data-dismiss CDATA #IMPLIED>
