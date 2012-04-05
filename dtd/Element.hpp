@@ -5,14 +5,16 @@
 #include<list>
 #include<iostream>
 
+#include "Document.hpp"
+
 namespace dtd {
 	class ContentSpec;
 
-	class Element {
+	class Element : public Declaration {
 		public:
 			Element(std::string _name = "", ContentSpec* _content = NULL);
 			virtual ~Element();
-			std::ostream& put(std::ostream& out);
+			virtual std::ostream& put(std::ostream& out);
 
 		protected:
 			std::string name;
@@ -44,13 +46,15 @@ namespace dtd {
 			std::list<Children*> children;
 	};
 	
-	class Choice : public Children {
+	class Choice : public ChoiceSeq {
 		public:
+			Choice(std::list<Children*> _children = NULL);
 			char getSep();
 	};
 	
-	class Seq : public Children {
+	class Seq : public ChoiceSeq {
 		public:
+			Seq(std::list<Children*> _children = NULL);
 			char getSep();
 	};
 	
@@ -63,5 +67,7 @@ namespace dtd {
 			std::string name;
 	};
 }
+
+std::ostream& operator<<(std::ostream& out, dtd::ContentSpec* c);
 
 #endif

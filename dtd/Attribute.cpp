@@ -1,9 +1,5 @@
 #include "Attribute.hpp"
 
-std::ostream& operator<<(std::ostream& out, dtd::Attribute* a) {
-	return a->put(out);
-}
-
 namespace dtd {
 	
 	Attribute::Attribute(std::string _name, std::list<std::string> _attDefs)
@@ -14,9 +10,11 @@ namespace dtd {
 		out << "<!ATTLIST " << name;
 		
 		for(it=attDefs.begin(); it != attDefs.end(); it++) {
-			out << "\n" << *it << " CDATA #IMPLIED";
+			out << std::endl << *it << " CDATA #IMPLIED";
 		}
 		
 		out << ">";
+		
+		return out;
 	}
 }

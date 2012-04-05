@@ -1,9 +1,5 @@
 #include "Element.hpp"
 
-std::ostream& operator<<(std::ostream& out, dtd::Element* e) {
-	return e->put(out);
-}
-
 std::ostream& operator<<(std::ostream& out, dtd::ContentSpec* c) {
 	return c->put(out);
 }
@@ -18,7 +14,8 @@ namespace dtd {
 	}
 
 	std::ostream& Element::put(std::ostream& out) {
-		out << "<!ELEMENT " << name << " " << content << ">\n";
+		out << "<!ELEMENT " << name << " " << content << ">" << std::endl;
+		return out;
 	}
 	
 	Children::Children(char _card)
@@ -45,6 +42,22 @@ namespace dtd {
     		out << getSep() << *it;
     	
     	out << ")" << card;
+    	
+    	return out;
+	}
+	
+	Choice::Choice(std::list<Children*> _children)
+		: ChoiceSeq(_children) {};
+	
+	char Choice::getSep() {
+		return '|';
+	}
+		
+	Seq::Seq(std::list<Children*> _children)
+		: ChoiceSeq(_children) {};
+	
+	char Seq::getSep() {
+		return ',';
 	}
 	
 	Name::Name(std::string _name)
@@ -52,6 +65,7 @@ namespace dtd {
 	
 	std::ostream& Name::put(std::ostream& out) {
 		out << name << card;
+		return out;
 	}
 	
 }
