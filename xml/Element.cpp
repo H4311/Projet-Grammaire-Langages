@@ -1,6 +1,6 @@
-# include "Element.h"
+# include "Element.hpp"
 
-namespace Xml {
+namespace xml {
 
 void Element::AddChild(Content* _content)
 {
@@ -18,22 +18,25 @@ Element::~Element()
 		it != childs.end();
 		++it)
 	{
-		cout << "Un élément de supprimé !" << endl;
 		delete *it;
 	}
 }
 
-ostream& Element::toString(ostream& stream)
+ostream& Element::toString(ostream& stream, int depth)
 {
-	ostream & current = EmptyElement::toString(stream);
+	ostream & current = EmptyElement::toString(stream, depth);
+	current << endl;
+
 	for (list<Content*>::iterator it = childs.begin();
 		it != childs.end();
 		++it)
 	{
 		Content* currentContent = *it;
-		currentContent->toString(current);
+		currentContent->toString(current, depth+1);
 		current << endl;
 	}
+	
+	printTabs(stream, depth);
 	current << "</";
 	if (!name.first.empty())
 	{

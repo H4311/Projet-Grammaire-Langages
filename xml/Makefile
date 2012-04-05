@@ -7,13 +7,16 @@ LDFLAGS =
 all: xml
 	
 
-xml: Data.o Element.o EmptyElement.o Content.o main.o Comment.o SpecialElement.o
+xml: Data.o Element.o EmptyElement.o Content.o main.o Comment.o ProcessingInstruction.o Document.o
 	$(LD) -o $(EXE) $^ $(LDFLAGS)
 
-%.o: %.cpp %.h
+%.o: %.cpp %.hpp
 	$(CXX) -o $@ -c $< $(CXXFLAGS)
 
 .PHONY: clean
 
 clean:
-	rm -f *.o $(EXE)
+	rm -f *.o 
+
+mrproper: clean
+	rm -f $(EXE)

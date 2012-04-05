@@ -1,11 +1,11 @@
 #ifndef __XML_COMMENT_H__
 #define __XML_COMMENT_H__
 
-# include "Content.h"
+# include "Content.hpp"
 # include <string>
 using namespace std;
 
-namespace Xml {
+namespace xml {
 	class Comment : public Content {
 	private:
 		string comment;
@@ -13,7 +13,7 @@ namespace Xml {
 	public:
 		Comment(string _c) : comment(_c) { /* empty */ }
 		
-		virtual ostream& toString(ostream& stream);
+		virtual ostream& toString(ostream& stream, int depth);
 	};
 }
 #endif

@@ -1,6 +1,6 @@
-# include "EmptyElement.h"
+# include "EmptyElement.hpp"
 
-namespace Xml
+namespace xml
 {
 
 EmptyElement::EmptyElement(string _ns, string _name)
@@ -28,20 +28,21 @@ void EmptyElement::AddAttribute(string _name, string _value)
 	attributes.push_back(Attribut(_name, _value));
 }
 
-ostream& EmptyElement::toString(ostream& stream)
+ostream& EmptyElement::toString(ostream& stream, int depth)
 {
+	printTabs(stream, depth);
 	stream << beginCharacter(); 
 	if (!name.first.empty())
 	{
 		stream << name.first << ":";
 	}
 
-	stream << name.second << " ";
+	stream << name.second;
 	for(AttList::iterator it = attributes.begin();
 		it != attributes.end();
 		++it)
 	{
-		stream << it->first << "=\"" << it->second << "\" ";
+		stream << " " << it->first << "=\"" << it->second << "\"";
 	}
 	stream << endCharacter(); 
 	return stream;
