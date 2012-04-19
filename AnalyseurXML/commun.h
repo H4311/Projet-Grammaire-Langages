@@ -1,10 +1,10 @@
 #ifndef COMMUN_H
 #define COMMUN_H
 
-using namespace std;
 #include <list>
 #include <utility>
 #include <string>
+using namespace std;
 
 typedef pair<string,string> Attribut;
 typedef list<Attribut> AttList;

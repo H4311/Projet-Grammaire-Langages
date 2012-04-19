@@ -16,8 +16,12 @@ namespace xml {
 		Element(Element& copied);
 		Element& operator= (Element& affected);
 	public:
-		Element(Attribut _a) : EmptyElement(_a) { /* empty */ }
+		Element(ElementName _n) : EmptyElement(_n) { /* empty */ }
+		Element() {}
+
 		~Element();
+		
+		void SetChilds(list<Content*> * _childs) { childs = *_childs; }
 
 		void AddChild(Content* _content);
 		virtual ostream& toString(ostream& stream, int depth);

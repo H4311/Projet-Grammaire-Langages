@@ -3,6 +3,7 @@
 
 %{
 #include "commun.h"
+#include "xmlincludes.h"
 #include "xml.tab.h"
 
 static char* skipSpace(char *s) {

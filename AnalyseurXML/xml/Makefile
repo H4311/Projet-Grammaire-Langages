@@ -1,4 +1,4 @@
-CXX = g++
+CC = g++
 LD = g++
 EXE = xml
 CXXFLAGS = -g -Wall

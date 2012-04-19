@@ -1,6 +1,8 @@
 #ifndef XML_H
 #define XML_H
 
-int parseXML(const char* file);
+#include "xml/Document.hpp"
+
+xml::Document* parseXML(const char* file);
 
 #endif

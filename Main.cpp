@@ -30,8 +30,10 @@ int main(int ac, char * av[])
 		}
 
 		if (vm.count("xml")) {
-			parseXML(vm["xml"].as<string>().c_str());
-			
+			xml::Document* document = NULL;
+			document = parseXML(vm["xml"].as<string>().c_str());
+			// TODO do something with document
+			cout << *document << "\n" << endl;
 		}
 		if (vm.count("dtd"))
 		{
