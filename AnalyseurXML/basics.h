@@ -1,5 +1,5 @@
-#ifndef COMMUN_H
-#define COMMUN_H
+#ifndef BASICS_H
+#define BASICS_H
 
 #include <list>
 #include <utility>

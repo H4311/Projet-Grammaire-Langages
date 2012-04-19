@@ -1,7 +1,6 @@
 %{
 
-#include "xmlincludes.h"
-#include "commun.h"
+#include "common.h"
 using namespace std;
 using namespace xml;
 

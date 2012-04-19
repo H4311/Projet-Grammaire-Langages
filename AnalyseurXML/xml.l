@@ -2,8 +2,7 @@
 %option noyywrap
 
 %{
-#include "commun.h"
-#include "xmlincludes.h"
+#include "common.h"
 #include "xml.tab.h"
 
 static char* skipSpace(char *s) {

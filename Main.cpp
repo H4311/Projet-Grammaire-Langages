@@ -4,7 +4,7 @@
 #include <string>
 #include <fstream>
 
-#include "AnalyseurXML/xml.h"
+#include "AnalyseurXML/xml_processor.h"
 #include "AnalyseurDTD/dtd.h"
 
 using namespace std;

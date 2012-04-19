@@ -4,7 +4,7 @@ EXEC_NAME = main
 INCLUDES = 
 LIBS = -lboost_program_options
 OBJ_FILES = Main.o
-OBJ_FILES_DEP = */lex.*.o */*.tab.o AnalyseurXML/xml/*.o
+OBJ_FILES_DEP = AnalyseurXML/*.o AnalyseurDTD/*.o
 
 all: $(EXEC_NAME)
 
