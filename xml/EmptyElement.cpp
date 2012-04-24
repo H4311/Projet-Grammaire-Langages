@@ -23,7 +23,7 @@ string EmptyElement::beginCharacter()
 	return "<";
 }
 
-string EmptyElement::GetName()
+string EmptyElement::getName()
 {
 	return (name.first != "" ? name.first + ":" : "") + name.second;
 }

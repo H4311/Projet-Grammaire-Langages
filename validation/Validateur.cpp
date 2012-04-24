@@ -3,13 +3,15 @@
 #include <iostream>
 #include "../xml/Content.hpp"
 #include "../xml/Element.hpp"
+#include "../xml/Data.hpp"
 
 #include "../dtd/Declaration.hpp"
 #include "../dtd/Element.hpp"
 #include "../dtd/Attribute.hpp"
 
 bool Validateur::validationChild(std::string dtdNode, std::string xmlChildren) {
-    boost::regex reg(dtdNode.c_str());
+    std::cout << "[" << dtdNode << "] [" << xmlChildren << "]" << std::endl;
+    boost::regex reg(dtdNode);
 	
 	if (regex_match(xmlChildren.c_str(), reg)) {
 		return true;
@@ -26,14 +28,14 @@ bool Validateur::validationNode(xml::Content* content, std::list<dtd::Element*> 
 	//Pas besoin de valider ses noeuds enfants
 	if(elem != NULL) {
 		//Récupérer le nom de la balise
-		std::string nomBalise = elem->GetName();
+		std::string nomBalise = elem->getName();
 		
 		//Récupérer la regexp depuis la dtd
-		std::list<dtd::Element*>::iterator it;
+		std::list<dtd::Element*>::iterator itElem;
 		std::string regex;
-		for(it = elements.begin(); it != elements.end(); it++) {
-			if((*it)->getName() == nomBalise) {
-				regex = (*it)->getRegex();
+		for(itElem = elements.begin(); itElem != elements.end(); itElem++) {
+			if((*itElem)->getName() == nomBalise) {
+				regex = (*itElem)->getRegex();
 				break;
 			}
 		}
@@ -46,8 +48,22 @@ bool Validateur::validationNode(xml::Content* content, std::list<dtd::Element*> 
 		std::list<xml::Content*> children = elem->getChildren();
 		
 		//Créer la string des fils
-		//TODO !!!
 		std::string chaineChildren;
+		std::list<xml::Content*>::iterator it;
+		for(it = children.begin(); it != children.end(); it++) {
+			xml::EmptyElement* curElem = dynamic_cast<xml::Element*>(*it);
+			if(curElem == NULL) {
+				curElem = dynamic_cast<xml::EmptyElement*>(content);
+			}
+			if(curElem != NULL) {
+				chaineChildren += curElem->getName() + ",";
+			} else {
+				xml::Data* data = dynamic_cast<xml::Data*>(content);
+				if(data != NULL) {
+					chaineChildren += "#PCDATA,";
+				}
+			}
+		}
 
 		//Valider le noeud
 		if(!Validateur::validationChild(regex, chaineChildren)) {
@@ -55,7 +71,6 @@ bool Validateur::validationNode(xml::Content* content, std::list<dtd::Element*> 
 		}
 
 		//Valider chacun des fils
-		std::list<xml::Content*>::iterator it;
 		for(it = children.begin(); it != children.end(); it++) {
 			if(!Validateur::validationNode(*it, elements, attributes)) {
 				return false;

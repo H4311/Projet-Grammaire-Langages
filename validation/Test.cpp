@@ -96,7 +96,7 @@ int main(int argc, char** argv) {
 	
 	// Tests Validation Node
 	cout << "==== Test validationChild ====" << endl;
-	std::string dtdNode("(titre,)(p,)+");
+	std::string dtdNode("(((((titre,))(p,)+)))");
 	std::string xmlChildren("titre,p,p,");
 	cout << "Regex : " << dtdNode << endl << "Test String :" << xmlChildren << endl << "Résultat : ";
 	
