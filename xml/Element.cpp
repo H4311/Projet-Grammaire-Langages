@@ -2,11 +2,6 @@
 
 namespace xml {
 
-void Element::AddChild(Content* _content)
-{
-	childs.push_back(_content);
-}
-
 string Element::endCharacter()
 {
 	return ">";
