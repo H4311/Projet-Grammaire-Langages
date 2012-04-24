@@ -42,6 +42,20 @@ int main(int argc, char** argv) {
 	
 	delete d;
 	
+	// Tests Validation Node
+	cout << "==== Test validationNode ====" << endl;
+	std::string dtdNode("(titre,)(p,)+");
+	std::string xmlChildren("titre,p,p,");
+	cout << "Regex : " << dtdNode << endl << "Test String :" << xmlChildren << endl << "Résultat : ";
+	
+	if (Validateur::validationNode(dtdNode, xmlChildren)) 
+	{
+		cout << "Noeud validé" << endl;
+	}
+	else
+	{
+		cout << "Noeud non validé" << endl;
+	}
 	
 	
 	return 0;
