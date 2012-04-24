@@ -4,11 +4,11 @@ EXE = dtd
 CXXFLAGS = -g
 LDFLAGS =
 
-all: xml
+all: dtd
 	
 
-xml: Document.o Attribute.o Element.o TestPut.o
-	$(LD) -o $(EXE) $^ $(LDFLAGS)
+dtd: Document.o Attribute.o Element.o
+#	$(LD) -o $(EXE) $^ $(LDFLAGS)
 
 %.o: %.cpp %.hpp
 	$(CXX) -o $@ -c $< $(CXXFLAGS)
