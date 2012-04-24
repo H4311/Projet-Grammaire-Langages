@@ -26,5 +26,9 @@ namespace dtd {
 		}
 		return out;
 	}
+	
+	std::list<Declaration*> Document::getDeclarations() {
+		return declarations;
+	}
 
 }

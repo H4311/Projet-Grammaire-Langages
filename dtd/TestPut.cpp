@@ -32,6 +32,12 @@ int main() {
 	
 	Element *e = new Element("ElemTest", s);
 	
+	Any *any = new Any();
+	Element *e2 = new Element("ElemTest2", any);
+	
+	Empty *empty = new Empty();
+	Element *e3 = new Element("br", empty);
+	
 	std::cout << e->getRegex() << std::endl << std::endl;
 	
 	std::list<std::string> att;
@@ -41,6 +47,8 @@ int main() {
 	
 	std::list<Declaration*> decl;
 	decl.push_back(e);
+	decl.push_back(e2);
+	decl.push_back(e3);
 	decl.push_back(a);
 	Document *d = new Document(decl);
 	
