@@ -124,8 +124,12 @@ xml::Document* parseXML(const char* file)
   if (xmlin != NULL)
   {
     err = xmlparse(&document);
-    if (err != 0) printf("Parse ended with %d error(s)\n", err);
-        else  printf("Parse ended with success\n");
+    if (err != 0) 
+    {
+	printf("Parse ended with %d error(s)\n", err);
+	document = NULL;
+    }
+    else  printf("Parse ended with success\n");
     fclose(xmlin);
   }
   
