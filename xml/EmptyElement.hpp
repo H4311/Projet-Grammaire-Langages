@@ -25,6 +25,8 @@ namespace xml {
 
 		void SetName(ElementName* _n) { name = *_n; }
 		void SetAttList(AttList* _l) { attributes = *_l; }
+		
+		std::string GetName();
 
 		string GetAttributeValue(string attributeName);
 		virtual ostream& toString(ostream& stream, int depth);

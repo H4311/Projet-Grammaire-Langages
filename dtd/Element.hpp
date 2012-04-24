@@ -15,6 +15,7 @@ namespace dtd {
 			virtual ~Element();
 			virtual std::ostream& put(std::ostream& out);
 			virtual std::string getRegex();
+			std::string getName();
 
 		protected:
 			std::string name;

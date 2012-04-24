@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
 	l2.push_back(n4);
 	dtd::Seq *s = new dtd::Seq(l2);
 	
-	dtd::Element *e = new dtd::Element("ElemTest", s);
+	dtd::Element *e = new dtd::Element("html", s);
 	
 	std::list<std::string> att;
 	att.push_back("att1");
@@ -95,12 +95,12 @@ int main(int argc, char** argv) {
 	
 	
 	// Tests Validation Node
-	cout << "==== Test validationNode ====" << endl;
+	cout << "==== Test validationChild ====" << endl;
 	std::string dtdNode("(titre,)(p,)+");
 	std::string xmlChildren("titre,p,p,");
 	cout << "Regex : " << dtdNode << endl << "Test String :" << xmlChildren << endl << "Résultat : ";
 	
-	if (Validateur::validationNode(dtdNode, xmlChildren)) 
+	if (Validateur::validationChild(dtdNode, xmlChildren)) 
 	{
 		cout << "Noeud validé" << endl;
 	}
@@ -109,6 +109,13 @@ int main(int argc, char** argv) {
 		cout << "Noeud non validé" << endl;
 	}
 	
+	cout << "==== Test validationDocument ====" << endl;
+	
+	if(Validateur::validationDocument(doc, *d)) {
+		cout << "Document validé" << endl;
+	} else {
+		cout << "Document non validé" << endl;
+	}
 	
 	delete d;
 	

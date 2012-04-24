@@ -30,6 +30,8 @@ class Document
 		void setXmlProlog(ProcessingInstruction *_xml) { xmlProlog = _xml; }
 		void setRoot(Content* _root) { root = _root; }
 		void setComments(list<Comment*> * _c) { comments = *_c; }
+		
+		Content* getRoot();
 
 		~Document();
 		Document() : doctype(""), xmlProlog(0), root(0) { /* empty */ }
