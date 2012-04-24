@@ -15,9 +15,10 @@ class Document
 	private:
 		string rootName;
 		string doctype;
+
 		ProcessingInstruction *xmlProlog;
 		Content *root;
-		list<Comment*> *comments;
+		list<Comment*> comments;
 
 		// Copy ctr and affectation are forbidden
 		Document(Document& copied);
@@ -25,11 +26,10 @@ class Document
 
 	public:
 		// Gettors and mutators 
-		void setDoctype(string _d) { doctype = _d; }
-		void setRootName(string _r) { rootName = _r; }
+		void setDoctype(Doctype * _d) { doctype = _d->first; rootName = _d->second; delete _d;}
 		void setXmlProlog(ProcessingInstruction *_xml) { xmlProlog = _xml; }
 		void setRoot(Content* _root) { root = _root; }
-		void setComments(list<Comment*> * _c) { comments = _c; }
+		void setComments(list<Comment*> * _c) { comments = *_c; delete _c; }
 
 		~Document();
 		Document() : doctype(""), xmlProlog(0), root(0) { /* empty */ }

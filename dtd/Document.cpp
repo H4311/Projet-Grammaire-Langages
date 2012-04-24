@@ -5,10 +5,6 @@ std::ostream& operator<<(std::ostream& out, dtd::Document* d) {
 	return d->put(out);
 }
 
-std::ostream& operator<<(std::ostream& out, dtd::Declaration* d) {
-	return d->put(out);
-}
-
 namespace dtd {
 
 	// --------------------------------------------------------- Class Document
@@ -31,8 +27,8 @@ namespace dtd {
 		return out;
 	}
 	
-	// ------------------------------------------------------ Class Declaration
-	
-	Declaration::~Declaration() {}
+	std::list<Declaration*> Document::getDeclarations() {
+		return declarations;
+	}
 
 }

@@ -1,7 +1,17 @@
 # include "EmptyElement.hpp"
+# include <functional>
+# include <algorithm>
+using namespace std;
 
 namespace xml
 {
+
+struct AttributName: public std::binary_function< Attribut, string, bool > {
+	// Adaptable binary predicate to find an attribute using its name :
+	bool operator () ( const Attribut &att, const string &name ) const {
+		return att.first == name;
+	}
+};
 
 string EmptyElement::endCharacter()
 {
@@ -13,9 +23,13 @@ string EmptyElement::beginCharacter()
 	return "<";
 }
 
-void EmptyElement::AddAttribute(Attribut _a)
+string EmptyElement::GetAttributeValue(string attributeName)
 {
-	attributes.push_back(_a);
+	string value;
+	list<Attribut>::iterator attr = attributes.begin();
+	attr = find_if( attr, attributes.end(), bind2nd( AttributName(), attributeName ) );
+	if (attr != attributes.end()) { value = attr->second; }
+	return value;
 }
 
 ostream& EmptyElement::toString(ostream& stream, int depth)
