@@ -1,4 +1,3 @@
 *.o
 main
 dtd/dtd
-*xml

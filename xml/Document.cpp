@@ -19,7 +19,8 @@ ostream& xml::Document::toString(ostream& stream)
 {
 	if (!doctype.empty())
 	{
-		stream << "<!DOCTYPE " << doctype << ">\n";
+		stream 	<< "<!DOCTYPE " << rootName << " SYSTEM \""
+			<< doctype << "\">\n";
 	}
 
 	if (xmlProlog)
@@ -30,6 +31,17 @@ ostream& xml::Document::toString(ostream& stream)
 	if (root)
 	{
 		stream << root;
+	}
+
+	if (!comments->empty())
+	{
+		for (list<Comment*>::iterator it = comments->begin();
+			it != comments->end();
+			it++)
+		{
+			delete *it;
+		}
+		delete comments;
 	}
 	return stream;
 }

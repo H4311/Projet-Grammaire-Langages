@@ -17,6 +17,8 @@ int yylex(void);
    EmptyElement * ee; 		/* element xml */
    list<Content*> * lc; 	/* liste d'éléments (enfants) */
    AttList *al;			/* liste d'attributs */
+   Doctype *dt;
+   list<Comment*> * lcom;
 }
 
 %token EQ SLASH CLOSE CLOSESPECIAL DOCTYPE
@@ -28,20 +30,30 @@ int yylex(void);
 %type <en> start
 %type <lc> content_opt close_content_and_end
 %type <al> attribut_opt
+%type <dt> declaration declarations_opt
+%type <lcom> misc_seq_opt
 
-%parse-param { xml::Document** doc }
+%parse-param { xml::Document** doc } 
 
 %%
 
 document
- : declarations_opt xml_element misc_seq_opt { *doc  = new Document();
-					//	*doc->setXmlProlog($1);
-						(*doc)->setRoot($2); }
+ : declarations_opt xml_element misc_seq_opt 
+	{ *doc  = new Document();
+	if ($1 != NULL) {
+		(*doc)->setRootName($1->first);
+		(*doc)->setDoctype($1->second);			
+	}
+	delete $1;
+	(*doc)->setComments($3);
+	(*doc)->setRoot($2); }
  ;
 
 misc_seq_opt
- : misc_seq_opt comment
- | /*empty*/
+ : misc_seq_opt comment		{ $1->push_back(static_cast<Comment*>($2));
+				  $$ = $1;
+				}
+ | /*empty*/			{ $$ = new list<Comment*>; }
  ;
 
 comment
@@ -49,16 +61,17 @@ comment
  ;
 
 declarations_opt
- : declaration
- | /*empty*/
+ : declaration		{ $$ = $1; }
+ | /*empty*/		{ $$ = NULL; }
  ;
  
 declaration
- : DOCTYPE IDENT IDENT STRING CLOSE
+ : DOCTYPE IDENT IDENT STRING CLOSE 	{ $$ = new Doctype($2, $4); }
  ;
 
 xml_element
  : start attribut_opt empty_or_content 	{ $3->SetAttList($2);
+					delete $2;
 					$3->SetName($1);
 					$$ = $3;
 					}
@@ -81,6 +94,7 @@ empty_or_content
  | close_content_and_end CLOSE { /* ex : <a>something</a> */
 				$$ = new Element();
 				((Element*)$$)->SetChilds($1);
+				delete $1;
 				}
  ;
 
