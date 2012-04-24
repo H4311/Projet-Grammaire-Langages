@@ -44,8 +44,10 @@ document
 	{ *doc  = new Document();
 	if ($1 != NULL) {
 		(*doc)->setDoctype($1);
+		delete $1;
 	}
 	(*doc)->setComments($3);
+	delete $3;
 	(*doc)->setRoot($2); }
  ;
 
@@ -77,6 +79,7 @@ declaration
 
 xml_element
  : start attribut_opt empty_or_content 	{ $3->SetAttList($2);
+					delete $2;
 					$3->SetName($1);
 					$$ = $3;
 					delete $1;
