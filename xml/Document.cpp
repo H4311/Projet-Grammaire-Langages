@@ -14,18 +14,17 @@ xml::Document::~Document()
 		root = 0;
 	}
 
-	/* // TODO
-	if (!comments->empty())
+	// TODO
+	if (!comments.empty())
 	{
-		for (list<Comment*>::iterator it = comments->begin();
-			it != comments->end();
+		for (list<Comment*>::iterator it = comments.begin();
+			it != comments.end();
 			it++)
 		{
 			delete *it;
 		}
-		delete comments;
 	}
-	*/
+	
 }
 
 ostream& xml::Document::toString(ostream& stream)
@@ -46,17 +45,16 @@ ostream& xml::Document::toString(ostream& stream)
 		stream << root;
 	}
 
-	/* // TODO affichage des commentaires
-	if (!comments->empty())
+	// TODO affichage des commentaires
+	if (!comments.empty())
 	{
-		for (list<Comment*>::iterator it = comments->begin();
-			it != comments->end();
+		for (list<Comment*>::iterator it = comments.begin();
+			it != comments.end();
 			++it)
 		{
-			stream << **it << endl;
+			stream << *it << endl;
 		}
 	}
-	*/
 
 	return stream;
 }
