@@ -15,7 +15,7 @@ public:
     		std::list<dtd::Element*> elements,
     		std::list<dtd::Attribute*> attributes);
     
-    static bool validationDocument(xml::Document& xml, dtd::Document& dtd); //Validation du document
+    static bool validationDocument(dtd::Document& dtd, xml::Document& xml); //Validation du document
 };
 
 #endif

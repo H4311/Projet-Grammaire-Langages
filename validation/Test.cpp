@@ -111,7 +111,7 @@ int main(int argc, char** argv) {
 	
 	cout << "==== Test validationDocument ====" << endl;
 	
-	if(Validateur::validationDocument(doc, *d)) {
+	if(Validateur::validationDocument(*d, doc)) {
 		cout << "Document validé" << endl;
 	} else {
 		cout << "Document non validé" << endl;

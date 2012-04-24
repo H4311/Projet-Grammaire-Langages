@@ -41,19 +41,33 @@ bool Validateur::validationNode(xml::Content* content, std::list<dtd::Element*> 
 			//Balise non définie dans la DTD
 			return false;
 		}
-	
+		
+		//Récupérer les fils du noeud
+		std::list<xml::Content*> children = elem->getChildren();
+		
 		//Créer la string des fils
+		//TODO !!!
+		std::string chaineChildren;
 
-		//Appeller validation children
+		//Valider le noeud
+		if(!Validateur::validationChild(regex, chaineChildren)) {
+			return false;
+		}
 
-		//TODO: pour chacun des fils => child[i]->validationNode();
+		//Valider chacun des fils
+		std::list<xml::Content*>::iterator it;
+		for(it = children.begin(); it != children.end(); it++) {
+			if(!Validateur::validationNode(*it, elements, attributes)) {
+				return false;
+			}
+		}
 		
 	}
 	
 	return true;
 }
 
-bool Validateur::validationDocument(xml::Document& xml, dtd::Document& dtd) {
+bool Validateur::validationDocument(dtd::Document& dtd, xml::Document& xml) {
 	
 	//Séparation des éléments et attributs de la DTD en deux listes
 	std::list<dtd::Element*> elements;
