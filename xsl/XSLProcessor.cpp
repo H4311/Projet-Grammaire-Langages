@@ -1,6 +1,7 @@
 # include <iostream>
 
 # include "XSLProcessor.hpp"
+# include "xml/xml_processor.h"
 
 using namespace std;
 
@@ -71,8 +72,37 @@ bool xsl::XSLProcessor::generateHtmlFile(string xmlFileName, string htmlOutputFi
 	// Checking if an valid XSL file as already been processed :
 	if (xslDoc == NULL) { return false; }
 
-	Document xmlDoc;
+	Document* xmlDoc;
 	Document htmlDoc;
+	
+	// Loading the XML File
+	File xmlFile = fopen(xmlFileName, "r");
+	
+	// Analyse the syntax of the XML file
+	xmlDoc = parseXML(xmlFile);
+	//cout << *document << "\n" << endl;
+	
+	//TODO: Verifying its semantic correctness
+	
+	//
+	list<Content*> contentsXsl = xslDoc->getChildren();
+	list<Content*> contentsXml = xmlDoc->getChildren();
+	list<Content*>::iterator itXml = contentsXsl->begin();
+	
+	for(list<Content*>::iterator itXsl = contentsXsl->begin();
+			itXsl != contentsXsl->end();
+			itXsl++)
+	{
+		if( itXsl.getName() == "template" ){
+			AttList attXsl = itXsl.getAttributes();
+			
+			if( ){
+				
+			}
+			
+		}
+		
+	}
 	
 	/** TO DO :
 	 * - Load the XML file

@@ -26,10 +26,10 @@ class Document
 
 	public:
 		// Gettors and mutators 
-		void setDoctype(Doctype * _d) { doctype = _d->first; rootName = _d->second; delete _d;}
+		void setDoctype(Doctype * _d) { doctype = _d->first; rootName = _d->second;}
 		void setXmlProlog(ProcessingInstruction *_xml) { xmlProlog = _xml; }
 		void setRoot(Content* _root) { root = _root; }
-		void setComments(list<Comment*> * _c) { comments = *_c; delete _c; }
+		void setComments(list<Comment*> * _c) { comments = *_c; }
 
 		~Document();
 		Document() : doctype(""), xmlProlog(0), root(0) { /* empty */ }
