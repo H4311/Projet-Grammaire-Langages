@@ -18,6 +18,14 @@ void EmptyElement::AddAttribute(Attribut _a)
 	attributes.push_back(_a);
 }
 
+Attribut EmptyElement::FindAttribute(string name)
+{
+	list<Attribut>::iterator attr = attributes.begin();
+	attr = find_if( attr, attributes.end(), bind2nd( AttributName(), name ) );
+	if (attr == books.end()) { return null; }
+	else return *attr;
+}
+
 ostream& EmptyElement::toString(ostream& stream, int depth)
 {
 	printTabs(stream, depth);
