@@ -1,0 +1,31 @@
+<!ELEMENT xsl:stylesheet ANY >
+<!ATTLIST xsl:stylesheet
+	version CDATA #IMPLIED
+	xmlns:xsl CDATA #FIXED "http://www.w3.org/1999/XSL/Transform"
+>
+
+<!ELEMENT xsl:template (apply-template | value-of | PCDATA)* >
+<!ATTLIST xsl:template match CDATA #REQUIRED>
+
+
+<!ELEMENT xsl:apply-template EMPTY>
+
+<<<<<<< HEAD
+<!ELEMENT xsl:value-of EMPTY>
+<!ATTLIST xsl:value-of select CDATA #REQUIRED>
+
+<!ELEMENT xsl:attribute PCDATA>
+<!ATTLIST xsl:attribute name CDATA #REQUIRED>
+=======
+<!ELEMENT value-of EMPTY>
+<!ATTLIST value-of select CDATA #REQUIRED>
+
+<!ELEMENT html (head, body)>
+<!ELEMENT body (h1 | h2 | h3 | h4 | a | small | div)+>
+<!ATTLIST body
+	class CDATA #IMPLIED
+	style CDATA #IMPLIED
+>
+
+<!ATTLIST a data-dismiss CDATA #IMPLIED>
+>>>>>>> 221a882f3c7ed25cf774ec76f0743578803c8d08

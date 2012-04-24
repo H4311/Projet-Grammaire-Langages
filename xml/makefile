@@ -3,7 +3,7 @@ LD = g++
 EXE = xmlparser
 CXXFLAGS = -g -Wall -DYYDEBUG=1
 LDFLAGS = 
-OBJ = lex.xml.o xml.tab.o Data.o Element.o EmptyElement.o Content.o Comment.o Document.o
+OBJ = lex.xml.o xml.tab.o Data.o Element.o EmptyElement.o Content.o Comment.o Document.o ProcessingInstruction.o
 
 all: analyseXML
 
