@@ -4,7 +4,7 @@ namespace xml {
 
 void Element::AddChild(Content* _content)
 {
-	childs.push_back(_content);
+	children.push_back(_content);
 }
 
 string Element::endCharacter()
@@ -14,8 +14,8 @@ string Element::endCharacter()
 
 Element::~Element()
 {
-	for (list<Content*>::iterator it = childs.begin();
-		it != childs.end();
+	for (list<Content*>::iterator it = children.begin();
+		it != children.end();
 		++it)
 	{
 		delete *it;
@@ -27,8 +27,8 @@ ostream& Element::toString(ostream& stream, int depth)
 	ostream & current = EmptyElement::toString(stream, depth);
 	current << endl;
 
-	for (list<Content*>::iterator it = childs.begin();
-		it != childs.end();
+	for (list<Content*>::iterator it = children.begin();
+		it != children.end();
 		++it)
 	{
 		Content* currentContent = *it;

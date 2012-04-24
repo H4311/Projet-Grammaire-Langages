@@ -9,7 +9,7 @@ using namespace std;
 namespace xml {
 	class Element : public EmptyElement {
 	private:
-		list<Content*> childs;
+		list<Content*> children;
 		string endCharacter();
 
 		// Copy and affectation operators are forbidden.
@@ -21,7 +21,7 @@ namespace xml {
 
 		~Element();
 		
-		void SetChilds(list<Content*> * _childs) { childs = *_childs; }
+		void Setchildren(list<Content*> * _children) { children = *_children; }
 
 		void AddChild(Content* _content);
 		virtual ostream& toString(ostream& stream, int depth);
