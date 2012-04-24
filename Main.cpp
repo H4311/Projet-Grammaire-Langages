@@ -4,7 +4,7 @@
 #include <string>
 #include <fstream>
 
-#include "AnalyseurXML/xml.h"
+#include "xml/xml_processor.h"
 #include "AnalyseurDTD/dtd.h"
 
 using namespace std;
@@ -30,8 +30,11 @@ int main(int ac, char * av[])
 		}
 
 		if (vm.count("xml")) {
-			parseXML(vm["xml"].as<string>().c_str());
-			
+			xml::Document* document = NULL;
+			document = parseXML(vm["xml"].as<string>().c_str());
+			// TODO do something with document
+			cout << *document << "\n" << endl;
+			delete document;
 		}
 		if (vm.count("dtd"))
 		{

@@ -1,8 +1,6 @@
 #ifndef __XML_PROC_INSTRUCTION_H__
 #define __XML_PROC_INSTRUCTION_H__
 
-#include "commun.h"
-
 #include "EmptyElement.hpp"
 #include <string>
 using namespace std;
@@ -14,7 +12,7 @@ namespace xml {
 		string endCharacter();
 
 	public:
-		ProcessingInstruction(string _name) : EmptyElement(_name) { /* empty */ }
+		ProcessingInstruction(ElementName _name) : EmptyElement(_name) { /* empty */ }
 	};
 }
 #endif

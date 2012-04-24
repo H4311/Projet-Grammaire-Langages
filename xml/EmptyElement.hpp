@@ -2,7 +2,7 @@
 #define __XML_EMPTY_ELEMENT_H__
 
 # include "Content.hpp"
-# include "commun.h"
+# include "basics.h"
 
 # include <string>
 using namespace std;
@@ -18,10 +18,13 @@ namespace xml {
 		virtual string endCharacter(); 
 		virtual string beginCharacter();
 	public:
-		EmptyElement(string _ns, string _name); 
-		EmptyElement(string _name);
+		EmptyElement(ElementName _en) : name(_en) { /* empty */ }
+		EmptyElement() {}
 
-		void AddAttribute(string _name, string _value);
+		void SetName(ElementName* _n) { name = *_n; }
+		void SetAttList(AttList* _l) { attributes = *_l; }
+
+		void AddAttribute(Attribut _a);
 		virtual ostream& toString(ostream& stream, int depth);
 	};
 }

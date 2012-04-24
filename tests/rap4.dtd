@@ -29,6 +29,6 @@
 	type (type1|type2 | type3) "type2"
 >
 
-<!ELEMENT container ANY>
+<!ELEMENT container ANY >
 <!ELEMENT spec ((a, p)*, form+, (a|p)?, ((form| a)+ | p?))>
 <!ELEMENT spec2 (((((a, p)*, form+, (a|p)?, ((form| a)+ | p?)))))>

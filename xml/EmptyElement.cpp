@@ -3,16 +3,6 @@
 namespace xml
 {
 
-EmptyElement::EmptyElement(string _ns, string _name)
-{
-	name = Attribut(_ns, _name); 		
-}
-
-EmptyElement::EmptyElement(string _name)
-{
-	name = Attribut("", _name);
-}
-
 string EmptyElement::endCharacter()
 {
 	return "/>";
@@ -23,9 +13,9 @@ string EmptyElement::beginCharacter()
 	return "<";
 }
 
-void EmptyElement::AddAttribute(string _name, string _value)
+void EmptyElement::AddAttribute(Attribut _a)
 {
-	attributes.push_back(Attribut(_name, _value));
+	attributes.push_back(_a);
 }
 
 ostream& EmptyElement::toString(ostream& stream, int depth)

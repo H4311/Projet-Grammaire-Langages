@@ -3,6 +3,7 @@
 
 # include "ProcessingInstruction.hpp"
 # include "Content.hpp"
+# include "Comment.hpp"
 
 # include <string>
 using namespace std;
@@ -12,19 +13,23 @@ namespace xml {
 class Document 
 {
 	private:
+		string rootName;
 		string doctype;
 		ProcessingInstruction *xmlProlog;
 		Content *root;
+		list<Comment*> *comments;
 
 		// Copy ctr and affectation are forbidden
 		Document(Document& copied);
 		Document& operator=(Document& affected);
 
 	public:
-		// Gettors and accessors
+		// Gettors and mutators 
 		void setDoctype(string _d) { doctype = _d; }
+		void setRootName(string _r) { rootName = _r; }
 		void setXmlProlog(ProcessingInstruction *_xml) { xmlProlog = _xml; }
 		void setRoot(Content* _root) { root = _root; }
+		void setComments(list<Comment*> * _c) { comments = _c; }
 
 		~Document();
 		Document() : doctype(""), xmlProlog(0), root(0) { /* empty */ }

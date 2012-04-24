@@ -11,19 +11,19 @@ int main(int argc, char**argv)
 {
 	xml::Document doc;
 
-	xml::ProcessingInstruction* se = new xml::ProcessingInstruction("xml");
-	se->AddAttribute("version", "2.0");
+	xml::ProcessingInstruction* se = new xml::ProcessingInstruction(ElementName("","xml"));
+	se->AddAttribute(Attribut("version", "2.0"));
 	doc.setXmlProlog(se);	
 
-	xml::Element* root = new xml::Element("html");
+	xml::Element* root = new xml::Element(ElementName("", "html"));
 	doc.setRoot(root);
 
-	xml::Element* body = new xml::Element("body");
+	xml::Element* body = new xml::Element(ElementName("", "body"));
 	root->AddChild(body);
 
-	xml::Element* element = new xml::Element("a");
-	element->AddAttribute("alt", "Google.fr");
-	element->AddAttribute("href", "http://www.google.fr/");
+	xml::Element* element = new xml::Element(ElementName("", "a"));
+	element->AddAttribute(Attribut("alt", "Google.fr"));
+	element->AddAttribute(Attribut("href", "http://www.google.fr/"));
 	xml::Data* data = new xml::Data("Mon petit lien");
 	element->AddChild(data);
 

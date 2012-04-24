@@ -17,14 +17,31 @@ xml::Document::~Document()
 
 ostream& xml::Document::toString(ostream& stream)
 {
-	stream << doctype << "\n";
+	if (!doctype.empty())
+	{
+		stream 	<< "<!DOCTYPE " << rootName << " SYSTEM \""
+			<< doctype << "\">\n";
+	}
+
 	if (xmlProlog)
 	{
 		stream << xmlProlog << "\n";	
 	}
+
 	if (root)
 	{
 		stream << root;
+	}
+
+	if (!comments->empty())
+	{
+		for (list<Comment*>::iterator it = comments->begin();
+			it != comments->end();
+			it++)
+		{
+			delete *it;
+		}
+		delete comments;
 	}
 	return stream;
 }
