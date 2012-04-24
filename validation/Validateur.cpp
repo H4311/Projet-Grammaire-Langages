@@ -1,7 +1,18 @@
-#include "validateur.hpp"
+#include "Validateur.hpp"
+#include <boost/regex.hpp>
 
 bool Validateur::validationNode(std::string dtdNode, std::string xmlChildren) {
-    //TODO: check boost entre dtdNode (regex) et xmlChildren (text)
+    boost::regex reg(dtdNode.c_str());
+	
+	if (regex_match(xmlChildren.c_str(), reg)) 
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+    
 }
 
 bool Validateur::validationDocument(xml::Document xml, dtd::Document dtd) {

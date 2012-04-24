@@ -7,7 +7,7 @@
 class Validateur {
 
 public:
-    bool validationNode(std::string dtdNode, std::string xmlChildren); //Validation d'un noeud
+    static bool validationNode(std::string dtdNode, std::string xmlChildren); //Validation d'un noeud
     
     bool validationDocument(xml::Document xml, dtd::Document dtd); //Validation du document
 };

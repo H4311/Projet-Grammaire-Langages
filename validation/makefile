@@ -2,8 +2,8 @@ CXX = g++
 CXXFLAGS = -Wall #-Werror -pedantic
 EXEC_NAME = main
 INCLUDES = 
-LIBS = 
-OBJ_FILES = Test.o
+LIBS = -lboost_regex
+OBJ_FILES = Test.o Validateur.o
 OBJ_FILES_DEP = ../xml/*.o ../dtd/*.o
 
 XML_REP = ../xml/
