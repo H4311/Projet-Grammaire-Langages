@@ -21,7 +21,7 @@ namespace xml {
 
 		~Element();
 		
-		void Setchildren(list<Content*> * _children) { children = *_children; }
+		void SetChildren(list<Content*> * _children) { children = *_children; }
 
 		virtual ostream& toString(ostream& stream, int depth);
 	};

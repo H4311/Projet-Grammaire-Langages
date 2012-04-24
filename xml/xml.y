@@ -93,7 +93,7 @@ empty_or_content
 		}	
  | close_content_and_end CLOSE { /* ex : <a>something</a> */
 				$$ = new Element();
-				((Element*)$$)->SetChilds($1);
+				((Element*)$$)->SetChildren($1);
 				delete $1;
 				}
  ;

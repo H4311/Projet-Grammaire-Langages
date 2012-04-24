@@ -1,58 +1,41 @@
-# include <iostream>
-
-# include "XSLProcessor.hpp"
+# ifndef __XSLPROCESSOR_H__
+# define __XSLPROCESSOR_H__
 
 using namespace std;
+#include "../xml/Document.hpp"
 
-xsl::XSLProcessor::XSLProcessor() : xslDoc() { /* empty */ }
+# include <string>
 
-void xsl::XSLProcessor::setXslDTDFileName(string name) {
-	xslDTDFileName = name;
+namespace xsl {
+
+	class XSLProcessor 
+	{
+		private:
+			Document* xslDoc; // Structure of the processed XSL file
+
+			string xslDTDFileName; // Name of the XSL DTD file to use to validate the XSL docs.
+
+		public:
+			// Getters and accessors
+			void setXslDTDFileName(string name);			
+
+			/**
+			 *	Validate and process the given XSL file.
+			 *	Return true if the XSL is conformed to the given XSL and HTML DTD, and save the document structure for the next HTML generation.
+			 */
+			bool processXslFile(string xslFileName);
+
+			/**
+			 *	Validate the given XML file and generate the HTML document using the previously processed XSL file.
+			 *	Return true if the XML is conformed, and save the HTML document to the given place.
+			 */
+			bool generateHtmlFile(string xmlFileName, string htmlOutputFile);
+
+			~XSLProcessor();
+			XSLProcessor();
+
+	};
+
 }
 
-
-bool xsl::XSLProcessor::processXslFile(string xslFileName) {
-	/** TO DO :
-	 * - Analyse the syntax of the XSL file, and of the XSL DTD file. If OK, continue.
-	 * - Verify the semantic correctness of the XSL elements, using the XSL DTD
-	 * - Analyse the syntax of the HTML DTD file. The link to this DTD can be found into the attribute xmlns:xsl of the element xsl:stylesheet.
-	 * - Verify the semantic correctness of the HTML elements, using the HTML DTD
-	 * - Save the file structure into xslDoc and return the boolean.
-	 */
-	
-	// Analyse the syntax of the XSL file, and of the XSL DTD file. If OK, continue.
-	
-	// Verify the semantic correctness of the XSL elements, using the XSL DTD.
-	
-	// Analyse the syntax of the HTML DTD file. The link to this DTD can be found into the attribute xmlns:xsl of the element xsl:stylesheet.
-	
-	<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	
-	return true;
-}
-
-bool xsl::XSLProcessor::generateHtmlFile(string xmlFileName, string htmlOutputFile) {
-
-	// Checking if an valid XSL file as already been processed :
-	if (xslDoc == null) { return false; }
-
-	Document xmlDoc;
-	Document htmlDoc;
-	
-	/** TO DO :
-	 * - Load the XML file
-	 * - Analyse the syntax of the XML file & verify its semantic correctness
-	 * - Save the file structure into xmlDoc
-	 * - For each tp xsl:template element into  xslDoc, do : (§)
-	 *		- name <- tp["match"];
-			- For each el XML element having its name == name
-				- For each hel HTML element of tp
-					- if (hel.name == "apply-template"), then apply recursively the process since the symbol §
-					- htmlDoc.insert(content);
-	 */
-	
-	
-	
-	return true;
-}
-
+# endif
