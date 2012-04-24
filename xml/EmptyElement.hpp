@@ -2,7 +2,7 @@
 #define __XML_EMPTY_ELEMENT_H__
 
 # include "Content.hpp"
-# include "../commun.h"
+# include "basics.h"
 
 # include <string>
 using namespace std;

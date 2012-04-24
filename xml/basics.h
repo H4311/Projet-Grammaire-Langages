@@ -1,5 +1,5 @@
-#ifndef COMMUN_H
-#define COMMUN_H
+#ifndef BASICS_H
+#define BASICS_H
 
 #include <list>
 #include <utility>
@@ -9,6 +9,7 @@ using namespace std;
 typedef pair<string,string> Attribut;
 typedef list<Attribut> AttList;
 typedef pair<string,string> ElementName;
+typedef pair<string,string> Doctype;
 
 #ifdef DEBUG
 #define debug(x) (x)
