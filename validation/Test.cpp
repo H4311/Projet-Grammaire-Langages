@@ -2,6 +2,9 @@
 #include "../dtd/Document.hpp"
 #include "../dtd/Element.hpp"
 #include "../dtd/Attribute.hpp"
+#include "../dtd/Name.hpp"
+#include "../dtd/Choice.hpp"
+#include "../dtd/Seq.hpp"
 #include <iostream>
 #include <list>
 
