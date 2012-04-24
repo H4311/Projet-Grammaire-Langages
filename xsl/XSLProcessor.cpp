@@ -14,19 +14,56 @@ void xsl::XSLProcessor::setXslDTDFileName(string name) {
 bool xsl::XSLProcessor::processXslFile(string xslFileName) {
 	/** TO DO :
 	 * - Analyse the syntax of the XSL file, and of the XSL DTD file. If OK, continue.
-	 * - Verify the semantic correctness of the XSL elements, using the XSL DTD
 	 * - Analyse the syntax of the HTML DTD file. The link to this DTD can be found into the attribute xmlns:xsl of the element xsl:stylesheet.
-	 * - Verify the semantic correctness of the HTML elements, using the HTML DTD
+	 * - Fusion the XSL DTD and the HTML DTD.
+	 * - Verify the semantic correctness of the XSL file, using the fusioned DTD
 	 * - Save the file structure into xslDoc and return the boolean.
 	 */
-	 
+	
+	// --- Analyse the syntax of the XSL file, and of the XSL DTD file. If OK, continue.
+	Document* xslDTDdoc;
+	// --- Analyse the syntax of the HTML DTD file. The link to this DTD can be found into the attribute xmlns:xsl of the element xsl:stylesheet.
+	
+	// --------- Finding the path to the HTML DTD, contained by the attribut "xmlns:xsl" of the element "xsl:stylesheet" :
+	Element* rootXSL = dynamic_cast<Element*>(xslDoc->getRoot());
+	if (rootXSL == NULL) {
+		return false; // <Error> Invalid or empty XSL document.
+	}
+	
+	list<Content*>::iterator itelementXSL = rootXSL->getChildren()->begin();
+	while  ( (itelementXSL != rootXSL->getChilds()->end())  && (itelementXSL->getName() != "xsl:stylesheet") ) { itelementXSL++; }
+	if (itelementXSL == rootXSL->getChilds()->end()) {
+		return false; // <Error> Unfound elementcontaining the path to HTML DTD file.
+	}
+	
+	Element* elementStylesheet = dynamic_cast<Element*>(&(*itelementXSL));
+	if (elementStylesheet == NULL) {
+		return false; // <Error> Invalid "xsl:stylecheet" element.
+	}	
+	
+	Attribut attrXMLNS = elementStylesheet->FindAttribute("xmlns:xsl");
+	if (attrXMLNS == NULL) {
+		return false; // <Error> Unfound "xmlns:xsl" attribute.
+	}		
+	
+	// --------- Opening, validating ant getting the structure of the HTML DTD file :
+	Document * htmlDTDdoc; // TO DO : Document * htmlDTDdoc = DTDValidator.validate(attrXMLNS.second);
+	if (htmlDTDdoc == NULL) {
+		return false; // <Error> Invalid or unfound HTML DTD file.
+	}
+	
+	// --- Fusion the XSL DTD and the HTML DTD.
+	xslDTDdoc.
+	
+	
+	
 	return true;
 }
 
 bool xsl::XSLProcessor::generateHtmlFile(string xmlFileName, string htmlOutputFile) {
 
 	// Checking if an valid XSL file as already been processed :
-	if (xslDoc == null) { return false; }
+	if (xslDoc == NULL) { return false; }
 
 	Document xmlDoc;
 	Document htmlDoc;

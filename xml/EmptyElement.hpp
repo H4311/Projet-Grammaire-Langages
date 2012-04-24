@@ -5,9 +5,11 @@
 # include "basics.h"
 
 # include <string>
+
 using namespace std;
 
 namespace xml {
+
 	class EmptyElement : public Content {
 	protected:
 		AttList attributes;
@@ -24,7 +26,7 @@ namespace xml {
 		void SetName(ElementName* _n) { name = *_n; }
 		void SetAttList(AttList* _l) { attributes = *_l; }
 
-		void AddAttribute(Attribut _a);
+		string GetAttributeValue(string attributeName);
 		virtual ostream& toString(ostream& stream, int depth);
 	};
 }

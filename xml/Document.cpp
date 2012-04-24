@@ -13,6 +13,19 @@ xml::Document::~Document()
 		delete root;
 		root = 0;
 	}
+
+	/* // TODO
+	if (!comments->empty())
+	{
+		for (list<Comment*>::iterator it = comments->begin();
+			it != comments->end();
+			it++)
+		{
+			delete *it;
+		}
+		delete comments;
+	}
+	*/
 }
 
 ostream& xml::Document::toString(ostream& stream)
@@ -33,16 +46,18 @@ ostream& xml::Document::toString(ostream& stream)
 		stream << root;
 	}
 
+	/* // TODO affichage des commentaires
 	if (!comments->empty())
 	{
 		for (list<Comment*>::iterator it = comments->begin();
 			it != comments->end();
-			it++)
+			++it)
 		{
-			delete *it;
+			stream << **it << endl;
 		}
-		delete comments;
 	}
+	*/
+
 	return stream;
 }
 

@@ -5,21 +5,24 @@
 
 #include "Document.hpp"
 #include "Element.hpp"
+#include "Seq.hpp"
+#include "Choice.hpp"
+#include "Name.hpp"
 #include "Attribute.hpp"
 
 using namespace dtd;
 
 int main() {
 	
-	Name *n = new Name("Test");
+	Name *n = new Name("Test", '+');
 	Name *n2 = new Name("Test2");
-	Name *n3 = new Name("Test3");
+	Name *n3 = new Name("Test3", '*');
 	Name *n4 = new Name("Test4");
 	
 	std::list<Children*> l;
 	l.push_back(n);
 	l.push_back(n2);
-	Choice *c = new Choice(l);
+	Choice *c = new Choice(l, '*');
 	
 	std::list<Children*> l2;
 	l2.push_back(n3);
@@ -28,6 +31,8 @@ int main() {
 	Seq *s = new Seq(l2);
 	
 	Element *e = new Element("ElemTest", s);
+	
+	std::cout << e->getRegex() << std::endl << std::endl;
 	
 	std::list<std::string> att;
 	att.push_back("att1");
