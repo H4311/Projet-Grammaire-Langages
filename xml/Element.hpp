@@ -23,7 +23,6 @@ namespace xml {
 		
 		void Setchildren(list<Content*> * _children) { children = *_children; }
 
-		void AddChild(Content* _content);
 		virtual ostream& toString(ostream& stream, int depth);
 	};
 }

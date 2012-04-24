@@ -26,29 +26,29 @@ bool xsl::XSLProcessor::processXslFile(string xslFileName) {
 	
 	// --------- Finding the path to the HTML DTD, contained by the attribut "xmlns:xsl" of the element "xsl:stylesheet" :
 	Element* rootXSL = dynamic_cast<Element*>(xslDoc->getRoot());
-	if (rootXSL == null) {
+	if (rootXSL == NULL) {
 		return false; // <Error> Invalid or empty XSL document.
 	}
 	
-	list<Content*>::iterator itelementXSL = rootXSL->getChilds()->begin();
+	list<Content*>::iterator itelementXSL = rootXSL->getChildren()->begin();
 	while  ( (itelementXSL != rootXSL->getChilds()->end())  && (itelementXSL->getName() != "xsl:stylesheet") ) { itelementXSL++; }
 	if (itelementXSL == rootXSL->getChilds()->end()) {
 		return false; // <Error> Unfound elementcontaining the path to HTML DTD file.
 	}
 	
 	Element* elementStylesheet = dynamic_cast<Element*>(&(*itelementXSL));
-	if (elementStylesheet == null) {
+	if (elementStylesheet == NULL) {
 		return false; // <Error> Invalid "xsl:stylecheet" element.
 	}	
 	
 	Attribut attrXMLNS = elementStylesheet->FindAttribute("xmlns:xsl");
-	if (attrXMLNS == null) {
+	if (attrXMLNS == NULL) {
 		return false; // <Error> Unfound "xmlns:xsl" attribute.
 	}		
 	
 	// --------- Opening, validating ant getting the structure of the HTML DTD file :
 	Document * htmlDTDdoc; // TO DO : Document * htmlDTDdoc = DTDValidator.validate(attrXMLNS.second);
-	if (htmlDTDdoc == null) {
+	if (htmlDTDdoc == NULL) {
 		return false; // <Error> Invalid or unfound HTML DTD file.
 	}
 	
@@ -63,7 +63,7 @@ bool xsl::XSLProcessor::processXslFile(string xslFileName) {
 bool xsl::XSLProcessor::generateHtmlFile(string xmlFileName, string htmlOutputFile) {
 
 	// Checking if an valid XSL file as already been processed :
-	if (xslDoc == null) { return false; }
+	if (xslDoc == NULL) { return false; }
 
 	Document xmlDoc;
 	Document htmlDoc;
