@@ -1,4 +1,4 @@
-CXX = clang++
+CXX = g++
 LD = g++
 EXE = xmlparser
 CXXFLAGS = -g -Wall -DYYDEBUG=1
