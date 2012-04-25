@@ -4,7 +4,9 @@
 /**
  * @file XSLProcessor.hpp
  * @brief Definition - XSL processing functions
+ * 
  * Contains the functions to validate a XSL stylesheet and parse XML files into HTML using it.
+ * 
  * @author Daniel BAUDRY & Benjamin Bill PLANCHE (ALdream)
  */
 
@@ -24,6 +26,7 @@ namespace xsl {
 	/**
 	 * @class XSLProcessor
 	 * @brief XSL processing functions
+	 * 
 	 * Object which contains the functions to validate a XSL stylesheet and parse XML files into HTML using it.
 	 */
 	class XSLProcessor 
@@ -31,15 +34,17 @@ namespace xsl {
 		private:
 			xml::Document* xslDoc; /** < Structure of the processed XSL file, which will be used to process the XML files. */
 			
-			xml::Document* xslhtmlDTDDoc; /** < Structure of the processed XSL+HTML DTD file, which will be used to validate the XSL files. */
+			xml::Document* xslDTDdoc; /** < Structure of the processed XSL DTD file, which will be used to validate the XSL files. */
 
 		public:
 			// Getters and setters
 			
 			/**
-			 * @brief Setter - XSL+HTML DTD
+			 * @brief Setter - XSL DTD
+			 * 
 			 * Validate and process the given DTD file, and set the XSL DTD attribute.
-			 * If the given DTD (XSL / HTML) is invalid, the previous one will be kept as attribute.
+			 * If the given DTD is invalid, the previous one will be kept as attribute.
+			 * 
 			 * @author Benjamin Bill PLANCHE (ALdream)
 			 * @param name Path to the XSL DTD to use.
 			 * @return true if the change has been made.
@@ -48,8 +53,10 @@ namespace xsl {
 
 			/**
 			 * @brief XSL Validator
+			 * 
 			 * Validate and process the given XSL file using the previously processed DTD file, and set the XSL attribute.
-			 * If the given document is invalid, the previous one will be kept as attribute.
+			 * If the given document is invalid, or the HTML DTD it uses, the previous one will be kept as attribute.
+			 *
 			 * @return true if the XSL is conformed to the given XSL and HTML DTD, and save the document structure for the next HTML generation.
 			 * @param xslFileName Path to the xsl file to evaluate.
 			 */
@@ -57,7 +64,9 @@ namespace xsl {
 
 			/**
 			 * @brief Setter - XML to HTML Processor
+			 * 
 			 * Validate the given XML file and generate the HTML document using the previously processed XSL file.
+			 * 
 			 * @author Daniel BAUDRY & Benjamin Bill PLANCHE (ALdream)
 			 * @return true if the XML is conformed, and save the HTML document to the given place.
 			 * @param xmlFileName Path to the xml file to evaluate.

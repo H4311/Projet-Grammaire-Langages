@@ -3,7 +3,9 @@
 /**
 * @file XSLProcessor.cpp
 * @brief Implementation - XSL processing functions
+* 
 * Contains the implementation of the XSL Processor class, and thus the functions to validate a XSL stylesheet and parse XML files into HTML using it.
+* 
 * @author Daniel BAUDRY & Benjamin Bill PLANCHE (Aldream)
 */
 #include "XSLProcessor.hpp"
@@ -16,7 +18,7 @@
 using namespace std;
 
 xsl::XSLProcessor::XSLProcessor() {
-	xslhtmlDTDDoc = NULL;
+	xslDTDdoc = NULL;
 	xslDoc = NULL;
 
 }
@@ -24,14 +26,32 @@ xsl::XSLProcessor::XSLProcessor() {
 void xsl::XSLProcessor::processXslDTDFile(string name) {
 	// --- Analyse the syntax of the XSL DTD file. If OK, continue.
 	/** @todo Analyse the XSL DTD file. If OK, continue. */
-	xml::Document* xslDTDdoc;
+	xml::Document* newXslDTDdoc;
 	
 	// --- Analyse the syntax of the HTML DTD file. The link to this DTD can be found into the attribute xmlns:xsl of the element xsl:stylesheet.
 	/** @todo Analyse the syntax of the HTML DTD file. */
-	xml::Element* rootXSLDTD = dynamic_cast<xml::Element*>(xslDTDdoc->getRoot());
+	xml::Element* rootXSLDTD = dynamic_cast<xml::Element*>(newXslDTDdoc->getRoot());
 	if (rootXSLDTD == NULL) {
 		return false; // <Error> Invalid or empty XSL DTD document.
 	}
+	
+	// --- Everything is OK with the new DTD : we delete the ancient one and replace by the new.
+	delete xslDTDdoc;
+	xslDTDdoc = newXslDTDdoc;
+	return true;
+}
+
+
+bool xsl::XSLProcessor::processXslFile(string xslFileName) {
+	
+	xml::Document* newXsldoc;
+	
+	// --- Analyse the syntax of the XSL file. If OK, continue.
+	/** @todo Analyse the syntax of the XSL file. If OK, continue. */
+	
+		
+	// --- Analyse the syntax of the HTML DTD file. The link to this DTD can be found into the attribute xmlns:xsl of the element xsl:stylesheet.
+	/** @todo Analyse the syntax of the HTML DTD file. */
 	
 	// --------- Finding the path to the HTML DTD, contained by the attribut "xmlns:xsl" of the element "xsl:stylesheet" :
 	xml::Element* rootXSL = dynamic_cast<xml::Element*>(xslDoc->getRoot());
@@ -70,27 +90,17 @@ void xsl::XSLProcessor::processXslDTDFile(string name) {
 		return false; // <Error> Invalid HTML DTD File - Invalid root.
 	}
 	
-	// --- Fusion the XSL DTD and the HTML DTD.
-	list<xml::Content*> xslDTDelements = rootXSLDTD->getChildren();
+	// --- Fusion the XSL DTD and the HTML DTD into a new DTD (only valid used for this XSL)
+	Document* xslhtmlDTDdoc = new Document();
+	/** @todo : Copy xslDTDdoc into xslhtmlDTDdoc */
+	xml::Element* rootXSLHTMLDTD = dynamic_cast<xml::Element*>(xslhtmlDTDdoc->getRoot());
+	list<xml::Content*> xslDTDelements = rootXSLHTMLDTD->getChildren();
 	for( list<xml::Content*>::const_iterator it = rootHTMLDTD->getChildren().begin();  it != rootHTMLDTD->getChildren().end(); it++) {
 		xslDTDelements.push_back(*it);
 	}
-	rootXSLDTD->SetChildren(&xslDTDelements);
+	rootXSLHTMLDTD->SetChildren(&xslDTDelements);
 	
-	// --- Everything is OK with the new DTD : we delete the ancient one and replace by the new.
-	delete xslhtmlDTDDoc;
-	xslhtmlDTDDoc = xslDTDdoc;
-	return true;
-}
-
-
-bool xsl::XSLProcessor::processXslFile(string xslFileName) {
-	
-	xml::Document* newXsldoc;
-	
-	// --- Analyse the syntax of the XSL file. If OK, continue.
-	/** @todo Analyse the syntax of the XSL file. If OK, continue. */
-	
+	// Semantic analysis :
 	bool semanticCorrectness = true;
 	/** @todo Analyse the semantic correctness of the XSL file :  semanticCorrectness = DTDValidator.validate(xslDoc, xslDTDdoc); */
 	if (!semanticCorrectness) {
@@ -100,6 +110,8 @@ bool xsl::XSLProcessor::processXslFile(string xslFileName) {
 	// --- Everything is OK with the new XSL : we delete the ancient one and replace by the new.
 	delete xslDoc;
 	xslDoc = newXsldoc;
+	
+	delete xslhtmlDTDdoc;
 	
 	return true;
 }
