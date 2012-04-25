@@ -8,6 +8,7 @@
 #include "Seq.hpp"
 #include "Choice.hpp"
 #include "Name.hpp"
+#include "AttributeList.hpp"
 #include "Attribute.hpp"
 
 using namespace dtd;
@@ -40,16 +41,27 @@ int main() {
 	
 	std::cout << e->getRegex() << std::endl << std::endl;
 	
-	std::list<std::string> att;
-	att.push_back("att1");
-	att.push_back("att2");
-	Attribute *a = new Attribute("AttTest", att);
+	std::list<std::string> type;
+	type.push_back("CDATA");
+	Attribute *a = new Attribute("att1", type, "#FIXED", "test");
+	
+	std::list<std::string> type2;
+	type2.push_back("enum1");
+	type2.push_back("enum2");
+	type2.push_back("enum3");
+	Attribute *a2 = new Attribute("att2", type2, "#IMPLIED");
+	
+	std::list<Attribute*> attList;
+	attList.push_back(a);
+	attList.push_back(a2);
+	
+	AttributeList *al = new AttributeList("list", attList);
 	
 	std::list<Declaration*> decl;
 	decl.push_back(e);
 	decl.push_back(e2);
 	decl.push_back(e3);
-	decl.push_back(a);
+	decl.push_back(al);
 	Document *d = new Document(decl);
 	
 	std::cout << d << std::endl;
