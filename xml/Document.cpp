@@ -1,6 +1,13 @@
 #include "Content.hpp"
 # include "Document.hpp"
 
+/**
+@file xml/Document.cpp
+Ce fichier contient la réalisation de la classe xml::Document.
+@author Benjamin BOUVIER
+*/
+
+using namespace std;
 
 xml::Document::~Document()
 {
@@ -16,7 +23,6 @@ xml::Document::~Document()
 		root = 0;
 	}
 
-	// TODO
 	if (!comments.empty())
 	{
 		for (list<Comment*>::iterator it = comments.begin();
@@ -29,7 +35,8 @@ xml::Document::~Document()
 	
 }
 
-xml::Content* xml::Document::getRoot() {
+xml::Content* xml::Document::getRoot() 
+{
 	return root;
 }
 
@@ -51,7 +58,6 @@ ostream& xml::Document::toString(ostream& stream)
 		stream << root;
 	}
 
-	// TODO affichage des commentaires
 	if (!comments.empty())
 	{
 		for (list<Comment*>::iterator it = comments.begin();

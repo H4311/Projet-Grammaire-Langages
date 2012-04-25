@@ -8,7 +8,6 @@
 
 # include "Content.hpp"
 # include <string>
-using namespace std;
 
 namespace xml {
 	/**
@@ -20,24 +19,25 @@ namespace xml {
 	*/
 	class Comment : public Content {
 	private:
-		/**
-		Contenu textuel du commentaire.
-		*/
-		string comment;
+		// Contenu du commentaire
+		std::string comment;
 
 	public:
 		/**
 			Constructeur par défaut.
 			@param _c Contenu du commentaire
 		*/
-		Comment(string _c) : comment(_c) { /* empty */ }
+		Comment(std::string _c) : comment(_c)
+		{ 
+		 /* empty */ 
+		}
 		
 		/**
 			Affichage du commentaire.
 			@param stream Flux dans lequel on écrit.
 			@param depth Profondeur dans l'arbre.
 		*/
-		virtual ostream& toString(ostream& stream, int depth);
+		virtual std::ostream& toString(std::ostream& stream, int depth);
 	};
 }
 #endif
