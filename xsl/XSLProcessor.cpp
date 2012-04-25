@@ -170,5 +170,5 @@ void applyTemplate( Element* XMLElement, Element* XSLTemplate ) {
 			
 			// Replace the value in the html file
 		}
-
+	}
 }
