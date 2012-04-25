@@ -112,3 +112,9 @@ closespecial "?>"{nl}?
 
 .			{ fprintf(stderr, "!ERROR(%c)\n", *yytext);}
 
+%%
+
+void flex_close()
+{
+	yylex_destroy();
+}

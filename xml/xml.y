@@ -18,7 +18,7 @@ int yylex(void);
    list<Content*> * lc; 	/* liste d'éléments (enfants) */
    AttList *al;			/* liste d'attributs */
    Doctype *dt;			/* doctype */
-   list<Comment*> * ld;	/* liste de commentaires */
+   list<Comment*> * ld;		/* liste de commentaires */
 }
 
 %token EQ SLASH CLOSE CLOSESPECIAL DOCTYPE
@@ -98,8 +98,8 @@ xml_element
 		$3->SetAttList($2);
 		delete $2;
 		$3->SetName($1);
-		$$ = $3;
 		delete $1;
+		$$ = $3;
 	}
  ;
 
@@ -173,6 +173,7 @@ content_opt
 %%
 
 extern FILE *xmlin;
+extern void flex_close();
 
 xml::Document* parseXML(const char* file)
 {
@@ -185,7 +186,7 @@ xml::Document* parseXML(const char* file)
 
   if (xmlin != NULL)
   {
-    err = xmlparse(&document);
+    err = yyparse(&document);
     if (err != 0) 
     {
 	printf("Parse ended with %d error(s)\n", err);
@@ -193,6 +194,7 @@ xml::Document* parseXML(const char* file)
     }
     else  printf("Parse ended with success\n");
     fclose(xmlin);
+    flex_close();
   }
   
   return document;
