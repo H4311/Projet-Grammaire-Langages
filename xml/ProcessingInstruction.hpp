@@ -1,18 +1,36 @@
 #ifndef __XML_PROC_INSTRUCTION_H__
 #define __XML_PROC_INSTRUCTION_H__
 
+/**
+@file xml/ProcessingInstruction.hpp
+Ce fichier contient l'entête de la classe ProcessingInstruction.
+@author Benjamin BOUVIER
+*/
+
 #include "EmptyElement.hpp"
 #include <string>
-using namespace std;
 
 namespace xml {
+	/**
+	@brief Instruction de traitement xml (<? ?>)
+
+	Cette classe modélise une instruction de traitement xml, ie une balise
+	de la forme <? ?>.
+	*/
 	class ProcessingInstruction : public EmptyElement {
 	private:
-		string beginCharacter();
-		string endCharacter();
+		// Le caractère de début est <?
+		std::string beginCharacter();
+
+		// Le caractère de fin est ?>
+		std::string endCharacter();
 
 	public:
-		ProcessingInstruction(ElementName _name) : EmptyElement(_name) { /* empty */ }
+		// TODO
+		/**
+		@todo Rajouter des méthodes.
+		*/
+		//ProcessingInstruction(ElementName _name) : EmptyElement(_name) { /* empty */ }
 	};
 }
 #endif

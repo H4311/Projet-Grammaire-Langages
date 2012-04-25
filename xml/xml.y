@@ -12,13 +12,13 @@ int yylex(void);
 
 %union {
    char * s;
-   ElementName * en;  		/* le nom d'un element avec son namespace */
-   Content * c; 		/* contenu xml */
-   EmptyElement * ee; 		/* element xml */
-   list<Content*> * lc; 	/* liste d'éléments (enfants) */
-   AttList *al;			/* liste d'attributs */
-   Doctype *dt;			/* doctype */
-   list<Comment*> * ld;		/* liste de commentaires */
+   ElementName * en;  			/* le nom d'un element avec son namespace */
+   xml::Content * c; 			/* contenu xml */
+   xml::EmptyElement * ee; 		/* element xml */
+   list<xml::Content*> * lc;	 	/* liste d'éléments (enfants) */
+   AttList *al;				/* liste d'attributs */
+   Doctype *dt;				/* doctype */
+   list<xml::Comment*> * ld;		/* liste de commentaires */
 }
 
 %token EQ SLASH CLOSE CLOSESPECIAL DOCTYPE
