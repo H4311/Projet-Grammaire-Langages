@@ -1,11 +1,10 @@
 %{
-
+#include <stdio.h>
 #include "common.h"
 using namespace std;
 using namespace dtd;
 
-#include <stdio.h>
-void yyerror(char *msg);
+int dtderror(Document ** doc, char *msg);
 int dtdwrap(void);
 void dtdrestart(FILE *);
 int yylex(void);
@@ -16,8 +15,8 @@ int yylex(void);
 	char *s;
 	DeclarationList *dl;
 	ChildrenList *cl;
-	Element *e;
-	Attribute *a;
+	dtd::Element *e;
+	dtd::Attribute *a;
 }
 
 %token ELEMENT ATTLIST CLOSE OPENPAR CLOSEPAR COMMA PIPE FIXED EMPTY ANY PCDATA AST QMARK PLUS CDATA COLON
@@ -140,10 +139,12 @@ list_mixed
 %%
 
 extern FILE *dtdin;
+extern void yylex_destroy();
 
 int parseDTD(const char * file)
 {
   int err;
+  dtd::Document * document = NULL;
   
   dtdin = fopen(file, "r");
   dtdrestart(dtdin);
@@ -152,10 +153,15 @@ int parseDTD(const char * file)
 
   if (dtdin != NULL)
   {
-    err = dtdparse();
-    if (err != 0) printf("Parse ended with %d error(s)\n", err);
-        else  printf("Parse ended with success\n", err);
+    err = dtdparse(&document);
+    if (err != 0) 
+    {
+	printf("Parse ended with %d error(s)\n", err);
+	if (document != NULL) delete document;
+    }
+    else  printf("Parse ended with success\n", err);
     fclose(dtdin);
+    yylex_destroy();
   }
   
   return 0;
@@ -166,7 +172,7 @@ int dtdwrap(void)
   return 1;
 }
 
-void yyerror(char *msg)
+int dtderror(Document** doc, char *msg)
 {
   fprintf(stderr, "%s\n", msg);
 }

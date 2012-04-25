@@ -22,11 +22,8 @@
 #include "Seq.hpp"
 #include "Name.hpp"
 
-using namespace std;
-using namespace dtd;
-
-typedef list<Declaration*> DeclarationList;
-typedef list<Children*> ChildrenList;
-typedef list<string> AttDefList;
+typedef std::list<dtd::Declaration*> DeclarationList;
+typedef std::list<dtd::Children*> ChildrenList;
+typedef std::list<std::string> AttDefList;
 
 #endif

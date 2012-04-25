@@ -12,7 +12,7 @@ using namespace std;
 namespace xml
 {
 	/**
-	Foncteur pour la recherche par nom d'attribut via std::find.
+	@brief Foncteur pour la recherche par nom d'attribut via std::find.
 	*/
 	struct AttributName: public std::binary_function< Attribut, string, bool > {
 		// Adaptable binary predicate to find an attribute using its name :

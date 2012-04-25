@@ -9,6 +9,11 @@ Ce fichier contient l'entête de la classe Content qui représente un contenu xm
 
 # include <iostream>
 
+/**
+@brief Toutes les classes xml
+
+Espace de noms contenant l'ensemble des classes relatives au traitement du xml.
+*/
 namespace xml {
 
 	/**

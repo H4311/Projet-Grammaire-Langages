@@ -1,6 +1,7 @@
 %option 8bit 
 
 %{
+#include "common.h"
 #include <ctype.h>
 #include <string.h>
 #include "dtd.tab.h"
