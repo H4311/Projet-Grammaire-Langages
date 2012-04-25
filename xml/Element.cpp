@@ -1,5 +1,12 @@
 # include "Element.hpp"
 
+/**
+@file xml/Element.cpp
+Ce fichier contient la réalisation de la classe Element.
+@author Benjamin BOUVIER
+*/
+using namespace std;
+
 namespace xml {
 	
 	string Element::endCharacter()
@@ -17,11 +24,17 @@ namespace xml {
 		}
 	}
 	
-	list<Content*> Element::getChildren() {
+	list<Content*> Element::getChildren() 
+	{
 		return children;
 	}
 
 	ostream& Element::toString(ostream& stream, int depth)
+	/*
+	On affiche d'abord la balise d'ouverture de l'élément,
+	puis les contenus enfants, et enfin la balise fermante de 
+	l'élément.
+	*/
 	{
 		ostream & current = EmptyElement::toString(stream, depth);
 		current << endl;
@@ -44,5 +57,4 @@ namespace xml {
 		current << name.second << ">";
 		return current;	
 	}
-
 }

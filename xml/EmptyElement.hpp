@@ -1,24 +1,30 @@
 #ifndef __XML_EMPTY_ELEMENT_H__
 #define __XML_EMPTY_ELEMENT_H__
 
+/**
+@file xml/EmptyElement.hpp
+Ce fichier contient l'entête de la classe EmptyElement.
+@author Benjamin BOUVIER
+*/
+
 # include "Content.hpp"
 # include "basics.h"
 
 # include <string>
-
-using namespace std;
-
 namespace xml {
-
-	class EmptyElement : public Content {
+	class EmptyElement : public Content 
+	{
 	protected:
+		// Attributs de l'élément.
 		AttList attributes;
+
+		// Nom de l'élément, sous la forme <namespace, nom>
 		ElementName name;	
 
 		// Represents the last character to print when calling toString.
 		// Should be "/>" for EmptyElement and ">" for Element.
-		virtual string endCharacter(); 
-		virtual string beginCharacter();
+		virtual std::string endCharacter(); 
+		virtual std::string beginCharacter();
 	public:
 		EmptyElement(ElementName _en) : name(_en) { /* empty */ }
 		EmptyElement() {}
@@ -26,10 +32,10 @@ namespace xml {
 		void SetName(ElementName* _n) { name = *_n; }
 		void SetAttList(AttList* _l) { attributes = *_l; }
 		
-		std::string getName();
+		std::std::string getName();
 
-		string GetAttributeValue(string attributeName);
-		virtual ostream& toString(ostream& stream, int depth);
+		std::string GetAttributeValue(std::string attributeName);
+		virtual std::ostream& toString(std::ostream& stream, int depth);
 	};
 }
 
