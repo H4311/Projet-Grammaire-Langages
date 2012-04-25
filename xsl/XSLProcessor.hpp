@@ -31,15 +31,15 @@ namespace xsl {
 		private:
 			xml::Document* xslDoc; /** < Structure of the processed XSL file, which will be used to process the XML files. */
 			
-			xml::Document* xslhtmlDTDDoc; /** < Structure of the processed XSL+HTML DTD file, which will be used to validate the XSL files. */
+			xml::Document* xslDTDdoc; /** < Structure of the processed XSL DTD file, which will be used to validate the XSL files. */
 
 		public:
 			// Getters and setters
 			
 			/**
-			 * @brief Setter - XSL+HTML DTD
+			 * @brief Setter - XSL DTD
 			 * Validate and process the given DTD file, and set the XSL DTD attribute.
-			 * If the given DTD (XSL / HTML) is invalid, the previous one will be kept as attribute.
+			 * If the given DTD is invalid, the previous one will be kept as attribute.
 			 * @author Benjamin Bill PLANCHE (ALdream)
 			 * @param name Path to the XSL DTD to use.
 			 * @return true if the change has been made.
@@ -49,7 +49,7 @@ namespace xsl {
 			/**
 			 * @brief XSL Validator
 			 * Validate and process the given XSL file using the previously processed DTD file, and set the XSL attribute.
-			 * If the given document is invalid, the previous one will be kept as attribute.
+			 * If the given document is invalid, or the HTML DTD it uses, the previous one will be kept as attribute.
 			 * @return true if the XSL is conformed to the given XSL and HTML DTD, and save the document structure for the next HTML generation.
 			 * @param xslFileName Path to the xsl file to evaluate.
 			 */
