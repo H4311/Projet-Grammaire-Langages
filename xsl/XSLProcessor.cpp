@@ -15,20 +15,15 @@
  
 using namespace std;
 
-xsl::XSLProcessor::XSLProcessor() : xslDoc() { /* empty */ }
+xsl::XSLProcessor::XSLProcessor() {
+	xslhtmlDTDDoc = NULL;
+	xslDoc = NULL;
 
-void xsl::XSLProcessor::setXslDTDFileName(string name) {
-	xslDTDFileName = name;
 }
 
-
-bool xsl::XSLProcessor::processXslFile(string xslFileName) {
-	
-	delete xslDoc;
-	xslDoc = NULL;
-	
-	// --- Analyse the syntax of the XSL file, and of the XSL DTD file. If OK, continue.
-	/** @todo Analyse the syntax of the XSL file, and of the XSL DTD file. If OK, continue. */
+void xsl::XSLProcessor::processXslDTDFile(string name) {
+	// --- Analyse the syntax of the XSL DTD file. If OK, continue.
+	/** @todo Analyse the XSL DTD file. If OK, continue. */
 	xml::Document* xslDTDdoc;
 	
 	// --- Analyse the syntax of the HTML DTD file. The link to this DTD can be found into the attribute xmlns:xsl of the element xsl:stylesheet.
@@ -82,7 +77,31 @@ bool xsl::XSLProcessor::processXslFile(string xslFileName) {
 	}
 	rootXSLDTD->SetChildren(&xslDTDelements);
 	
-	return true; /** @todo return DTDValidator.validate(xslDoc, xslDTDdoc); */ // if false : <Error> Invalid XSL file : doesn't respect the given DTD.
+	// --- Everything is OK with the new DTD : we delete the ancient one and replace by the new.
+	delete xslhtmlDTDDoc;
+	xslhtmlDTDDoc = xslDTDdoc;
+	return true;
+}
+
+
+bool xsl::XSLProcessor::processXslFile(string xslFileName) {
+	
+	xml::Document* newXsldoc;
+	
+	// --- Analyse the syntax of the XSL file. If OK, continue.
+	/** @todo Analyse the syntax of the XSL file. If OK, continue. */
+	
+	bool semanticCorrectness = true;
+	/** @todo Analyse the semantic correctness of the XSL file :  semanticCorrectness = DTDValidator.validate(xslDoc, xslDTDdoc); */
+	if (!semanticCorrectness) {
+		return false; // if false : <Error> Invalid XSL file : doesn't respect the given DTD.
+	}
+	
+	// --- Everything is OK with the new XSL : we delete the ancient one and replace by the new.
+	delete xslDoc;
+	xslDoc = newXsldoc;
+	
+	return true;
 }
 
 bool xsl::XSLProcessor::generateHtmlFile(string xmlFileName, string htmlOutputFile) {

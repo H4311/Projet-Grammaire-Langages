@@ -29,24 +29,27 @@ namespace xsl {
 	class XSLProcessor 
 	{
 		private:
-			xml::Document* xslDoc; /** < Structure of the processed XSL file */
-
-			string xslDTDFileName; /** < Name of the XSL DTD file to use to validate the XSL docs. */
+			xml::Document* xslDoc; /** < Structure of the processed XSL file, which will be used to process the XML files. */
+			
+			xml::Document* xslhtmlDTDDoc; /** < Structure of the processed XSL+HTML DTD file, which will be used to validate the XSL files. */
 
 		public:
 			// Getters and setters
 			
 			/**
-			 * @brief Setter - XSL DTD file path
-			 * Sets the XSL DTD file path attribute
+			 * @brief Setter - XSL+HTML DTD
+			 * Validate and process the given DTD file, and set the XSL DTD attribute.
+			 * If the given DTD (XSL / HTML) is invalid, the previous one will be kept as attribute.
 			 * @author Benjamin Bill PLANCHE (ALdream)
-			 * @param name New path.
+			 * @param name Path to the XSL DTD to use.
+			 * @return true if the change has been made.
 			 */
-			void setXslDTDFileName(string name);			
+			bool processXslDTDFile(string name);			
 
 			/**
-			 * @brief Setter - XSL Validator
-			 * Validate and process the given XSL file.
+			 * @brief XSL Validator
+			 * Validate and process the given XSL file using the previously processed DTD file, and set the XSL attribute.
+			 * If the given document is invalid, the previous one will be kept as attribute.
 			 * @return true if the XSL is conformed to the given XSL and HTML DTD, and save the document structure for the next HTML generation.
 			 * @param xslFileName Path to the xsl file to evaluate.
 			 */
