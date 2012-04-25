@@ -1,17 +1,17 @@
 # ifndef __XSLPROCESSOR_H__
 # define __XSLPROCESSOR_H__
 
-using namespace std;
-#include "../xml/Document.hpp"
+#include "Document.hpp"
 
 # include <string>
+using namespace std;
 
 namespace xsl {
 
 	class XSLProcessor 
 	{
 		private:
-			Document* xslDoc; // Structure of the processed XSL file
+			xml::Document* xslDoc; // Structure of the processed XSL file
 
 			string xslDTDFileName; // Name of the XSL DTD file to use to validate the XSL docs.
 
