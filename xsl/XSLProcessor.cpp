@@ -28,8 +28,6 @@ void xsl::XSLProcessor::processXslDTDFile(string name) {
 	/** @todo Analyse the XSL DTD file. If OK, continue. */
 	xml::Document* newXslDTDdoc;
 	
-	// --- Analyse the syntax of the HTML DTD file. The link to this DTD can be found into the attribute xmlns:xsl of the element xsl:stylesheet.
-	/** @todo Analyse the syntax of the HTML DTD file. */
 	xml::Element* rootXSLDTD = dynamic_cast<xml::Element*>(newXslDTDdoc->getRoot());
 	if (rootXSLDTD == NULL) {
 		return false; // <Error> Invalid or empty XSL DTD document.
@@ -91,7 +89,7 @@ bool xsl::XSLProcessor::processXslFile(string xslFileName) {
 	}
 	
 	// --- Fusion the XSL DTD and the HTML DTD into a new DTD (only valid used for this XSL)
-	Document* xslhtmlDTDdoc = new Document();
+	xml::Document* xslhtmlDTDdoc = new Document();
 	/** @todo : Copy xslDTDdoc into xslhtmlDTDdoc */
 	xml::Element* rootXSLHTMLDTD = dynamic_cast<xml::Element*>(xslhtmlDTDdoc->getRoot());
 	list<xml::Content*> xslDTDelements = rootXSLHTMLDTD->getChildren();
