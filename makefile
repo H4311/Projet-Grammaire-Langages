@@ -4,10 +4,10 @@ EXEC_NAME = main
 INCLUDES = 
 LIBS = -lboost_program_options
 OBJ_FILES = Main.o
-OBJ_FILES_DEP = xml/*.o AnalyseurDTD/*.o # xsl/*.o
+OBJ_FILES_DEP = xml/*.o dtd/*.o # xsl/*.o
 
 XML_REP = xml/
-DTD_REP = AnalyseurDTD/
+DTD_REP = dtd/
 XSL_REP = xsl/
 
 all: $(EXEC_NAME)
