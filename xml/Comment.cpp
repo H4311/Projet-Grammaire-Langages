@@ -2,9 +2,10 @@
 
 /**
 * @file Comment.cpp
-* Implémentation de la classe Comment.
+* Implémentation des méthodes de la classe Comment.
 * @author Benjamin BOUVIER
 */
+using namespace std;
 
 namespace xml
 {

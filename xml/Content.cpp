@@ -1,9 +1,11 @@
 # include "Content.hpp"
 
 /**
+@file Content.cpp
 Implémentation des méthodes et fonctions de la classe Content.
 @author Benjamin BOUVIER
 */
+using namespace std;
 
 ostream& operator<<(ostream& stream, xml::Content* content) {
 	// la profondeur initiale est de 0. Ce sont les éléments appelés

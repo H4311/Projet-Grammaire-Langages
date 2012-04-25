@@ -2,8 +2,10 @@
 #define BASICS_H
 
 /**
- * Ce fichier contient des typedef utilisés dans divers sources, notamment
- * les fichiers flex et bison.
+* @file basics.h
+* Ce fichier contient des typedef utilisés dans divers sources, notamment
+* les fichiers flex et bison.
+* @author Benjamin BOUVIER
 */
 
 #include <list>
