@@ -3,7 +3,9 @@
 /**
 * @file XSLProcessor.cpp
 * @brief Implementation - XSL processing functions
+* 
 * Contains the implementation of the XSL Processor class, and thus the functions to validate a XSL stylesheet and parse XML files into HTML using it.
+* 
 * @author Daniel BAUDRY & Benjamin Bill PLANCHE (Aldream)
 */
 #include "XSLProcessor.hpp"
