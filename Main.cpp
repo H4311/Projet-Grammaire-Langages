@@ -38,7 +38,10 @@ int main(int ac, char * av[])
 		}
 		if (vm.count("dtd"))
 		{
-			parseDTD(vm["dtd"].as<string>().c_str());
+			dtd::Document* document = NULL;
+			document = parseDTD(vm["dtd"].as<string>().c_str());
+			cout << document << "\n" << endl;
+			delete document;
 		}
 	
 	} catch(exception& e) {

@@ -10,7 +10,8 @@
 namespace dtd {
 	class Choice : public ChoiceSeq {
 		public:
-			Choice(std::list<Children*> _children = NULL, char card = 0);
+			// Choice(std::list<Children*> _children = NULL, char card = 0);
+			Choice(std::list<Children*> _children = NULL);
 			virtual ~Choice();
 			char getSep();
 			char getRegexSep();

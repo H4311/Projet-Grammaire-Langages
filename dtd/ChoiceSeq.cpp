@@ -6,8 +6,8 @@ namespace dtd {
 
 	// -------------------------------------------------------- Class ChoiceSeq
 		
-	ChoiceSeq::ChoiceSeq(std::list<Children*> _children, char card)
-		: Children(card), children(_children) {}
+	ChoiceSeq::ChoiceSeq(std::list<Children*> _children)
+		: children(_children) {}
 	
 	ChoiceSeq::~ChoiceSeq() {
 		std::list<Children*>::iterator it;

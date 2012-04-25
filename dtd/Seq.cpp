@@ -4,8 +4,8 @@ namespace dtd {
 
 	// -------------------------------------------------------------- Class Seq
 		
-	Seq::Seq(std::list<Children*> _children, char card)
-		: ChoiceSeq(_children, card) {}
+	Seq::Seq(std::list<Children*> _children)
+		: ChoiceSeq(_children) {}
 	
 	Seq::~Seq() {}
 	

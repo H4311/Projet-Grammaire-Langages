@@ -1,6 +1,8 @@
 #ifndef DTD_H
 #define DTD_H
 
-int parseDTD(const char* file);
+# include "Document.hpp"
+
+dtd::Document* parseDTD(const char* file);
 
 #endif

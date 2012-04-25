@@ -22,7 +22,8 @@ int main() {
 	std::list<Children*> l;
 	l.push_back(n);
 	l.push_back(n2);
-	Choice *c = new Choice(l, '*');
+	Choice *c = new Choice(l);
+	c->SetCard('*');
 	
 	std::list<Children*> l2;
 	l2.push_back(n3);
@@ -50,7 +51,7 @@ int main() {
 	decl.push_back(e2);
 	decl.push_back(e3);
 	decl.push_back(a);
-	Document *d = new Document(decl);
+	Document *d = new Document(&decl);
 	
 	std::cout << d << std::endl;
 	
