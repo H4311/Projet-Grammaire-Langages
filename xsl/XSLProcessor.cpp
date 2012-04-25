@@ -31,7 +31,7 @@ void xsl::XSLProcessor::processXslDTDFile(string name) {
 	xml::Element* rootXSLDTD = dynamic_cast<xml::Element*>(newXslDTDdoc->getRoot());
 	if (rootXSLDTD == NULL) {
 		return false; // <Error> Invalid or empty XSL DTD document.
-	
+	}
 	
 	// --- Everything is OK with the new DTD : we delete the ancient one and replace by the new.
 	delete xslDTDdoc;
