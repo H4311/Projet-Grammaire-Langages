@@ -89,7 +89,7 @@ bool xsl::XSLProcessor::processXslFile(string xslFileName) {
 	}
 	
 	// --- Fusion the XSL DTD and the HTML DTD into a new DTD (only valid used for this XSL)
-	Document* xslhtmlDTDdoc = new Document();
+	xml::Document* xslhtmlDTDdoc = new Document();
 	/** @todo : Copy xslDTDdoc into xslhtmlDTDdoc */
 	xml::Element* rootXSLHTMLDTD = dynamic_cast<xml::Element*>(xslhtmlDTDdoc->getRoot());
 	list<xml::Content*> xslDTDelements = rootXSLHTMLDTD->getChildren();
