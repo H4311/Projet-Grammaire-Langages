@@ -5,7 +5,7 @@
 #include <fstream>
 
 #include "xml/xml_processor.h"
-#include "AnalyseurDTD/dtd.h"
+#include "dtd/dtd.h"
 
 using namespace std;
 namespace po = boost::program_options;
