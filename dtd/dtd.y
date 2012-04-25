@@ -1,17 +1,30 @@
 %{
+
+#include "common.h"
+using namespace std;
+using namespace dtd;
+
 #include <stdio.h>
 void yyerror(char *msg);
 int dtdwrap(void);
 void dtdrestart(FILE *);
 int yylex(void);
+
 %}
 
 %union { 
-   char *s; 
-   }
+	char *s;
+	DeclarationList *dl;
+	ChildrenList *cl;
+	Element *e;
+	Attribute *a;
+}
 
 %token ELEMENT ATTLIST CLOSE OPENPAR CLOSEPAR COMMA PIPE FIXED EMPTY ANY PCDATA AST QMARK PLUS CDATA COLON
 %token <s> IDENT TOKENTYPE DECLARATION STRING
+
+%parse-param { Document** doc } 
+
 %%
 
 main: dtd_list_opt 
