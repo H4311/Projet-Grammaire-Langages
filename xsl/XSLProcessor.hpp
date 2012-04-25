@@ -3,9 +3,9 @@
 
 /**
  * @file XSLProcessor.hpp
- * @brief XSL processing functions
+ * @brief Definition - XSL processing functions
  * Contains the functions to validate a XSL stylesheet and parse XML files into HTML using it.
- * @author Benjamin Bill Planche (Aldream)
+ * @author Benjamin Bill PLANCHE (Aldream)
  */
 
 # include "Content.hpp"
