@@ -1,6 +1,11 @@
 #ifndef BASICS_H
 #define BASICS_H
 
+/**
+ * Ce fichier contient des typedef utilisés dans divers sources, notamment
+ * les fichiers flex et bison.
+*/
+
 #include <list>
 #include <utility>
 #include <string>
@@ -16,6 +21,5 @@ typedef pair<string,string> Doctype;
 #else
 #define debug(x) ((void) 0)
 #endif
-
 
 #endif

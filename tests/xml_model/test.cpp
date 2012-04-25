@@ -27,7 +27,7 @@ int main(int argc, char**argv)
 	// root->AddChild(body);
 	list<xml::Content*> childs;
 	childs.push_back(body);
-	root->SetChilds(&childs);
+	root->SetChildren(&childs);
 
 	xml::Element* element = new xml::Element(ElementName("", "a"));
 	attributes.push_back(Attribut("alt", "Google.fr"));
@@ -43,12 +43,12 @@ int main(int argc, char**argv)
 	xml::Comment* comment = new xml::Comment("Ceci est un commentaire.");
 	// element->AddChild(comment);
 	childs.push_back(comment);
-	element->SetChilds(&childs);
+	element->SetChildren(&childs);
 
 	childs.clear();
 	childs.push_back(element);
 	// body->AddChild(element);
-	body->SetChilds(&childs);
+	body->SetChildren(&childs);
 
 	cout << doc << endl;
 }
