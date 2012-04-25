@@ -1,8 +1,12 @@
-# include <iostream>
+#include <iostream>
 
-# include "XSLProcessor.hpp"
-# include "xml/xml_processor.h"
-
+#include "XSLProcessor.hpp"
+#include "xml_processor.h"
+#include "Element.hpp"
+#include "EmptyElement.hpp"
+#include "Document.hpp"
+#include "basics.h"
+ 
 using namespace std;
 
 xsl::XSLProcessor::XSLProcessor() : xslDoc() { /* empty */ }
@@ -14,57 +18,65 @@ void xsl::XSLProcessor::setXslDTDFileName(string name) {
 
 bool xsl::XSLProcessor::processXslFile(string xslFileName) {
 	
-	delete *xsldoc;
-	xsldoc = null;
+	delete xslDoc;
+	xslDoc = NULL;
 	
 	// --- Analyse the syntax of the XSL file, and of the XSL DTD file. If OK, continue.
 	/** TO DO */
-	Document* xslDTDdoc;
+	xml::Document* xslDTDdoc;
 	
 	// --- Analyse the syntax of the HTML DTD file. The link to this DTD can be found into the attribute xmlns:xsl of the element xsl:stylesheet.
 	/** TO DO */
-	Element* rootXSLDTD = dynamic_cast<Element*>(xslDTDdoc->getRoot());
+	xml::Element* rootXSLDTD = dynamic_cast<xml::Element*>(xslDTDdoc->getRoot());
 	if (rootXSLDTD == NULL) {
 		return false; // <Error> Invalid or empty XSL DTD document.
 	}
 	
 	// --------- Finding the path to the HTML DTD, contained by the attribut "xmlns:xsl" of the element "xsl:stylesheet" :
-	Element* rootXSL = dynamic_cast<Element*>(xslDoc->getRoot());
+	xml::Element* rootXSL = dynamic_cast<xml::Element*>(xslDoc->getRoot());
 	if (rootXSL == NULL) {
 		return false; // <Error> Invalid or empty XSL document.
 	}
 	
-	list<Content*>::iterator itelementXSL = rootXSL->getChildren()->begin();
-	while  ( (itelementXSL != rootXSL->getChilds()->end())  && (itelementXSL->getName() != "xsl:stylesheet") ) { itelementXSL++; }
-	if (itelementXSL == rootXSL->getChilds()->end()) {
-		return false; // <Error> Unfound elementcontaining the path to HTML DTD file.
+	list<xml::Content*>::iterator itelementXSL = rootXSL->getChildren().begin();
+	xml::EmptyElement* elStylesheet;
+	while  (itelementXSL != rootXSL->getChildren().end()) {
+		xml::EmptyElement* elXSL = dynamic_cast<xml::Element*>(*itelementXSL);
+		if ( (elXSL != NULL) && (elXSL->getName() == "xsl:stylesheet") ) {
+			elStylesheet = elXSL;
+			break;
+		 }
+		itelementXSL++;
 	}
-	
-	Element* elementStylesheet = dynamic_cast<Element*>(&(*itelementXSL));
-	if (elementStylesheet == NULL) {
-		return false; // <Error> Invalid "xsl:stylecheet" element.
+	if (itelementXSL == rootXSL->getChildren().end()) {
+		return false; // <Error> Unfound elementcontaining the path to HTML DTD file.
 	}	
 	
-	Attribut attrXMLNS = elementStylesheet->FindAttribute("xmlns:xsl");
-	if (attrXMLNS == NULL) {
+	string attrXMLNS = elStylesheet->GetAttributeValue("xmlns:xsl");
+	if (attrXMLNS.empty()) {
 		return false; // <Error> Unfound "xmlns:xsl" attribute.
 	}		
 	
 	// --------- Opening, validating ant getting the structure of the HTML DTD file :
-	Document * htmlDTDdoc;
+	xml::Document * htmlDTDdoc;
 	/** TO DO : Document * htmlDTDdoc = DTDValidator.parse(attrXMLNS.second); */
 	if (htmlDTDdoc == NULL) {
 		return false; // <Error> Invalid or unfound HTML DTD file.
 	}
 	
+	xml::Element* rootHTMLDTD = dynamic_cast<xml::Element*>(htmlDTDdoc->getRoot());
+	if (rootHTMLDTD == NULL) {
+		return false; // <Error> Invalid HTML DTD File - Invalid root.
+	}
+	
 	// --- Fusion the XSL DTD and the HTML DTD.
-	list<Content*> xslDTDelements = rootXSLDTD->getChildren();
-	for( list<Content*>::const_iterator it = htmlDTDdoc->getRoot()->getChildren().begin(),  it != htmlDTDdoc->getRoot()->getChildren().end(); it++) {
+	list<xml::Content*> xslDTDelements = rootXSLDTD->getChildren();
+	for( list<xml::Content*>::const_iterator it = rootHTMLDTD->getChildren().begin();  it != rootHTMLDTD->getChildren().end(); it++) {
 		xslDTDelements.push_back(*it);
 	}
-	rootXSLDTD->SetChildren(xslDTDelements);
+	rootXSLDTD->SetChildren(&xslDTDelements);
 	
-	return true; /** TO DO : return DTDValidator.validate(xslDoc, xslDTDdoc); */) // if false : <Error> Invalid XSL file : doesn't respect the given DTD.
+	return true; /** TO DO : return DTDValidator.validate(xslDoc, xslDTDdoc); */ // if false : <Error> Invalid XSL file : doesn't respect the given DTD.
 }
 
 bool xsl::XSLProcessor::generateHtmlFile(string xmlFileName, string htmlOutputFile) {

@@ -21,7 +21,8 @@ namespace xml {
 
 		~Element();
 		
-		void SetChildren(list<Content*> * _children) { children = *_children; delete _children;}
+		void SetChildren(list<Content*> * _children) { children = *_children; }
+		list<Content*> getChildren();
 
 		virtual ostream& toString(ostream& stream, int depth);
 	};

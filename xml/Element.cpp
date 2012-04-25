@@ -16,6 +16,10 @@ namespace xml {
 			delete *it;
 		}
 	}
+	
+	list<Content*> Element::getChildren() {
+		return children;
+	}
 
 	ostream& Element::toString(ostream& stream, int depth)
 	{

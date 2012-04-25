@@ -1,4 +1,6 @@
+#include "Content.hpp"
 # include "Document.hpp"
+
 
 xml::Document::~Document()
 {
@@ -25,6 +27,10 @@ xml::Document::~Document()
 		}
 	}
 	
+}
+
+xml::Content* xml::Document::getRoot() {
+	return root;
 }
 
 ostream& xml::Document::toString(ostream& stream)

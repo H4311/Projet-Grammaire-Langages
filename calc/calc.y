@@ -42,14 +42,16 @@ expr : 	DOUBLE { $$ = $1; }
 	| expr FOIS expr { $$ = $1 * $3; }
 	| expr SLASH expr { $$ = $1 / $3; }
 	| PAR_OUV expr PAR_FER { $$ = $2; }
-	| VAR { $$ = variables[$1]; }
-	| VAR EGAL expr { $$ = (variables[string($1)] = $3); }
+	| VAR { $$ = variables[$1]; free($1);}
+	| VAR EGAL expr { $$ = (variables[string($1)] = $3); free($1);}
 	;
 
 %%
 # include <iostream>
 # include <map>
 using namespace std;
+
+extern void parse(double*);
 
 int main(void) {
 	double * d = new double;
@@ -58,7 +60,8 @@ int main(void) {
 	     << "puis appuyez sur Ctrl+D pour évaluer. Pour arrêter, entrez 0"
 	     << "(ou arrangez vous pour que le résultat fasse 0 ^^.";
 	do {
-		yyparse(d);
+		// yyparse(d);
+		parse(d);
 		cout << "Valeur calculée : " << *d << endl;
 	} while (*d != 0);
 	delete d;

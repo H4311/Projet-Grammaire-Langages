@@ -25,3 +25,11 @@ ident [a-zA-Z]+
 . { cout << "Caractère inattendu : " << yytext << endl; }
 
 %%
+
+extern void yyparse(double*);
+
+void parse(double* d)
+{
+	yyparse(d);
+	yylex_destroy();
+}

@@ -22,4 +22,8 @@ namespace dtd {
 		return content->getRegex();
 	}
 	
+	std::string Element::getName() {
+		return name;
+	}
+	
 }
