@@ -80,29 +80,13 @@ bool xsl::XSLProcessor::generateHtmlFile(string xmlFileName, string htmlOutputFi
 	
 	// Analyse the syntax of the XML file
 	xmlDoc = parseXML(xmlFile);
-	//cout << *document << "\n" << endl;
+	//TODO: traitement retour
 	
 	//TODO: Verifying its semantic correctness
 	
-	//
-	list<Content*> contentsXsl = xslDoc->getChildren();
-	list<Content*> contentsXml = xmlDoc->getChildren();
-	list<Content*>::iterator itXml = contentsXsl->begin();
 	
-	for(list<Content*>::iterator itXsl = contentsXsl->begin();
-			itXsl != contentsXsl->end();
-			itXsl++)
-	{
-		if( itXsl.getName() == "template" ){
-			AttList attXsl = itXsl.getAttributes();
-			
-			if( ){
-				
-			}
-			
-		}
-		
-	}
+	
+	
 	
 	/** TO DO :
 	 * - Load the XML file
@@ -116,8 +100,63 @@ bool xsl::XSLProcessor::generateHtmlFile(string xmlFileName, string htmlOutputFi
 					- htmlDoc.insert(content);
 	 */
 	
-	
-	
 	return true;
 }
 
+
+Element* xsl::XSLProcessor::analyseXML( Element* XMLElement ){
+	
+	Document htmlDoc;
+	Element* XSLTemplate = findTemplate( XMLElement.getName() );
+	
+	if( XSLTemplate == NULL ){
+		Element XMLCopy = XMLElement;
+		
+		// Pour tous les fils de l'element XML ???
+		Element* rootXMLCopy = dynamic_cast<Data*>(XMLCopy->getRoot());
+		if(XMLCopy != NULL) {
+			htmlDoc.append( XMLCopy );
+		}
+		
+	}else{
+		applyTemplate( XMLElement, XSLTemplate );
+
+	}
+}
+
+
+Element* findTemplate( string XMLElementName ){
+	
+	list<Content*> contentsXsl = xslDoc->getChildren();
+	
+	for(list<Content*>::iterator itXsl = contentsXsl->begin();
+			itXsl != contentsXsl->end(); itXsl++)
+	{
+		currentElement = (*itXsl);
+		if( currentElement->getName() == "template" ){
+			if( currentElement->GetAttributeValue("match") == XMLElementName ){
+				return *currentElement;
+			}
+		}
+	}
+}
+
+
+void applyTemplate( Element* XMLElement, Element* XSLTemplate ) {
+	
+	list<Content*> contentsHtml = XSLTemplate->getRoot()->getChildren();
+	list<Content*> contentsXML = XMLElement->getRoot()->getChildren();
+	
+	for(list<Content*>::iterator itHtml = contentsHtml->begin();
+			itHtml != contentsHtml->end(); itHtml++)
+	{
+		currentElement = (*itHtml);
+		if( currentElement->getName() == "value-of" ){
+			string htmlTag = currentElement->GetAttributeValue("value-of");
+			
+			// Find the value in the xml file
+			
+			// Replace the value in the html file
+		}
+
+}
