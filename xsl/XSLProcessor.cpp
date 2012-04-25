@@ -116,23 +116,28 @@ bool xsl::XSLProcessor::generateHtmlFile(string xmlFileName, string htmlOutputFi
 }
 
 
-Element* xsl::XSLProcessor::analyseXML( Element* XMLElement ){
+Element* xsl::XSLProcessor::conversionHTML( Element* XMLElement, Element* HTMLElement ){
 	
-	Document htmlDoc;
 	Element* XSLTemplate = findTemplate( XMLElement.getName() );
 	
 	if( XSLTemplate == NULL ){
-		Element XMLCopy = XMLElement;
-		
-		// Pour tous les fils de l'element XML ???
-		Element* rootXMLCopy = dynamic_cast<Data*>(XMLCopy->getRoot());
-		if(XMLCopy != NULL) {
-			htmlDoc.append( XMLCopy );
+		list<Content*> contentsXML = XMLElement->getRoot()->getChildren();
+	
+		for(list<Content*>::iterator itHtml = contentsHtml->begin();
+				itHtml != contentsHtml->end(); itHtml++)
+		{
+			//Test si Data ou pas
+			Element* rootXMLCopy = dynamic_cast<Data*>(XMLCopy->getChildren());
+			if( XMLCopy != NULL ) {
+				HTMLElement.append( XMLCopy );
+			}else{
+				conversionHTML( currentElement, HTMLElement);
+			}
 		}
 		
 	}else{
 		applyTemplate( XMLElement, XSLTemplate );
-
+		// HTMLElement doit changer
 	}
 }
 
@@ -144,18 +149,22 @@ Element* findTemplate( string XMLElementName ){
 	for(list<Content*>::iterator itXsl = contentsXsl->begin();
 			itXsl != contentsXsl->end(); itXsl++)
 	{
-		currentElement = (*itXsl);
-		if( currentElement->getName() == "template" ){
-			if( currentElement->GetAttributeValue("match") == XMLElementName ){
+		xml::Content* currentElement = dynamic_cast<xml::Content*>(*itXsl);
+		//TODO: comment
+		if( currentElement != NULL &&
+			currentElement->getName() == "template"  &&
+			currentElement->GetAttributeValue("match") == XMLElementName ){
+				
 				return *currentElement;
-			}
 		}
 	}
+	return NULL;
 }
 
 
 void applyTemplate( Element* XMLElement, Element* XSLTemplate ) {
 	
+	// Dynamic_cast de XSLTemplate->getRoot() en Element*
 	list<Content*> contentsHtml = XSLTemplate->getRoot()->getChildren();
 	list<Content*> contentsXML = XMLElement->getRoot()->getChildren();
 	
