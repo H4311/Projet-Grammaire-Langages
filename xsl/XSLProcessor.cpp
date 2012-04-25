@@ -1,5 +1,11 @@
 #include <iostream>
 
+/**
+* @file XSLProcessor.cpp
+* @brief Implementation - XSL processing functions
+* Contains the implementation of the XSL Processor class, and thus the functions to validate a XSL stylesheet and parse XML files into HTML using it.
+* @author Daniel BAUDRY & Benjamin Bill PLANCHE (Aldream)
+*/
 #include "XSLProcessor.hpp"
 #include "xml_processor.h"
 #include "Element.hpp"
@@ -22,11 +28,11 @@ bool xsl::XSLProcessor::processXslFile(string xslFileName) {
 	xslDoc = NULL;
 	
 	// --- Analyse the syntax of the XSL file, and of the XSL DTD file. If OK, continue.
-	/** TO DO */
+	/** @todo Analyse the syntax of the XSL file, and of the XSL DTD file. If OK, continue. */
 	xml::Document* xslDTDdoc;
 	
 	// --- Analyse the syntax of the HTML DTD file. The link to this DTD can be found into the attribute xmlns:xsl of the element xsl:stylesheet.
-	/** TO DO */
+	/** @todo Analyse the syntax of the HTML DTD file. */
 	xml::Element* rootXSLDTD = dynamic_cast<xml::Element*>(xslDTDdoc->getRoot());
 	if (rootXSLDTD == NULL) {
 		return false; // <Error> Invalid or empty XSL DTD document.
@@ -59,7 +65,7 @@ bool xsl::XSLProcessor::processXslFile(string xslFileName) {
 	
 	// --------- Opening, validating ant getting the structure of the HTML DTD file :
 	xml::Document * htmlDTDdoc;
-	/** TO DO : Document * htmlDTDdoc = DTDValidator.parse(attrXMLNS.second); */
+	/** @todo : Document * htmlDTDdoc = DTDValidator.parse(attrXMLNS.second); */
 	if (htmlDTDdoc == NULL) {
 		return false; // <Error> Invalid or unfound HTML DTD file.
 	}
@@ -76,7 +82,7 @@ bool xsl::XSLProcessor::processXslFile(string xslFileName) {
 	}
 	rootXSLDTD->SetChildren(&xslDTDelements);
 	
-	return true; /** TO DO : return DTDValidator.validate(xslDoc, xslDTDdoc); */ // if false : <Error> Invalid XSL file : doesn't respect the given DTD.
+	return true; /** @todo return DTDValidator.validate(xslDoc, xslDTDdoc); */ // if false : <Error> Invalid XSL file : doesn't respect the given DTD.
 }
 
 bool xsl::XSLProcessor::generateHtmlFile(string xmlFileName, string htmlOutputFile) {
@@ -92,23 +98,23 @@ bool xsl::XSLProcessor::generateHtmlFile(string xmlFileName, string htmlOutputFi
 	
 	// Analyse the syntax of the XML file
 	xmlDoc = parseXML(xmlFile);
-	//TODO: traitement retour
+	/** @todo Processing the return. */
 	
-	//TODO: Verifying its semantic correctness
-	
-	
+	/** @todo Verifying its semantic correctness */
 	
 	
 	
-	/** TO DO :
+	
+	
+	/** @todo
 	 * - Load the XML file
 	 * - Analyse the syntax of the XML file & verify its semantic correctness
 	 * - Save the file structure into xmlDoc
-	 * - For each tp xsl:template element into  xslDoc, do : (§)
+	 * - For each tp xsl:template element into  xslDoc, do : (ï¿½)
 	 *		- name <- tp["match"];
 			- For each el XML element having its name == name
 				- For each hel HTML element of tp
-					- if (hel.name == "apply-template"), then apply recursively the process since the symbol §
+					- if (hel.name == "apply-template"), then apply recursively the process since the symbol ï¿½
 					- htmlDoc.insert(content);
 	 */
 	
@@ -150,7 +156,7 @@ Element* findTemplate( string XMLElementName ){
 			itXsl != contentsXsl->end(); itXsl++)
 	{
 		xml::Content* currentElement = dynamic_cast<xml::Content*>(*itXsl);
-		//TODO: comment
+		/** @todo Comment */
 		if( currentElement != NULL &&
 			currentElement->getName() == "template"  &&
 			currentElement->GetAttributeValue("match") == XMLElementName ){
