@@ -87,10 +87,10 @@ bool Validateur::validationDocument(dtd::Document& dtd, xml::Document& xml) {
 	//Séparation des éléments et attributs de la DTD en deux listes
 	std::list<dtd::Element*> elements;
 	std::list<dtd::Attribute*> attributes;
-	std::list<dtd::Declaration*> declarations = dtd.getDeclarations();
+	std::list<dtd::Declaration*> *declarations = dtd.getDeclarations();
 	
 	std::list<dtd::Declaration*>::iterator it;
-	for(it = declarations.begin(); it != declarations.end(); it++) {
+	for(it = declarations->begin(); it != declarations->end(); it++) {
 		dtd::Element* elem = dynamic_cast<dtd::Element*>(*it);
 		
 		if(elem != NULL) {
@@ -104,6 +104,8 @@ bool Validateur::validationDocument(dtd::Document& dtd, xml::Document& xml) {
 			}
 		}
 	}
+	
+	delete declarations;
 	
 	return validationNode(xml.getRoot(), elements, attributes);
 }
