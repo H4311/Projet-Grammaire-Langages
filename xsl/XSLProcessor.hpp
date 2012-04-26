@@ -47,14 +47,11 @@ namespace xsl {
 			/**
 			 * @brief Setter - XSL DTD
 			 * 
-			 * Validate and process the given DTD file, and set the XSL DTD attribute.
-			 * If the given DTD is invalid, the previous one will be kept as attribute.
+			 * Set the XSL DTD attribute, with an already-processed (and validated) DTD structure.
 			 * 
-			 * @author Benjamin Bill PLANCHE (ALdream)
-			 * @param name Path to the XSL DTD to use.
-			 * @return true if the change has been made.
+			 * @param newXslDTDdoc New DTD structure.
 			 */
-			bool processXslDTDFile(string name);			
+			void setXslDTDFile(Document* newXslDTDdoc)			
 
 			/**
 			 * @brief XSL Validator
@@ -65,7 +62,7 @@ namespace xsl {
 			 * @return true if the XSL is conformed to the given XSL and HTML DTD, and save the document structure for the next HTML generation.
 			 * @param xslFileName Path to the xsl file to evaluate.
 			 */
-			bool processXslFile(string xslFileName);
+			bool processXslFile(Document* xslDoc);
 
 			/**
 			 * @brief Setter - XML to HTML Processor
