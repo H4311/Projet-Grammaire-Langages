@@ -1,4 +1,4 @@
-analyseXML
+test_xml
 lex.*.c
 *.output
 *.tab.c
