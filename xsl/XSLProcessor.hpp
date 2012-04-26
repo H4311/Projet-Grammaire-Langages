@@ -10,11 +10,16 @@
  * @author Daniel BAUDRY & Benjamin Bill PLANCHE (ALdream)
  */
 
-# include "Content.hpp"
 # include <string>
-#include "Document.hpp"
 
-# include <string>
+# include "xml/Content.hpp"
+# include "xml/Document.hpp"
+# include "xml/Element.hpp"
+# include "xml/Document.hpp"
+
+# include "dtd/Document.hpp"
+
+
 using namespace std;
 
 /**
@@ -34,7 +39,7 @@ namespace xsl {
 		private:
 			xml::Document* xslDoc; /** < Structure of the processed XSL file, which will be used to process the XML files. */
 			
-			xml::Document* xslDTDdoc; /** < Structure of the processed XSL DTD file, which will be used to validate the XSL files. */
+			dtd::Document* xslDTDdoc; /** < Structure of the processed XSL DTD file, which will be used to validate the XSL files. */
 
 		public:
 			// Getters and setters
@@ -72,10 +77,33 @@ namespace xsl {
 			 * @param xmlFileName Path to the xml file to evaluate.
 			 * @param htmlOutputFile Path to the file which will contain the HTML file.
 			 */
-			bool generateHtmlFile(string xmlFileName, string htmlOutputFile);
+			xml::Document* generateHtmlFile(string xmlFileName);
 
 			~XSLProcessor();
 			XSLProcessor();
+		private :
+
+			/**
+			 * @brief Recursive XML to HTML Processor
+			 * 
+			 * Recursively apply the XSL templates to the XML elements, generating the HTML document.
+			 * If no template is given, it only pasts the inner data and tries to apply other templates to the elements children.
+			 *
+			 * @return the list of generated HTML elements
+			 * @param xslNode Template to apply.
+			 * @param xmlNode XML element to process.
+			 */			
+			list<xml::Content*> generateHtmlElement(xml::Element* xslNode, xml::Content* xmlNode);
+
+			/**
+			 * @brief XSL Template Finder
+			 * 
+			 * Find the template which has the same value for the "match" attribute than the given element's name.
+			 *
+			 * @return the first XSL template element if found, or NULL.
+			 * @param xmlElementName Name of the element for which we want to find a template.
+			 */
+			xml::Element* findTemplate( string xmlElementName );
 
 	};
 

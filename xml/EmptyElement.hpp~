@@ -66,9 +66,7 @@ namespace xml {
 		valeur>).
 		*/
 		void setAttList(AttList _l) { attributes = _l; }
-		/**
-		Accesseur : renvoie la liste des attributs de l'élément courant.
-		*/		
+		
 		AttList getAttList() { return attributes; }
 		/**
 		Accesseur : renvoie le nom de l'élément courant.

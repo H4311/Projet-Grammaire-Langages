@@ -1,4 +1,3 @@
-#include <iostream>
 
 /**
 * @file XSLProcessor.cpp
@@ -8,12 +7,24 @@
 * 
 * @author Daniel BAUDRY & Benjamin Bill PLANCHE (Aldream)
 */
+
+#include <iostream>
+
 #include "XSLProcessor.hpp"
-#include "xml_processor.h"
-#include "Element.hpp"
-#include "EmptyElement.hpp"
-#include "Document.hpp"
-#include "basics.h"
+
+#include "xml/basics.h"
+#include "xml/xml_processor.h"
+#include "xml/Element.hpp"
+#include "xml/Data.hpp"
+#include "xml/EmptyElement.hpp"
+#include "xml/Document.hpp"
+
+#include "dtd/Document.hpp"
+#include "dtd/Declaration.hpp"
+#include "dtd/dtd.h"
+
+#include "validation/Validateur.cpp"
+
  
 using namespace std;
 
@@ -23,10 +34,9 @@ xsl::XSLProcessor::XSLProcessor() {
 
 }
 
-void xsl::XSLProcessor::processXslDTDFile(string name) {
+bool xsl::XSLProcessor::processXslDTDFile(string name) {
 	// --- Analyse the syntax of the XSL DTD file. If OK, continue.
-	/** @todo Analyse the XSL DTD file. If OK, continue. */
-	dtd::Document* newXslDTDdoc = dtd::parseDTD(name);
+	dtd::Document* newXslDTDdoc = parseDTD(name.c_str());
 	if (newXslDTDdoc == NULL) {
 		return false; // <Error> Syntax Error - Invalid or empty XSL DTD document.
 	}	
@@ -45,7 +55,7 @@ bool xsl::XSLProcessor::processXslFile(string xslFileName) {
 		return false; // <Error> No DTD. Please process a XSL DTD first.
 	}
 	// --- Analyse the syntax of the XSL file. If OK, continue.
-	xml::Document* newXsldoc = xml::parseXML(name);
+	xml::Document* newXsldoc = parseXML(xslFileName.c_str());
 	if (newXsldoc == NULL) {
 		return false; // <Error> Syntax Error - Invalid or empty XSL document.
 	}	
@@ -72,30 +82,28 @@ bool xsl::XSLProcessor::processXslFile(string xslFileName) {
 		return false; // <Error> Unfound elementcontaining the path to HTML DTD file.
 	}	
 	
-	string attrXMLNS = elStylesheet->GetAttributeValue("xmlns:xsl");
+	string attrXMLNS = elStylesheet->getAttributeValue("xmlns:xsl");
 	if (attrXMLNS.empty()) {
 		return false; // <Error> Unfound "xmlns:xsl" attribute.
 	}		
 	
 	// --------- Opening, validating ant getting the structure of the HTML DTD file :
-	dtd::Document * htmlDTDdoc = dtd::parseDTD(name);
+	dtd::Document * htmlDTDdoc = parseDTD(attrXMLNS.c_str());
 	if (htmlDTDdoc == NULL) {
 		return false; // <Error> Syntax Error - Invalid, empty or unfound XSL document.
 	}	
 
 	// --- Fusion the XSL DTD and the HTML DTD into a new DTD (only valid used for this XSL) : we copy the XSL DTD into the HTML one.
-	xml::Element* rootXSLDTD = dynamic_cast<xml::Element*>(newXslDTDdoc->getRoot());
-	list<xml::Content*> xslDTDelements =  rootHTMLDTD->getChildren();
-	for( list<xml::Content*>::const_iterator it = rootXSLDTD->getChildren().begin();  it != rootXSLDTD->getChildren().end(); it++) {
-		xslDTDelements.push_back(*it);
+	list<dtd::Declaration*>* htmlDeclarations =  htmlDTDdoc->getDeclarations();
+	list<dtd::Declaration*>* xslDeclarations =  xslDTDdoc->getDeclarations();
+	for( list<dtd::Declaration*>::const_iterator it = xslDeclarations->begin();  it != xslDeclarations->end(); it++) {
+		htmlDeclarations->push_back(*it);
 	}
-	rootHTMLDTD->SetChildren(&xslDTDelements);
+	htmlDTDdoc->setDeclarations(htmlDeclarations);
 	
-	// Semantic analysis :
-	bool semanticCorrectness = true;
-	/** @todo Analyse the semantic correctness of the XSL file :  semanticCorrectness = DTDValidator.validate(xslDoc, xslDTDdoc); */
-	if (!semanticCorrectness) {
-		return false; // <Error> Invalid XSL file : doesn't respect the given DTD.
+	// --- Semantic analysis :
+	if (Validateur::validationDocument(*htmlDTDdoc, *xslDoc)) {
+		return false; // <Error> Semantic Error - Invalid XSL file : doesn't respect the given DTD.
 	}
 	
 	// --- Everything is OK with the new XSL : we delete the ancient one and replace by the new.
@@ -111,52 +119,63 @@ bool xsl::XSLProcessor::processXslFile(string xslFileName) {
 xml::Document* xsl::XSLProcessor::generateHtmlFile(string xmlFileName) {
 	// Checking if an valid XSL file as already been processed :
 	if (xslDoc == NULL) {
-		return false; // <Error> No XSL. Please process a XSL stylesheet first.
+		return NULL; // <Error> No XSL. Please process a XSL stylesheet first.
 	}
 
-	xml::Document* xmlDoc = xml::parseXML(name);
+	//Processing and validating the XML file :
+	xml::Document* xmlDoc = parseXML(xmlFileName.c_str());
 	if (xmlDoc == NULL) {
-		return false; // <Error> Syntax Error - Invalid, empty or unfound XML document.
+		return NULL; // <Error> Syntax Error - Invalid, empty or unfound XML document.
 	}
-	
-	xml::Element* xslNode = findTemplate(xmlDoc->getRoot());
-	list<xml::Content*> listHTMLElements = generateHTML(xslNode, xmlDoc->getRoot());
-	xml::Element* htmlRoot;
-	if (listHTMLElements.length() > 1) { // No generated rooot, so we add one :
-		htmlRoot = new Element();
-		htmlRoot->setName("null");
-		htmlRoot->setChildren(listHTMLElements);
+	/** @todo Analyse the semantic correctness of the XML file :  semanticCorrectness = DTDValidator.validate(xmlDoc, xmlDTDdoc); */
+	xml::EmptyElement* rootXML = dynamic_cast<xml::EmptyElement*>(xmlDoc->getRoot());
+	xml::Element* xslNode;
+	if (rootXML != NULL) { // If it's an empty element or element, we try to find a template to apply :
+		xslNode = findTemplate(rootXML->getName());
 	}
-	else if (listHTMLElements.length() == 1) {
-		htmlRoot = listHTMLElements[0];
-	}
-	
+	list<xml::Content*> listHTMLElements = generateHtmlElement(xslNode, xmlDoc->getRoot());
 	xml::Document* docHTML = new xml::Document();
-	docHTML->setRoot(htmlRoot);
+	if (listHTMLElements.size() > 1) { // No generated root, so we add one :
+		xml::Element* htmlRoot = new xml::Element();
+		htmlRoot->setName(ElementName("","null"));
+		htmlRoot->setChildren(listHTMLElements);
+		docHTML->setRoot(htmlRoot);
+	}
+	else if (listHTMLElements.size() == 1) {
+		docHTML->setRoot(listHTMLElements.front());
+	}
 	
 	return docHTML;
 }
 
-list<xml::Element*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode, xml::Content* xmlNode) {
+list<xml::Content*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode, xml::Content* xmlNode) {
 
-	list<xml::Element*> htmlNode;
+	list<xml::Content*> htmlNode;
 
-	if (xslNode != NULL) // We apply this template :
-		for(list<xml::Content*>::const_iterator itXSL = xslNode->getChildren()->begin(); itXSL != xslNode->getChildren()->end(); itXSL++) {
+	if (xslNode != NULL) { // We apply this template :
+		list<xml::Content*> xslNodeChildren = xslNode->getChildren();
+		for(list<xml::Content*>::const_iterator itXSL = xslNodeChildren.begin(); itXSL != xslNodeChildren.end(); itXSL++) {
 			xml::Content* htmlChild;
 			xml::Element* itXSLEle = dynamic_cast<xml::Element*>(*itXSL);
 			if (itXSLEle != NULL) { // If it's an element 
 				htmlChild = new xml::Element();
 				if (itXSLEle->getNamespace() != "xsl") { // If it's HTML :
-					htmlChild->setName(itXSLEle->getName());
-					htmlChild->setAttributes(itXSLEle->getAttributes());
-					htmlChild->appendChild(generateHTML(itXSLEle, xmlNode));
+					((xml::Element*)htmlChild)->setName(ElementName(itXSLEle->getNamespace(), itXSLEle->getName()));
+					((xml::Element*)htmlChild)->setAttList(itXSLEle->getAttList());
+					((xml::Element*)htmlChild)->appendChild(generateHtmlElement(itXSLEle, xmlNode));
 				}
 				else if (itXSLEle->getName() == "apply-templates") {
 					// For each child of the current XML node, we try to apply another template :
-					for(list<xml::Content*>::const_iterator itXML = xmlNode->getChildren()->begin(); itXML != xmlNode->getChildren()->end(); itXML++) {
-						xml::Element* xslNodeChild = findTemplate(*itXML);
-						generateHTML(xslNodeChild, *itXML); // recursivity
+					xml::Element* xmlEle = dynamic_cast<xml::Element*>(xmlNode);
+					if (xmlEle != NULL) { // If it's an element 
+						for(list<xml::Content*>::const_iterator itXML = xmlEle->getChildren().begin(); itXML != xmlEle->getChildren().end(); itXML++) {
+							xml::Element* xslNodeChild = NULL;
+							xml::EmptyElement* itXMLEmp = dynamic_cast<xml::EmptyElement*>(*itXML);
+							if (itXMLEmp != NULL) { // If it's an empty element or element, we try to find a template to apply :
+								xslNodeChild = findTemplate(itXMLEmp->getName());
+							}
+							generateHtmlElement(xslNodeChild, *itXML); // recursivity
+						}
 					}
 				}
 				else if (itXSLEle->getName() == "value-of") {
@@ -170,14 +189,13 @@ list<xml::Element*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode
 				xml::EmptyElement* itXSLEmp = dynamic_cast<xml::EmptyElement*>(*itXSL);
 				if (itXSLEmp != NULL) {  // If it's an empty element 
 					htmlChild = new xml::EmptyElement();
-					htmlChild->setName(itXSLEmp->getName());
-					htmlChild->setAttributes(itXSLEmp->getAttributes());
+					((xml::EmptyElement*)htmlChild)->setName(ElementName(itXSLEle->getNamespace(), itXSLEle->getName()));
+					((xml::EmptyElement*)htmlChild)->setAttList(itXSLEmp->getAttList());
 				}
 				else {
-					xml::EmptyElement* itXSLDat = dynamic_cast<xml::Data*>(*itXSL);
+					xml::Data* itXSLDat = dynamic_cast<xml::Data*>(*itXSL);
 					if (itXSLDat != NULL) {  // If it's an empty element 
-						htmlChild = new xml::Data();
-						htmlChild->setData(itXSLDat->getData());
+						htmlChild = new xml::Data(itXSLDat->getData());
 					}
 				}
 			}
@@ -185,17 +203,17 @@ list<xml::Element*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode
 			htmlNode.push_back(htmlChild);
 		}
 	}
-	else { // If we didn't find a template, we only past the inner data, try to apply other templates to the children
+	else { // If we didn't find a template, we only past the inner data, try to apply other templates to the elements children
 		for(list<xml::Content*>::const_iterator itXML = xmlNode->getChildren()->begin(); itXML != xmlNode->getChildren()->end(); itXML++) {
 			xml::Data* itXMLDat = dynamic_cast<xml::Data*>(*itXML);
 			if (itXMLDat != NULL) {  // If it's data, we past it into the html doc :
 				htmlNode.push_back(itXMLDat);
 			}
 			else {
-				xml::Element* itXMLEle = dynamic_cast<xml::Element*>(*itXML);
-				if (itXMLEle != NULL) {  // If it's an element, we process it :
-					xml::Element* xslNodeChild = findTemplate(itXMLEle);
-					generateHTML(xslNodeChild, itXMLEle); // recursivity
+				xml::EmptyElement* itXMLEmp = dynamic_cast<xml::EmptyElement*>(*itXML);
+				if (itXMLEmp != NULL) {  // If it's an element (empty or not), we process it :
+					xml::Element* xslNodeChild = findTemplate(itXMLEmp->getName());
+					generateHTML(xslNodeChild, itXMLEmp); // recursivity
 				}
 			}
 
@@ -205,170 +223,21 @@ list<xml::Element*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode
 	return htmlNode;
 }
 
-
-
-/** @todo ALGO POTENTIELLEMENT VALIDE ET TOTAL, à implémenter et tester (NE PAS SUPPRIMER -> servira pour le CR Algo)
-Document* generateHtmlFile(string xmlFileName)
-DEBUT
-	xmlDoc = parseXML(xmlFileName);
-	Si xmlDoc nul
-		return NULL;
-	FinSi
+xml::Element* xsl::XSLProcessor::findTemplate( string xmlElementName ) {
 	
-	Element* XSLnode = findTemplate(xmlDoc->getRoot());
-	Liste<Element*> listElementsHTML = generateHTML(XSLnodeChild, xmlDoc->getRoot());
-	Element* racineHTML;
-	Si listElementsHTML.length() > 1 // XSL n'ayant pas généré de racine, donc on en ajoute une
-		racineHTML = new Element();
-		racineHTML->setName("null");
-		racineHTML->setChildren(listElementsHTML);
-	SinonSi listElementsHTML.length() = 1
-		racineHTML = listElementsHTML[0];
-	FinSi
+	list<xml::Content*> contentsXsl = xslDoc->getChildren();
 	
-	Document* docHTML = newDocument();
-	docHTML->setRoot(racineHTML);
-	
-	return docHTML;
-FIN
-
-Liste<Element*> generateHTMLElement(Element* XSLnode, Content* XMLnode)
-DEBUT
-	Liste<Element*> HTMLnode;
-	Si XSLnode non-nul
-		Pour chaque enfant de XSLnode
-			Content* htmlChild = new Content();
-			Si xslEl EmptyElement
-				htmlChild->setName(xslEl->getName());
-				htmlChild->setAttributes(xslEl->getAttributes());
-			SinonSi xslEl Data
-				htmlChild->setData(xslEl->getData());
-			SinonSi xslEl Element
-				Si xslEl est du HTML
-					htmlChild->setName(xslEl->getName());
-					htmlChild->setAttributes(xslEl->getAttributes());
-					htmlChild->appendChild(generateHTML(xslEl, XMLnode);
-				SinonSi xslEl apply-templates
-					Si XMLnode Element
-						Pour chaque enfant de XMLnode
-							Element* XSLnodeChild = findTemplate(XMLnodeChild);
-							generateHTML(XSLnodeChild, XMLnodeChild);
-						FinPour
-					FinSi
-				FinSi
-			FinSi
-			HTMLnode.push_back(htmlChild);
-		FinPour
-	Sinon
-		Pour chaque enfant de XMLnode
-			Si XMLnodeChild Data // On ajoute sans modifier :
-				HTMLnode.push_back(XMLnodeChild);
-			SinonSi XMLnodeChild Element
-				Element* XSLnodeChild = findTemplate(XMLnodeChild);
-				generateHTML(XSLnodeChild, XMLnodeChild);
-			FinSi
-		FinPour
-	FinSi
-	return HTMLnode;
-FIN
-*/
-
-bool xsl::XSLProcessor::generateHtmlFile(string xmlFileName, string htmlOutputFile) {
-
-
-	Document htmlDoc;
-	
-	// Loading the XML File
-	File xmlFile = fopen(xmlFileName, "r");
-	
-	// Analyse the syntax of the XML file
-	xmlDoc = parseXML(xmlFile);
-	/** @todo Processing the return. */
-	
-	/** @todo Verifying its semantic correctness */
-	
-	
-	
-	
-	
-	/** @todo
-	 * - Load the XML file
-	 * - Analyse the syntax of the XML file & verify its semantic correctness
-	 * - Save the file structure into xmlDoc
-	 * - For each tp xsl:template element into  xslDoc, do : (�)
-	 *		- name <- tp["match"];
-			- For each el XML element having its name == name
-				- For each hel HTML element of tp
-					- if (hel.name == "apply-template"), then apply recursively the process since the symbol �
-					- htmlDoc.insert(content);
-	 */
-	
-	return true;
-}
-
-
-Element* xsl::XSLProcessor::conversionHTML( Element* XMLElement, Element* HTMLElement ){
-	
-	Element* XSLTemplate = findTemplate( XMLElement.getName() );
-	
-	if( XSLTemplate == NULL ){
-		list<Content*> contentsXML = XMLElement->getRoot()->getChildren();
-	
-		for(list<Content*>::iterator itHtml = contentsHtml->begin();
-				itHtml != contentsHtml->end(); itHtml++)
-		{
-			//Test si Data ou pas
-			Element* rootXMLCopy = dynamic_cast<Data*>(XMLCopy->getChildren());
-			if( XMLCopy != NULL ) {
-				HTMLElement.append( XMLCopy );
-			}else{
-				conversionHTML( currentElement, HTMLElement);
-			}
-		}
-		
-	}else{
-		applyTemplate( XMLElement, XSLTemplate );
-		// HTMLElement doit changer
-	}
-}
-
-
-Element* findTemplate( string XMLElementName ){
-	
-	list<Content*> contentsXsl = xslDoc->getChildren();
-	
-	for(list<Content*>::iterator itXsl = contentsXsl->begin();
+	for(list<xml::Content*>::iterator itXsl = contentsXsl->begin();
 			itXsl != contentsXsl->end(); itXsl++)
 	{
-		xml::Content* currentElement = dynamic_cast<xml::Content*>(*itXsl);
-		/** @todo Comment */
-		if( currentElement != NULL &&
+		xml::Element* currentElement = dynamic_cast<xml::Element*>(*itXsl);
+		/** If it's a template element, and its "match" attribute has the same value than the name of the XML element, we return it */
+		if ( currentElement != NULL &&
 			currentElement->getName() == "template"  &&
-			currentElement->GetAttributeValue("match") == XMLElementName ){
+			currentElement->GetAttributeValue("match") == xmlElementName ){
 				
 				return *currentElement;
 		}
 	}
 	return NULL;
-}
-
-
-void applyTemplate( Element* XMLElement, Element* XSLTemplate ) {
-	
-	// Dynamic_cast de XSLTemplate->getRoot() en Element*
-	list<Content*> contentsHtml = XSLTemplate->getRoot()->getChildren();
-	list<Content*> contentsXML = XMLElement->getRoot()->getChildren();
-	
-	for(list<Content*>::iterator itHtml = contentsHtml->begin();
-			itHtml != contentsHtml->end(); itHtml++)
-	{
-		currentElement = (*itHtml);
-		if( currentElement->getName() == "value-of" ){
-			string htmlTag = currentElement->GetAttributeValue("value-of");
-			
-			// Find the value in the xml file
-			
-			// Replace the value in the html file
-		}
-	}
 }

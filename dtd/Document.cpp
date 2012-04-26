@@ -32,4 +32,9 @@ namespace dtd {
 		return declarations;
 	}
 
+	void Document::setDeclarations(std::list<Declaration*>* dec) {
+		delete declarations;
+		declarations = dec;
+	}
+
 }
