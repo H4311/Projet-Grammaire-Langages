@@ -10,6 +10,8 @@
 #include "../dtd/Attribute.hpp"
 #include "../dtd/AttributeList.hpp"
 
+#include "../xml/basics.h"
+
 /**
  * @file Validateur.cpp
  * Implémenation des fonctions de la classe Validateur
@@ -17,10 +19,12 @@
 
 bool Validateur::validationChild(std::string dtdNode, std::string xmlChildren) {
     boost::regex reg(dtdNode);
+    std::cout << dtdNode << " " << xmlChildren << std::endl;
 	
 	if (regex_match(xmlChildren.c_str(), reg)) {
 		return true;
 	} else {
+		std::cout << "non" << std::endl;
 		return false;
 	}
     
@@ -34,6 +38,44 @@ bool Validateur::validationNode(xml::Content* content, std::list<dtd::Element*> 
 	if(elem != NULL) {
 		//Récupérer le nom de la balise
 		std::string nomBalise = elem->getName();
+		
+		//Valider les attributs
+		//TODO: pour l'instant on ne valide que le nom de l'attribut
+		//On récupère la liste des attributs de la dtd
+		std::list<dtd::AttributeList*>::iterator itAttList;
+		std::list<dtd::Attribute*> attributes;
+		for(itAttList = attributesList.begin(); itAttList != attributesList.end(); itAttList++) {
+			if((*itAttList)->getName() == nomBalise) {
+				break;
+			}
+		}
+		if(itAttList != attributesList.end()) {
+			attributes = (*itAttList)->getAttributes();
+		}
+		//On parcours la liste des attributs xml pour les valider
+		AttList xmlAttributes = elem->getAttList();
+		if(xmlAttributes.size() > 0) {
+			std::list<dtd::Attribute*>::iterator itXmlAtt;
+			for(itXmlAtt = attributes.begin(); itXmlAtt != attributes.end(); itXmlAtt++) {
+				bool found = false;
+				//On recherche l'attribut de la dtd corrrespondant à l'argument xml courant
+				std::list<dtd::Attribute*>::iterator itAtt;
+				for(itAtt = attributes.begin(); itAtt != attributes.end(); itAtt++) {
+					if(*itXmlAtt == *itAtt) {
+						found = true;
+						//std::cout << "att found " << *itXmlAtt << std::endl;
+						break;
+					}
+				}
+				if(found == false) {
+					//L'attribut présent dans le xml n'existe pas dans la dtd
+					std::cout << "att non trouvé " << *itXmlAtt << std::endl;
+					return false;
+				}
+			}
+		}
+		
+		
 		
 		//Récupérer la regexp depuis la dtd
 		std::list<dtd::Element*>::iterator itElem;
