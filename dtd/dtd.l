@@ -45,7 +45,7 @@ element 	{open}"!ELEMENT"{ws}
 attlist 	{open}"!ATTLIST"{ws}
 declaration 	"#"("REQUIRED"|"IMPLIED"){ws}?
 fixed 		"#FIXED"{ws}
-pcdata 		"(#)?PCDATA"{ws}?
+pcdata 		("#")?"PCDATA"{ws}?
 cdata 		"CDATA"{ws}?
 qmark 		"?"
 ast 		"*"
