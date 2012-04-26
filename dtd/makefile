@@ -5,9 +5,9 @@ OBJ = Document.o Declaration.o AttributeList.o Attribute.o Element.o ContentSpec
 CXXFLAGS = -g
 LDFLAGS =
 
-all: dtd analyseDTD
+all: flexbison dtd 
 
-analyseDTD: *.l *.y makefile
+flexbison: dtd.l dtd.y
 	flex -P dtd dtd.l
 	bison -p dtd --debug --verbose --defines=dtd.tab.h dtd.y
 	g++ -g -DYYDEBUG=1 -c lex.dtd.c dtd.tab.c 

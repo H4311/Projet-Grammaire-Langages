@@ -9,7 +9,7 @@ all: analyseXML
 
 analyseXML: flexbison $(OBJ)
 
-flexbison:
+flexbison: xml.l xml.y
 	flex -P xml xml.l
 	bison -p xml --debug --verbose --defines=xml.tab.h xml.y
 

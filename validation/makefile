@@ -24,6 +24,7 @@ $(EXEC_NAME): $(OBJ_FILES)
 	make -C $(XML_REP)
 	make -C $(DTD_REP)
 	$(CXX) -o $(EXEC_NAME) $(OBJ_FILES) $(OBJ_FILES_DEP) $(LIBS)
+	rm Test.o
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ -c $<

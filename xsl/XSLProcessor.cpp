@@ -23,7 +23,9 @@
 #include "dtd/Declaration.hpp"
 #include "dtd/dtd.h"
 
-#include "validation/Validateur.cpp"
+#include "validation/Validateur.hpp"
+
+// #include "validation/Validateur.cpp" // TODO C'est une blague ?
 
  
 using namespace std;

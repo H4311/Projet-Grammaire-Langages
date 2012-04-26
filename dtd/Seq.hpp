@@ -7,7 +7,21 @@
 
 #include "ChoiceSeq.hpp"
 
+/**
+* @file dtd/Seq.hpp
+* Ce fichier contient la classe dtd::Seq. Cette classe permet de définir
+* un contenu de type "Children" qui est une séquence.
+* @author Arnaud Lahache
+*/
+
 namespace dtd {
+	/**
+	* @brief Contenu d'un élément en séquence
+	* 
+	* Classe permettant de définir le contenu d'un élément de type "Children"
+	* qui est une séquence.
+	* @author Arnaud Lahache
+	*/
 	class Seq : public ChoiceSeq {
 		public:
 			//Seq(std::list<Children*> _children = NULL, char card = 0);

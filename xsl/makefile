@@ -1,8 +1,8 @@
-CXX = clang++
-LD = clang++
+CXX = g++
+LD = g++
 EXE = xsl
 CXXFLAGS = -g -Wall -DYYDEBUG=1 -I..
-LDFLAGS = 
+LDFLAGS = -lboost_regex
 OBJ = XSLProcessor.o
 XML_OBJ = ../xml/*.o
 DTD_OBJ = ../dtd/*.o
@@ -10,11 +10,13 @@ VALID_OBJ = ../validation/*.o
 
 all: exe
 
-exe: xml  $(OBJ)
+exe: deps  $(OBJ)
 	$(CXX) -o $(EXE) $(XML_OBJ) $(DTD_OBJ) $(VALID_OBJ) $(OBJ) $(LDFLAGS)
 
-xml:
+deps:
 	make -C ../xml
+	make -C ../dtd
+	make -C ../validation
 
 %.o: %.cpp %.hpp
 	$(CXX) -o $@ -c $< $(CXXFLAGS)

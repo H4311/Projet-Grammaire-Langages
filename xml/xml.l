@@ -1,5 +1,6 @@
 %option 8bit nodefault
 %option noyywrap
+%option yylineno
 
 %{
 #include "common.h"
@@ -63,7 +64,7 @@ static char *split_namespace(char *s) { /* extrait la deuxième partie après l'
 nl		(\r\n|\r|\n)
 ws		[ \t\r\n]+
 open		{ws}?"<"
-close		">"{nl}?
+close		">"{ws}?
 namestart	[A-Za-z\200-\377_]
 namechar	[A-Za-z\200-\377_0-9.-]
 esc		"&#"[0-9]+";"|"&#x"[0-9a-fA-F]+";"
@@ -73,10 +74,10 @@ data		([^<\n&]|\n[^<&]|\n{esc}|{esc})+
 pcdata		[^<]+
 comment		{open}"!--"([^-]|"-"[^-])*"--"{close}
 string		\"([^"&]|{esc})*\"|\'([^'&]|{esc})*\'
-xmlversion   {ws}?"<?xml"{ws}"version="{string}{ws}"encoding="{string}"?>"{nl}?
-doctype     {ws}?"<!DOCTYPE"{ws}
-openspecial {ws}?"<?"
-closespecial "?>"{nl}?
+xmlversion   	{ws}?"<?xml"{ws}"version="{string}{ws}"encoding="{string}"?>"{nl}?
+doctype     	{ws}?"<!DOCTYPE"{ws}
+openspecial 	{ws}?"<?"
+closespecial 	"?>"{nl}?
 
 /*
  * Le mode CONTENT est utilse pour le contenu des elements, c a d
@@ -85,6 +86,16 @@ closespecial "?>"{nl}?
  * et a l'interieur des balises
  */
 
+/*
+{open}"/"{name}		{
+	BEGIN(INITIAL); 
+	char * tmp = word(yytext); 
+	xmllval.en = new ElementName("",tmp); 
+	free(tmp); 
+	return END;
+}
+{open}"/"{nsname}		{BEGIN(INITIAL); char *tmp1 = nameSpace(yytext); char * tmp2 = split_namespace(yytext); xmllval.en = new ElementName(tmp1,tmp2); free(tmp1); free(tmp2); return NSEND;}
+*/
 %s CONTENT
 
 
@@ -98,20 +109,16 @@ closespecial "?>"{nl}?
 <INITIAL>{close}	{ BEGIN(CONTENT); return CLOSE;}
 <INITIAL>{closespecial}	{ return CLOSESPECIAL;}
 <INITIAL>{name}		{ xmllval.s = strdup(yytext); return IDENT;}
-<INITIAL>{nsname}		{ xmllval.s = strdup(yytext); return NSIDENT;}
+<INITIAL>{nsname}	{ xmllval.s = strdup(yytext); return NSIDENT;}
 <INITIAL>{string}	{ xmllval.s = strdup(getString(yytext)); return STRING;}
 
 {openspecial}{ws}?{name}	{ BEGIN(INITIAL); char * tmp = word(yytext); xmllval.en = new ElementName("",tmp); free(tmp); return STARTSPECIAL;}
 {open}{ws}?{name}	{ BEGIN(INITIAL); char * tmp = word(yytext); xmllval.en = new ElementName("",tmp); free(tmp); return START;}
 {open}{ws}?{nsname}	{ BEGIN(INITIAL); char *tmp1 = nameSpace(yytext); char * tmp2 = split_namespace(yytext); xmllval.en = new ElementName(tmp1,tmp2); free(tmp1); free(tmp2); return NSSTART;}
-{open}"/"{name}		{
-	BEGIN(INITIAL); 
-	char * tmp = word(yytext); 
-	xmllval.en = new ElementName("",tmp); 
-	free(tmp); 
-	return END;
-}
-{open}"/"{nsname}		{BEGIN(INITIAL); char *tmp1 = nameSpace(yytext); char * tmp2 = split_namespace(yytext); xmllval.en = new ElementName(tmp1,tmp2); free(tmp1); free(tmp2); return NSEND;}
+
+{open}"/"{name}		{BEGIN(INITIAL); return END;}
+{open}"/"{nsname}	{BEGIN(INITIAL); return NSEND;}
+
 {comment}		{ xmllval.s = strdup(yytext); return COMMENT;}
 
 <CONTENT>{ws}?{pcdata}		{ xmllval.s = strdup(skipSpace(yytext)); return DATA;}

@@ -10,6 +10,8 @@ int yylex(void);
 
 %}
 
+%locations
+
 %union {
    char * s;
    ElementName * en;  			/* le nom d'un element avec son namespace */
@@ -21,9 +23,9 @@ int yylex(void);
    list<xml::Comment*> * ld;		/* liste de commentaires */
 }
 
-%token EQ SLASH CLOSE CLOSESPECIAL DOCTYPE
+%token EQ SLASH CLOSE CLOSESPECIAL DOCTYPE END NSEND
 %token <s> ENCODING STRING DATA COMMENT IDENT NSIDENT
-%token <en> NSSTART START STARTSPECIAL END NSEND
+%token <en> NSSTART START STARTSPECIAL 
 
 %type <c> comment 
 %type <ee> empty_or_content xml_element
@@ -35,6 +37,27 @@ int yylex(void);
 
 %parse-param { xml::Document** doc } 
 
+%destructor { free($$); } <s>
+%destructor { delete $$; } <en> <c> <ee> <dt> <at>
+%destructor 
+{ 
+	list<xml::Comment*>::iterator it;
+	for (it = $$->begin(); it != $$->end(); ++it)
+	{
+		delete *it;
+	}
+	delete $$;
+} <ld>
+%destructor 
+{ 
+	list<xml::Content*>::iterator it;
+	for (it = $$->begin(); it != $$->end(); ++it)
+	{
+		delete *it;
+	}
+	delete $$;
+} <lc>
+
 %%
 
 document
@@ -45,9 +68,16 @@ document
 			(*doc)->setDoctype(*$1);
 			delete $1;
 		}
-		(*doc)->setComments(*$3);
-		delete $3;
+
+		if ($3 != NULL) {
+			(*doc)->setComments(*$3);
+			delete $3;
+		}
 		(*doc)->setRoot($2);
+	}
+ | error
+	{
+		yyerror(doc, "Erreur au niveau du document.");
 	}
  ;
 
@@ -60,6 +90,11 @@ misc_seq_opt
  | /*empty*/		
 	{ 
 		$$ = new list<Comment*>; 
+	}
+ | error
+	{
+		yyerror(doc, "Contenu interdit après la balise racine");	
+		$$ = NULL;
 	}
  ;
 
@@ -111,6 +146,13 @@ attribut_opt
 		free($2); 
 		free($4);
 	}
+ | attribut_opt NSIDENT EQ STRING
+	{
+		$1->push_back(Attribut($2, $4)); 
+		$$ = $1; 
+		free($2); 
+		free($4);
+	}
  | /*empty*/ 			
 	{ 
 		$$ = new AttList; 
@@ -146,6 +188,11 @@ close_content_and_end
 	{ 
 		$$ = $2; 
 	} 
+ |
+   CLOSE	content_opt NSEND
+	{
+		$$ = $2;
+	}
  ;
 
 content_opt 
@@ -173,7 +220,8 @@ content_opt
 %%
 
 extern FILE *xmlin;
-extern void flex_close();
+extern void xmllex_destroy();
+extern int xmllineno;
 
 xml::Document* parseXML(const char* file)
 {
@@ -182,7 +230,7 @@ xml::Document* parseXML(const char* file)
   
   xmlin = fopen(file, "r");
 
-  //yydebug = 1; // pour désactiver l'affichage de l'exécution du parser LALR, commenter cette ligne
+  //xmldebug = 1; // pour désactiver l'affichage de l'exécution du parser LALR, commenter cette ligne
 
   if (xmlin != NULL)
   {
@@ -194,7 +242,7 @@ xml::Document* parseXML(const char* file)
     }
     else  printf("Parse ended with success\n");
     fclose(xmlin);
-    flex_close();
+    xmllex_destroy();
   }
   
   return document;
@@ -207,6 +255,6 @@ int xmlwrap(void)
 
 void xmlerror(xml::Document** doc, char *msg)
 {
-  fprintf(stderr, "%s\n", msg);
+  fprintf(stderr, "(Ligne %d) Erreur : %s.\n", xmllineno, msg);
 }
 

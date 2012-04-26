@@ -7,7 +7,20 @@
 
 #include "Document.hpp"
 
+/**
+* @file dtd/Attribut.hpp
+* Ce fichier contient la classe dtd::Attribute.
+* @author Arnaud Lahache
+*/
+
 namespace dtd {
+	/**
+	* @brief Définition d'un attribut d'un élément xml
+	* 
+	* Classe permettant de définir un attribut spécifique d'un élément xml, en
+	* spécifiant son nom, ainsi que sa valeur par défault.
+	* @author Arnaud Lahache
+	*/
 	class Attribute {
 		public:
 			Attribute(std::string _name = "",
