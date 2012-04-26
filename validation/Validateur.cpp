@@ -8,6 +8,7 @@
 #include "../dtd/Declaration.hpp"
 #include "../dtd/Element.hpp"
 #include "../dtd/Attribute.hpp"
+#include "../dtd/AttributeList.hpp"
 
 /**
  * @file Validateur.cpp
@@ -25,7 +26,7 @@ bool Validateur::validationChild(std::string dtdNode, std::string xmlChildren) {
     
 }
 
-bool Validateur::validationNode(xml::Content* content, std::list<dtd::Element*> elements, std::list<dtd::Attribute*> attributes) {
+bool Validateur::validationNode(xml::Content* content, std::list<dtd::Element*> elements, std::list<dtd::AttributeList*> attributesList) {
 	xml::Element* elem = dynamic_cast<xml::Element*>(content);
 	
 	//Si elem est NULL, content est soit un Data soit un Comment, soit un EmptyElement
@@ -76,7 +77,7 @@ bool Validateur::validationNode(xml::Content* content, std::list<dtd::Element*> 
 
 		//Valider chacun des fils
 		for(it = children.begin(); it != children.end(); it++) {
-			if(!Validateur::validationNode(*it, elements, attributes)) {
+			if(!Validateur::validationNode(*it, elements, attributesList)) {
 				return false;
 			}
 		}
@@ -90,7 +91,7 @@ bool Validateur::validationDocument(dtd::Document& dtd, xml::Document& xml) {
 	
 	//Séparation des éléments et attributs de la DTD en deux listes
 	std::list<dtd::Element*> elements;
-	std::list<dtd::Attribute*> attributes;
+	std::list<dtd::AttributeList*> attributesList;
 	std::list<dtd::Declaration*> *declarations = dtd.getDeclarations();
 	
 	std::list<dtd::Declaration*>::iterator it;
@@ -101,16 +102,15 @@ bool Validateur::validationDocument(dtd::Document& dtd, xml::Document& xml) {
 		if(elem != NULL) {
 			elements.push_back(elem);
 		} else {
-			dtd::Attribute* att = dynamic_cast<dtd::Attribute*>(*it);
+			dtd::AttributeList* att = dynamic_cast<dtd::AttributeList*>(*it);
 			if(att != NULL) {
-				attributes.push_back(att);
+				attributesList.push_back(att);
 			} else {
-				// TODO : AttributeList
-				std::cerr << "E: Une déclaration de la DTD n'est ni un dtd::Element ni un dtd::Attribute" << std::endl;
+				std::cerr << "E: Une déclaration de la DTD n'est ni un dtd::Element ni un dtd::AttributeList" << std::endl;
 			}
 		}
 	}
 	
 	
-	return validationNode(xml.getRoot(), elements, attributes);
+	return validationNode(xml.getRoot(), elements, attributesList);
 }
