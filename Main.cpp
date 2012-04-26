@@ -33,8 +33,11 @@ int main(int ac, char * av[])
 			xml::Document* document = NULL;
 			document = parseXML(vm["xml"].as<string>().c_str());
 			// TODO do something with document
-			cout << *document << "\n" << endl;
-			delete document;
+			if (document != NULL)
+			{
+				cout << *document << "\n" << endl;
+				delete document;
+			}
 		}
 		if (vm.count("dtd"))
 		{

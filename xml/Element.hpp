@@ -46,7 +46,7 @@ namespace xml {
 		Mutateur : définit les contenus enfants de l'élément courant.
 		@param _children Liste des contenus enfants.
 		*/
-		void SetChildren(std::list<Content*> * _children) { children = *_children; }
+		void SetChildren(std::list<Content*> _children) { children = _children; }
 
 		/**
 		Accesseur : renvoie les contenus enfants de l'élément courant.

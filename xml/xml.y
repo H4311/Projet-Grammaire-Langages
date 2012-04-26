@@ -42,10 +42,10 @@ document
 	{ 
 		*doc  = new Document();
 		if ($1 != NULL) {
-			(*doc)->setDoctype($1);
+			(*doc)->setDoctype(*$1);
 			delete $1;
 		}
-		(*doc)->setComments($3);
+		(*doc)->setComments(*$3);
 		delete $3;
 		(*doc)->setRoot($2);
 	}
@@ -95,9 +95,9 @@ declaration
 xml_element
  : start attribut_opt empty_or_content 	
 	{ 
-		$3->SetAttList($2);
+		$3->SetAttList(*$2);
 		delete $2;
-		$3->SetName($1);
+		$3->SetName(*$1);
 		delete $1;
 		$$ = $3;
 	}
@@ -136,7 +136,7 @@ empty_or_content
  | close_content_and_end CLOSE 
 	{ /* ex : <a>something</a> */
 		$$ = new Element();
-		((Element*)$$)->SetChildren($1);
+		((Element*)$$)->SetChildren(*$1);
 		delete $1;
 	}
  ;

@@ -58,14 +58,14 @@ namespace xml {
 		Mutateur : donne le nom _n à l'élément courant.
 		@param _n Nom de l'élément : pair<namespace, nom>
 		*/
-		void SetName(ElementName* _n) { name = *_n; }
+		void SetName(ElementName _n) { name = _n; }
 
 		/**
 		Mutateur : attribue la liste d'attributs à l'élément courant.
 		@param _l Liste d'attributs (un attribut est de la forme pair<nom,
 		valeur>).
 		*/
-		void SetAttList(AttList* _l) { attributes = *_l; }
+		void SetAttList(AttList _l) { attributes = _l; }
 		
 		/**
 		Accesseur : renvoie le nom de l'élément courant.
