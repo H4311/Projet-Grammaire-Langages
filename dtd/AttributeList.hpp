@@ -12,6 +12,7 @@ namespace dtd {
 	class AttributeList : public Declaration {
 		public:
 			AttributeList(std::string _name = "", std::list<Attribute*> _attDefs = NULL);
+			std::list<Attribute*> getAttributes();
 			virtual ~AttributeList();
 			virtual std::ostream& put(std::ostream& out);
 

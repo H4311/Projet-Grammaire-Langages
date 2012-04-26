@@ -7,6 +7,10 @@ namespace dtd {
 	AttributeList::AttributeList(std::string _name, std::list<Attribute*> _attDefs)
 		: name(_name), attDefs(_attDefs) {}
 	
+	std::list<Attribute*> AttributeList::getAttributes() {
+		return attDefs;
+	}
+	
 	AttributeList::~AttributeList() {
 		std::list<Attribute*>::iterator it;
 		for(it=attDefs.begin(); it!=attDefs.end(); it++) {
