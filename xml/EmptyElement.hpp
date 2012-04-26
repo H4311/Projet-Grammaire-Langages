@@ -53,6 +53,11 @@ namespace xml {
 		{
 		/* empty */
 		}
+		
+		/**
+		Destructeur vide (pour pouvoir détruire les objets des classes filles).
+		*/
+		virtual ~EmptyElement() {}
 
 		/**
 		Mutateur : donne le nom _n à l'élément courant.

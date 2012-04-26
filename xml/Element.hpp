@@ -40,7 +40,7 @@ namespace xml {
 		/**
 		Destructeur de l'élément.
 		*/
-		~Element();
+		virtual ~Element();
 		
 		/**
 		Mutateur : définit les contenus enfants de l'élément courant.
@@ -52,7 +52,7 @@ namespace xml {
 		Accesseur : renvoie les contenus enfants de l'élément courant.
 		@return Liste des contenus enfants.
 		*/
-		std::list<Content*> getChildren();
+		std::list<Content*> & getChildren();
 
 		/**
 		Affiche l'élément courant dans le stream donné.

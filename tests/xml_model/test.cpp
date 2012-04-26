@@ -16,7 +16,10 @@ int main(int argc, char**argv)
 	list<xml::Content*> childs;
 
 	xml::ProcessingInstruction* se = new xml::ProcessingInstruction;
-	se->SetName(ElementName("","xml"));
+	ElementName * seName = new ElementName("", "xml");
+	se->SetName(*seName);
+	delete seName;
+
 	attributes.push_back(Attribut("version", "2.0"));
 	attributes.push_back(Attribut("encoding", "utf8"));
 	se->SetAttList(attributes);
