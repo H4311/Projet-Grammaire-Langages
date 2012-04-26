@@ -162,7 +162,7 @@ list<xml::Content*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode
 				if (itXSLEle->getNamespace() != "xsl") { // If it's HTML :
 					((xml::Element*)htmlChild)->setName(ElementName(itXSLEle->getNamespace(), itXSLEle->getName()));
 					((xml::Element*)htmlChild)->setAttList(itXSLEle->getAttList());
-					((xml::Element*)htmlChild)->appendChild(generateHtmlElement(itXSLEle, xmlNode));
+					((xml::Element*)htmlChild)->appendChildren(generateHtmlElement(itXSLEle, xmlNode));
 				}
 				else if (itXSLEle->getName() == "apply-templates") {
 					// For each child of the current XML node, we try to apply another template :
@@ -204,19 +204,22 @@ list<xml::Content*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode
 		}
 	}
 	else { // If we didn't find a template, we only past the inner data, try to apply other templates to the elements children
-		for(list<xml::Content*>::const_iterator itXML = xmlNode->getChildren()->begin(); itXML != xmlNode->getChildren()->end(); itXML++) {
-			xml::Data* itXMLDat = dynamic_cast<xml::Data*>(*itXML);
-			if (itXMLDat != NULL) {  // If it's data, we past it into the html doc :
-				htmlNode.push_back(itXMLDat);
-			}
-			else {
-				xml::EmptyElement* itXMLEmp = dynamic_cast<xml::EmptyElement*>(*itXML);
-				if (itXMLEmp != NULL) {  // If it's an element (empty or not), we process it :
-					xml::Element* xslNodeChild = findTemplate(itXMLEmp->getName());
-					generateHTML(xslNodeChild, itXMLEmp); // recursivity
+		xml::Element* xmlElement = dynamic_cast<xml::Element*>(xmlNode);
+		if (xmlElement != NULL) {
+			for(list<xml::Content*>::const_iterator itXML = xmlElement->getChildren().begin(); itXML != xmlElement->getChildren().end(); itXML++) {
+				xml::Data* itXMLDat = dynamic_cast<xml::Data*>(*itXML);
+				if (itXMLDat != NULL) {  // If it's data, we past it into the html doc :
+					htmlNode.push_back(itXMLDat);
 				}
-			}
+				else {
+					xml::EmptyElement* itXMLEmp = dynamic_cast<xml::EmptyElement*>(*itXML);
+					if (itXMLEmp != NULL) {  // If it's an element (empty or not), we process it :
+						xml::Element* xslNodeChild = findTemplate(itXMLEmp->getName());
+						generateHtmlElement(xslNodeChild, itXMLEmp); // recursivity
+					}
+				}
 
+			}
 		}
 	}
 
@@ -225,18 +228,17 @@ list<xml::Content*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode
 
 xml::Element* xsl::XSLProcessor::findTemplate( string xmlElementName ) {
 	
-	list<xml::Content*> contentsXsl = xslDoc->getChildren();
+	list<xml::Content*> contentsXsl = ((xml::Element*)(xslDoc->getRoot()))->getChildren();
 	
-	for(list<xml::Content*>::iterator itXsl = contentsXsl->begin();
-			itXsl != contentsXsl->end(); itXsl++)
+	for(list<xml::Content*>::iterator itXsl = contentsXsl.begin(); itXsl != contentsXsl.end(); itXsl++)
 	{
 		xml::Element* currentElement = dynamic_cast<xml::Element*>(*itXsl);
 		/** If it's a template element, and its "match" attribute has the same value than the name of the XML element, we return it */
 		if ( currentElement != NULL &&
 			currentElement->getName() == "template"  &&
-			currentElement->GetAttributeValue("match") == xmlElementName ){
+			currentElement->getAttributeValue("match") == xmlElementName ){
 				
-				return *currentElement;
+				return currentElement;
 		}
 	}
 	return NULL;
