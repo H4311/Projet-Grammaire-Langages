@@ -70,14 +70,13 @@ namespace xsl {
 			/**
 			 * @brief Setter - XML to HTML Processor
 			 * 
-			 * Validate the given XML file and generate the HTML document using the previously processed XSL file.
+			 * Generate the HTML document from a XML one using the previously processed XSL file.
 			 * 
 			 * @author Daniel BAUDRY & Benjamin Bill PLANCHE (ALdream)
-			 * @return true if the XML is conformed, and save the HTML document to the given place.
-			 * @param xmlFileName Path to the xml file to evaluate.
-			 * @param htmlOutputFile Path to the file which will contain the HTML file.
+			 * @return the structure of the HTML document.
+			 * @param xmlDoc Processed XML document.
 			 */
-			xml::Document* generateHtmlFile(string xmlFileName);
+			xml::Document* generateHtmlFile(xml::Document* xmlDoc);
 
 			~XSLProcessor();
 			XSLProcessor();
@@ -92,6 +91,7 @@ namespace xsl {
 			 * @return the list of generated HTML elements
 			 * @param xslNode Template to apply.
 			 * @param xmlNode XML element to process.
+			 * @param htmlNode HTML element which is being generated (used for the XSL "attribute" element).
 			 */			
 			list<xml::Content*> generateHtmlElement(xml::Element* xslNode, xml::Content* xmlNode, xml::Element* htmlNode);
 

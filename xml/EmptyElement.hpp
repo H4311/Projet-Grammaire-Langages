@@ -75,6 +75,12 @@ namespace xml {
 		Accesseur : renvoie la liste des attributs de l'élément courant.
 		*/		
 		AttList getAttList() { return attributes; }
+
+		/**
+		Mutateur : ajoute un attribut à la liste de ceux assignés à cet élément.
+		@param attr Attribut à ajouter.
+		*/
+		void addAttribute(Attribut attr);
 		/**
 		Accesseur : renvoie le nom de l'élément courant.
 		*/
