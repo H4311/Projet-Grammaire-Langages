@@ -23,6 +23,7 @@ static Document & getDoc()
 
 	singleton = new Document;
 	Document & doc = *singleton;
+	doc.setDoctype(Doctype("html.dtd", "html"));
 
 	AttList attributes;
 	list<Content*> childs;
@@ -48,7 +49,7 @@ static Document & getDoc()
 	title->setName(ElementName("", "title"));
 	
 	list<Content*> titleChild;
-	Data* titleContent = new Data("Bienvenue sur mon site oueb !");
+	Data* titleContent = new Data("Bienvenue");
 	titleChild.push_back(titleContent);
 	title->setChildren(titleChild);
 	
@@ -102,24 +103,61 @@ struct TestAffichage : public TestCase
 	}
 };
 
-struct TestContenu : public TestCase
+struct TestEnfants : public TestCase
 {
-	TestContenu() : TestCase("Vérifier que le contenu du document est bien celui créé.") {}
+	TestEnfants() : TestCase("Vérifier que le contenu du document est bien celui créé : enfants.") {}
 	bool operator()()
 	{
 		Document & doc = getDoc();
 		Element* root = static_cast<Element*>(doc.getRoot());
+		
 		cout << "Vérifier que la racine est bien de type Element...";
 		bool check = root != NULL;
 		if (!check) return false;
+		
 		cout << "OK\nVérifier que le nom de l'élément racine est bien html...";
 		check = root->getName() == "html";
 		if (!check) return false;
+		
 		cout << "OK\nVérifier que html contient bien deux fils...";
 		check = root->getChildren().size() == 2;
 		if (!check) return false;
-		cout << "OK" << endl;
+	
+		cout << "OK\nVérifier que le premier fils est bien head...";		
+		Element* head = static_cast<Element*>(* root->getChildren().begin());
+		check = head != NULL && head->getName() == "head";
+		if (!check) return false;
+		
+		cout << "OK\nVérifier que head contient bien title...";
+		Element* title = static_cast<Element*>(* head->getChildren().begin());
+		check = title != NULL;
+		if (!check) return false;
+
+		cout << "OK\nVérifier que title contient bien 'Bienvenue'...";
+		Data* titleData = static_cast<Data*>(* title->getChildren().begin());
+		check = titleData != NULL && titleData->getData() == "Bienvenue";
+		if (!check) return false;
+
+		cout << "OK";
+
+		cout << endl;
 		return true;
+	}
+};
+
+struct TestAttributs : public TestCase
+{
+	TestAttributs() : TestCase("Vérifier que le contenu du document est bien celui créé : attributs.") {}
+	bool operator()()
+	{
+		Document & doc = getDoc();
+		Element * root = static_cast<Element*>(doc.getRoot());
+		if (root == NULL) return false;
+		Element * body = static_cast<Element*>( *(++root->getChildren().begin()) );
+		if (body == NULL) return false;
+		Element * a = static_cast<Element*>(* body->getChildren().begin() );
+		return a != NULL && a->getAttList().begin()->first == "alt"
+				&& a->getAttList().begin()->second == "Google.fr";
 	}
 };
 
@@ -128,7 +166,8 @@ int main(int argc, char** argv)
 	TestSuite suite;
 	
 	suite.add(new TestAffichage);
-	suite.add(new TestContenu);
+	suite.add(new TestEnfants);
+	suite.add(new TestAttributs);
 	
 	suite.launch();
 
