@@ -1,0 +1,27 @@
+<!DOCTYPE rapport SYSTEM "rap1.dtd">
+<ns:rapport>
+  <ns:titre>Réaliser un compilateur</ns:titre>
+  <ns:auteur>
+    <ns:prenom> Nino </ns:prenom>
+    <ns:nom> Silverio </ns:nom>
+  </ns:auteur>
+  <ns:resume> Ceci est extrait du livre "Réaliser un compilateur : 
+	les outils Lex et Yacc" de Nino Silverio. </ns:resume>
+  <ns:chapitre>
+    <ns:titre> Introduction : concepts de base </ns:titre>
+    <ns:section>
+      <ns:titre>Fonctions et structure d'un compilateur</ns:titre>
+      <ns:p>Tout programme rédigé dans un langage de programmation de haut niveau 
+	tel que Pascal ou C ne peut être exécuté par un ordinateur que s'il 
+	est traduit en instructions exécutables par l'ordinateur, généralement 
+	des instruction en langage machine. L'ordinateur qui doit exécuter 
+	le programme ainsi traduit est appelé machine cible.</ns:p>
+    </ns:section>
+    <ns:section>
+      <ns:titre>Réalisation d'un compilateur</ns:titre>
+      <ns:p>Comme l'écriture d'un compilateur est une tâche fort complexe, 
+	le programmateur a tout intérêt à travailler en utilisant un langage 
+	de programmation de haut niveau.</ns:p>
+    </ns:section>
+  </ns:chapitre>
+</ns:rapport>

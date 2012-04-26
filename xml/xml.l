@@ -104,7 +104,13 @@ closespecial "?>"{nl}?
 {openspecial}{ws}?{name}	{ BEGIN(INITIAL); char * tmp = word(yytext); xmllval.en = new ElementName("",tmp); free(tmp); return STARTSPECIAL;}
 {open}{ws}?{name}	{ BEGIN(INITIAL); char * tmp = word(yytext); xmllval.en = new ElementName("",tmp); free(tmp); return START;}
 {open}{ws}?{nsname}	{ BEGIN(INITIAL); char *tmp1 = nameSpace(yytext); char * tmp2 = split_namespace(yytext); xmllval.en = new ElementName(tmp1,tmp2); free(tmp1); free(tmp2); return NSSTART;}
-{open}"/"{name}		{BEGIN(INITIAL); char * tmp = word(yytext); xmllval.en = new ElementName("",tmp); free(tmp); return END;}
+{open}"/"{name}		{
+	BEGIN(INITIAL); 
+	char * tmp = word(yytext); 
+	xmllval.en = new ElementName("",tmp); 
+	free(tmp); 
+	return END;
+}
 {open}"/"{nsname}		{BEGIN(INITIAL); char *tmp1 = nameSpace(yytext); char * tmp2 = split_namespace(yytext); xmllval.en = new ElementName(tmp1,tmp2); free(tmp1); free(tmp2); return NSEND;}
 {comment}		{ xmllval.s = strdup(yytext); return COMMENT;}
 
