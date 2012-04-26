@@ -119,6 +119,97 @@ bool xsl::XSLProcessor::processXslFile(string xslFileName) {
 	return true;
 }
 
+
+Document* generateHtmlFile(string xmlFileName)
+DEBUT
+	xmlDoc = parseXML(xmlFileName);
+	Si xmlDoc nul
+		return NULL;
+	FinSi
+	
+	Element* XSLnode = findTemplate(xmlDoc->getRoot());
+	Liste<Element*> listElementsHTML = generateHTML(XSLnodeChild, xmlDoc->getRoot());
+	Element* racineHTML;
+	Si listElementsHTML.length() > 1 // XSL n'ayant pas généré de racine, donc on en ajoute une
+		racineHTML = new Element();
+		racineHTML->setName("null");
+		racineHTML->setChildren(listElementsHTML);
+	SinonSi listElementsHTML.length() = 1
+		racineHTML = listElementsHTML[0];
+	FinSi
+	
+	Document* docHTML = newDocument();
+	docHTML->setRoot(racineHTML);
+	
+	return docHTML;
+FIN
+
+/** @todo ALGO POTENTIELLEMENT VALIDE ET TOTAL, à implémenter et tester (NE PAS SUPPRIMER -> servira pour le CR Algo)
+Document* generateHtmlFile(string xmlFileName)
+DEBUT
+	xmlDoc = parseXML(xmlFileName);
+	Si xmlDoc nul
+		return NULL;
+	FinSi
+	
+	Element* XSLnode = findTemplate(xmlDoc->getRoot());
+	Liste<Element*> listElementsHTML = generateHTML(XSLnodeChild, xmlDoc->getRoot());
+	Element* racineHTML;
+	Si listElementsHTML.length() > 1 // XSL n'ayant pas généré de racine, donc on en ajoute une
+		racineHTML = new Element();
+		racineHTML->setName("null");
+		racineHTML->setChildren(listElementsHTML);
+	SinonSi listElementsHTML.length() = 1
+		racineHTML = listElementsHTML[0];
+	FinSi
+	
+	Document* docHTML = newDocument();
+	docHTML->setRoot(racineHTML);
+	
+	return docHTML;
+FIN
+
+Liste<Element*> generateHTMLElement(Element* XSLnode, Content* XMLnode)
+DEBUT
+	Liste<Element*> HTMLnode;
+	Si XSLnode non-nul
+		Pour chaque enfant de XSLnode
+			Content* htmlChild = new Content();
+			Si xslEl EmptyElement
+				htmlChild->setName(xslEl->getName());
+				htmlChild->setAttributes(xslEl->getAttributes());
+			SinonSi xslEl Data
+				htmlChild->setData(xslEl->getData());
+			SinonSi xslEl Element
+				Si xslEl est du HTML
+					htmlChild->setName(xslEl->getName());
+					htmlChild->setAttributes(xslEl->getAttributes());
+					htmlChild->appendChild(generateHTML(xslEl, XMLnode);
+				SinonSi xslEl apply-templates
+					Si XMLnode Element
+						Pour chaque enfant de XMLnode
+							Element* XSLnodeChild = findTemplate(XMLnodeChild);
+							generateHTML(XSLnodeChild, XMLnodeChild);
+						FinPour
+					FinSi
+				FinSi
+			FinSi
+			HTMLnode.push_back(htmlChild);
+		FinPour
+	Sinon
+		Pour chaque enfant de XMLnode
+			Si XMLnodeChild Data // On ajoute sans modifier :
+				HTMLnode.push_back(XMLnodeChild);
+			SinonSi XMLnodeChild Element
+				Element* XSLnodeChild = findTemplate(XMLnodeChild);
+				generateHTML(XSLnodeChild, XMLnodeChild);
+			FinSi
+		FinPour
+	FinSi
+	return HTMLnode;
+FIN
+*/
+
 bool xsl::XSLProcessor::generateHtmlFile(string xmlFileName, string htmlOutputFile) {
 
 	// Checking if an valid XSL file as already been processed :
