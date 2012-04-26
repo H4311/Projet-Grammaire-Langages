@@ -26,6 +26,7 @@ namespace dtd {
 			virtual ~Document();
 			std::ostream& put(std::ostream& out);
 			std::list<Declaration*>* getDeclarations();
+			void setDeclarations(std::list<Declaration*>* declarations);
 		
 		protected:
 			std::list<Declaration*>* declarations;

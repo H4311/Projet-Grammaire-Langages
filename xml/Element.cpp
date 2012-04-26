@@ -24,6 +24,16 @@ namespace xml {
 		}
 	}
 	
+	void Element::appendChildren(std::list<Content*> _children)
+	{
+		for (list<Content*>::iterator it = _children.begin();
+			it != _children.end();
+			++it)
+		{
+			children.push_back(*it);
+		}
+	}
+	
 	list<Content*> & Element::getChildren() 
 	{
 		return children;
@@ -58,3 +68,4 @@ namespace xml {
 		return current;	
 	}
 }
+

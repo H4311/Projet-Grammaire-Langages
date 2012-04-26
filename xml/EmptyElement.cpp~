@@ -46,7 +46,7 @@ namespace xml
 		return (name.first != "" ? name.first + ":" : "") + name.second;
 	}
 
-	string EmptyElement::getAttributeValue(string attributeName)
+	string EmptyElement::GetAttributeValue(string attributeName)
 	{
 		string value;
 		list<Attribut>::iterator attr = attributes.begin();
