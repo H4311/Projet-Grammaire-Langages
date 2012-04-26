@@ -55,6 +55,10 @@ namespace xml
 		return value;
 	}
 
+	void EmptyElement::addAttribute(Attribut attr) {
+		attributes.push_back(attr);
+	}
+
 	ostream& EmptyElement::toString(ostream& stream, int depth)
 	/*
 	On affiche d'abord la balise ouvrante, l'ensemble des attributs puis la balise

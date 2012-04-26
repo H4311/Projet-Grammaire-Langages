@@ -24,9 +24,6 @@
 #include "dtd/dtd.h"
 
 #include "validation/Validateur.hpp"
-
-// #include "validation/Validateur.cpp" // TODO C'est une blague ?
-
  
 using namespace std;
 
@@ -96,6 +93,7 @@ bool xsl::XSLProcessor::processXslFile(string xslFileName) {
 	}	
 
 	// --- Fusion the XSL DTD and the HTML DTD into a new DTD (only valid used for this XSL) : we copy the XSL DTD into the HTML one.
+	list<dtd::Declaration*> htmlDeclarationsCopy =  *(htmlDTDdoc->getDeclarations()); // We keep a copy of the original HTML declarations list.
 	list<dtd::Declaration*>* htmlDeclarations =  htmlDTDdoc->getDeclarations();
 	list<dtd::Declaration*>* xslDeclarations =  xslDTDdoc->getDeclarations();
 	for( list<dtd::Declaration*>::const_iterator it = xslDeclarations->begin();  it != xslDeclarations->end(); it++) {
@@ -112,30 +110,20 @@ bool xsl::XSLProcessor::processXslFile(string xslFileName) {
 	delete xslDoc;
 	xslDoc = newXsldoc;
 	
+	htmlDTDdoc->setDeclarations(&htmlDeclarationsCopy); // We restore the original list, so when deleting the HTML DTD and its list of declarations, we won't destroy the XSL declarations (the XSL DTD can be reused).
 	delete htmlDTDdoc;
 	
 	return true;
 }
 
 
-xml::Document* xsl::XSLProcessor::generateHtmlFile(string xmlFileName) {
-	// Checking if an valid XSL file as already been processed :
-	if (xslDoc == NULL) {
-		return NULL; // <Error> No XSL. Please process a XSL stylesheet first.
-	}
-
-	//Processing and validating the XML file :
-	xml::Document* xmlDoc = parseXML(xmlFileName.c_str());
-	if (xmlDoc == NULL) {
-		return NULL; // <Error> Syntax Error - Invalid, empty or unfound XML document.
-	}
-	/** @todo Analyse the semantic correctness of the XML file :  semanticCorrectness = DTDValidator.validate(xmlDoc, xmlDTDdoc); */
+xml::Document* xsl::XSLProcessor::generateHtmlFile(xml::Document* xmlDoc) {
 	xml::EmptyElement* rootXML = dynamic_cast<xml::EmptyElement*>(xmlDoc->getRoot());
 	xml::Element* xslNode;
 	if (rootXML != NULL) { // If it's an empty element or element, we try to find a template to apply :
 		xslNode = findTemplate(rootXML->getName());
 	}
-	list<xml::Content*> listHTMLElements = generateHtmlElement(xslNode, xmlDoc->getRoot());
+	list<xml::Content*> listHTMLElements = generateHtmlElement(xslNode, xmlDoc->getRoot(), NULL);
 	xml::Document* docHTML = new xml::Document();
 	if (listHTMLElements.size() > 1) { // No generated root, so we add one :
 		xml::Element* htmlRoot = new xml::Element();
@@ -150,9 +138,9 @@ xml::Document* xsl::XSLProcessor::generateHtmlFile(string xmlFileName) {
 	return docHTML;
 }
 
-list<xml::Content*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode, xml::Content* xmlNode) {
+list<xml::Content*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode, xml::Content* xmlNode, xml::Element* htmlNode) {
 
-	list<xml::Content*> htmlNode;
+	list<xml::Content*> htmlNodeChildren;
 
 	if (xslNode != NULL) { // We apply this template :
 		list<xml::Content*> xslNodeChildren = xslNode->getChildren();
@@ -164,7 +152,7 @@ list<xml::Content*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode
 				if (itXSLEle->getNamespace() != "xsl") { // If it's HTML :
 					((xml::Element*)htmlChild)->setName(ElementName(itXSLEle->getNamespace(), itXSLEle->getName()));
 					((xml::Element*)htmlChild)->setAttList(itXSLEle->getAttList());
-					((xml::Element*)htmlChild)->appendChildren(generateHtmlElement(itXSLEle, xmlNode));
+					((xml::Element*)htmlChild)->appendChildren(generateHtmlElement(itXSLEle, xmlNode, ((xml::Element*)htmlChild)));
 				}
 				else if (itXSLEle->getName() == "apply-templates") {
 					// For each child of the current XML node, we try to apply another template :
@@ -176,7 +164,7 @@ list<xml::Content*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode
 							if (itXMLEmp != NULL) { // If it's an empty element or element, we try to find a template to apply :
 								xslNodeChild = findTemplate(itXMLEmp->getName());
 							}
-							generateHtmlElement(xslNodeChild, *itXML); // recursivity
+							((xml::Element*)htmlChild)->appendChildren(generateHtmlElement(xslNodeChild, *itXML, ((xml::Element*)htmlChild))); // recursivity
 						}
 					}
 				}
@@ -184,7 +172,19 @@ list<xml::Content*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode
 					/** @todo Process "value-of" element (overquality) */
 				}
 				else if (itXSLEle->getName() == "attribute") {
-					/** @todo Process "attribute" element (overquality) */
+					// Processing the data inside this XSL element :
+					list<xml::Content*> contentChildren = generateHtmlElement(itXSLEle, xmlNode, htmlNode);
+					// Getting its textual value :
+					string data;
+					for(list<xml::Content*>::const_iterator itHTML = contentChildren.begin(); itHTML != contentChildren.end(); itHTML++) {
+						xml::Data* htmlData = dynamic_cast<xml::Data*>(*itHTML);
+						if (htmlData != NULL) {
+							data += htmlData->getData();
+						}
+						delete *itHTML;
+					}
+					// Adding it as an attribute into the current HTML node :
+					htmlNode->addAttribute(Attribut(itXSLEle->getAttributeValue("name"), data));
 				}					
 			}
 			else {
@@ -202,7 +202,7 @@ list<xml::Content*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode
 				}
 			}
 
-			htmlNode.push_back(htmlChild);
+			htmlNodeChildren.push_back(htmlChild);
 		}
 	}
 	else { // If we didn't find a template, we only past the inner data, try to apply other templates to the elements children
@@ -211,13 +211,16 @@ list<xml::Content*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode
 			for(list<xml::Content*>::const_iterator itXML = xmlElement->getChildren().begin(); itXML != xmlElement->getChildren().end(); itXML++) {
 				xml::Data* itXMLDat = dynamic_cast<xml::Data*>(*itXML);
 				if (itXMLDat != NULL) {  // If it's data, we past it into the html doc :
-					htmlNode.push_back(itXMLDat);
+					htmlNodeChildren.push_back(itXMLDat);
 				}
 				else {
 					xml::EmptyElement* itXMLEmp = dynamic_cast<xml::EmptyElement*>(*itXML);
 					if (itXMLEmp != NULL) {  // If it's an element (empty or not), we process it :
 						xml::Element* xslNodeChild = findTemplate(itXMLEmp->getName());
-						generateHtmlElement(xslNodeChild, itXMLEmp); // recursivity
+						list<xml::Content*> contentChildren = generateHtmlElement(xslNodeChild, itXMLEmp, htmlNode); // recursivity
+						for(list<xml::Content*>::const_iterator itHTML = contentChildren.begin(); itHTML != contentChildren.end(); itHTML++) {
+							htmlNodeChildren.push_back(*itHTML);
+						}
 					}
 				}
 
@@ -225,7 +228,7 @@ list<xml::Content*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode
 		}
 	}
 
-	return htmlNode;
+	return htmlNodeChildren;
 }
 
 xml::Element* xsl::XSLProcessor::findTemplate( string xmlElementName ) {

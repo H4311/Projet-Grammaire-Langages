@@ -25,6 +25,7 @@ namespace dtd {
 		public:
 			AttributeList(std::string _name = "", std::list<Attribute*> _attDefs = NULL);
 			std::list<Attribute*> getAttributes();
+			std::string getName();
 			virtual ~AttributeList();
 			virtual std::ostream& put(std::ostream& out);
 

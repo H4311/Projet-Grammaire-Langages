@@ -11,6 +11,10 @@ namespace dtd {
 		return attDefs;
 	}
 	
+	std::string AttributeList::getName() {
+		return name;
+	}
+	
 	AttributeList::~AttributeList() {
 		std::list<Attribute*>::iterator it;
 		for(it=attDefs.begin(); it!=attDefs.end(); it++) {
