@@ -10,7 +10,12 @@ XML_REP = xml/
 DTD_REP = dtd/
 XSL_REP = xsl/
 
-all: $(EXEC_NAME)
+all: fils $(EXEC_NAME) 
+
+fils:
+	make -C $(XML_REP)
+	make -C $(DTD_REP)
+	#make -C $(XSL_REP)
 
 .PHONY: clean rebuild
 
@@ -22,11 +27,8 @@ clean:
 
 rebuild: clean all
 
-$(EXEC_NAME): $(OBJ_FILES)
-	make -C $(XML_REP)
-	make -C $(DTD_REP)
-#	make -C $(XSL_REP)
+$(EXEC_NAME): $(OBJ_FILES) $(OBJ_FILES_DEP)
 	$(CXX) -o $(EXEC_NAME) $(OBJ_FILES) $(OBJ_FILES_DEP) $(LIBS)
 
-%.o: %.cpp
+Main.o: Main.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ -c $<
