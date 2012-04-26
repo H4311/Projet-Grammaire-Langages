@@ -148,7 +148,7 @@ xml::Document* xsl::XSLProcessor::generateHtmlFile(string xmlFileName) {
 	return docHTML;
 }
 
-list<xml::Content*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode, xml::Content* xmlNode) {
+list<xml::Content*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode, xml::Content* xmlNode, xml::Element* htmlNode) {
 
 	list<xml::Content*> htmlNode;
 
@@ -162,7 +162,7 @@ list<xml::Content*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode
 				if (itXSLEle->getNamespace() != "xsl") { // If it's HTML :
 					((xml::Element*)htmlChild)->setName(ElementName(itXSLEle->getNamespace(), itXSLEle->getName()));
 					((xml::Element*)htmlChild)->setAttList(itXSLEle->getAttList());
-					((xml::Element*)htmlChild)->appendChildren(generateHtmlElement(itXSLEle, xmlNode));
+					((xml::Element*)htmlChild)->appendChildren(generateHtmlElement(itXSLEle, xmlNode, ((xml::Element*)htmlChild)));
 				}
 				else if (itXSLEle->getName() == "apply-templates") {
 					// For each child of the current XML node, we try to apply another template :
@@ -174,7 +174,7 @@ list<xml::Content*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode
 							if (itXMLEmp != NULL) { // If it's an empty element or element, we try to find a template to apply :
 								xslNodeChild = findTemplate(itXMLEmp->getName());
 							}
-							generateHtmlElement(xslNodeChild, *itXML); // recursivity
+							generateHtmlElement(xslNodeChild, *itXML, ((xml::Element*)htmlChild)); // recursivity
 						}
 					}
 				}
@@ -183,6 +183,7 @@ list<xml::Content*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode
 				}
 				else if (itXSLEle->getName() == "attribute") {
 					/** @todo Process "attribute" element (overquality) */
+					htmlNode.addAttribute(new Attribute());
 				}					
 			}
 			else {
@@ -215,7 +216,7 @@ list<xml::Content*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode
 					xml::EmptyElement* itXMLEmp = dynamic_cast<xml::EmptyElement*>(*itXML);
 					if (itXMLEmp != NULL) {  // If it's an element (empty or not), we process it :
 						xml::Element* xslNodeChild = findTemplate(itXMLEmp->getName());
-						generateHtmlElement(xslNodeChild, itXMLEmp); // recursivity
+						generateHtmlElement(xslNodeChild, itXMLEmp, htmlNode); // recursivity
 					}
 				}
 

@@ -93,7 +93,7 @@ namespace xsl {
 			 * @param xslNode Template to apply.
 			 * @param xmlNode XML element to process.
 			 */			
-			list<xml::Content*> generateHtmlElement(xml::Element* xslNode, xml::Content* xmlNode);
+			list<xml::Content*> generateHtmlElement(xml::Element* xslNode, xml::Content* xmlNode, xml::Element* htmlNode);
 
 			/**
 			 * @brief XSL Template Finder
