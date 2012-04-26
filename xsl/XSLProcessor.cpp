@@ -42,6 +42,11 @@ void xsl::XSLProcessor::processXslDTDFile(string name) {
 
 bool xsl::XSLProcessor::processXslFile(string xslFileName) {
 	
+	// --- Checking if a DTD has been processed
+	if (xslDTDdoc == NULL) {
+		return false; // <Error> No DTD. Please process a XSL DTD first.
+	}
+	
 	xml::Document* newXsldoc;
 	
 	// --- Analyse the syntax of the XSL file. If OK, continue.
