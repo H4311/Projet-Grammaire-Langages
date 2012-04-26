@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE rapport SYSTEM "rap2.dtd">
 <rapport>
- <titre>Réaliser un compilateur</titre>
+ <titre>RÃ©aliser un compilateur</titre>
  <auteur>
   <nom>Nino</nom>
   <prenom>Silverio</prenom>
  </auteur>
- <resume>Ceci est un extrait du livre "Réaliser un compilateur: 
+ <resume>Ceci est un extrait du livre "RÃ©aliser un compilateur: 
 	les outils Lex et Yacc" de Nino Silverio</resume>
  <chapitre titre="Introduction: concepts de base">
    <section titre="Fonctions et structure d'un compilateur">
-    <p>Tout programme rédigé dans un langage de programmation de haut 
-	niveau tel que Pascal ou C ne peut être exécuté par un ordinateur 
-	que s'il est traduit en instructions exécutables par l'ordinateur, 
-	généralement des instructions en langage machine. L'ordinateur qui 
-	doit exécuter le programme ainsi traduit est appelé machine cible.
-	Un ordinateur est représenté sur l'image ci dessous : 
+    <p>Tout programme rÃ©digÃ© dans un langage de programmation de haut 
+	niveau tel que Pascal ou C ne peut Ãªtre exÃ©cutÃ© par un ordinateur 
+	que s'il est traduit en instructions exÃ©cutables par l'ordinateur, 
+	gÃ©nÃ©ralement des instructions en langage machine. L'ordinateur qui 
+	doit exÃ©cuter le programme ainsi traduit est appelÃ© machine cible.
+	Un ordinateur est reprÃ©sentÃ© sur l'image ci dessous : 
 	<img src="ordinateur.png" title="Image"/>
-	Voilà.
+	VoilÃ .
 	</p>
    </section>
 
-   <section titre="Réalisation d'un compilateur">
-    <p>Comme l'écriture d'un compilateur est une tâche fort complexe, 
-	le programmateur a tout intérêt à travailler en utilisant un langage 
+   <section titre="RÃ©alisation d'un compilateur">
+    <p>Comme l'Ã©criture d'un compilateur est une tÃ¢che fort complexe, 
+	le programmateur a tout intÃ©rÃªt Ã  travailler en utilisant un langage 
 	de programmation de haut niveau.</p>
    </section>
  </chapitre>
