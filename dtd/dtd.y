@@ -183,7 +183,7 @@ default_declaration
 	}
 | FIXED STRING 
 	{
-		$$ = new string("#FIXED");	
+		$$ = new string("#FIXED ");	
 		*$$ += string($2);
 		free($2);
 	}

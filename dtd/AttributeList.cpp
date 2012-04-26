@@ -7,7 +7,12 @@ namespace dtd {
 	AttributeList::AttributeList(std::string _name, std::list<Attribute*> _attDefs)
 		: name(_name), attDefs(_attDefs) {}
 	
-	AttributeList::~AttributeList() {}
+	AttributeList::~AttributeList() {
+		std::list<Attribute*>::iterator it;
+		for(it=attDefs.begin(); it!=attDefs.end(); it++) {
+			delete *it;
+		}
+	}
 
 	std::ostream& AttributeList::put(std::ostream& out) {
 		std::list<Attribute*>::iterator it;

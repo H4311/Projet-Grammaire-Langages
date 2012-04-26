@@ -6,6 +6,13 @@
 
 #include "Declaration.hpp"
 
+/**
+* @file dtd/Document.hpp
+* Ce fichier contient la classe dtd::Document qui est l'entité manipulable par l'utilisateur
+* représentant un document dtd.
+* @author Arnaud Lahache & un peu Benjamin Bouvier
+*/
+
 namespace dtd {	
 	/**
 	* @brief Document dtd

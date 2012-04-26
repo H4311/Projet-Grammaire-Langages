@@ -60,11 +60,12 @@ int main() {
 	
 	AttributeList *al = new AttributeList("list", attList);
 	
-	std::list<Declaration*> decl;
-	decl.push_back(e);
-	decl.push_back(e2);
-	decl.push_back(e3);
-	Document *d = new Document(&decl);
+	std::list<Declaration*>* decl = new std::list<Declaration*>();
+	decl->push_back(e);
+	decl->push_back(e2);
+	decl->push_back(e3);
+	decl->push_back(al);
+	Document *d = new Document(decl);
 	
 	std::cout << d << std::endl;
 	
