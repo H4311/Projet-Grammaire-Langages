@@ -1,6 +1,6 @@
 CXX = g++
 LD = g++
-EXE = dtd
+EXE = test_dtd
 OBJ = Document.o Declaration.o AttributeList.o Attribute.o Element.o ContentSpec.o Children.o ChoiceSeq.o Choice.o Seq.o Name.o TestPut.o
 CXXFLAGS = -g
 LDFLAGS =
