@@ -110,7 +110,5 @@ bool Validateur::validationDocument(dtd::Document& dtd, xml::Document& xml) {
 		}
 	}
 	
-	delete declarations;
-	
 	return validationNode(xml.getRoot(), elements, attributes);
 }
