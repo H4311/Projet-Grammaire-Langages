@@ -1,3 +1,13 @@
+
+/**
+ * @file Test.hpp
+ * @brief Tests - XML
+ * 
+ * Contains the test functions for the XML processor.
+ * 
+ * @author Benjamin BOUVIER
+ */
+
 # include <iostream>
 # include <list>
 using namespace std;

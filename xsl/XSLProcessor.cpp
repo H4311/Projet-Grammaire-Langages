@@ -33,36 +33,23 @@ xsl::XSLProcessor::XSLProcessor() {
 
 }
 
-bool xsl::XSLProcessor::processXslDTDFile(string name) {
-	// --- Analyse the syntax of the XSL DTD file. If OK, continue.
-	dtd::Document* newXslDTDdoc = parseDTD(name.c_str());
-	if (newXslDTDdoc == NULL) {
-		return false; // <Error> Syntax Error - Invalid or empty XSL DTD document.
-	}	
-
-	// --- Everything is OK with the new DTD : we delete the ancient one and replace by the new.
+void xsl::XSLProcessor::setXslDTDFile(Document* newXslDTDdoc) {
 	delete xslDTDdoc;
 	xslDTDdoc = newXslDTDdoc;
-	return true;
 }
 
 
-bool xsl::XSLProcessor::processXslFile(string xslFileName) {
+bool xsl::XSLProcessor::processXslFile(Document* newXsldoc) {
 	
 	// --- Checking if a DTD has been processed
 	if (xslDTDdoc == NULL) {
 		return false; // <Error> No DTD. Please process a XSL DTD first.
 	}
-	// --- Analyse the syntax of the XSL file. If OK, continue.
-	xml::Document* newXsldoc = parseXML(xslFileName.c_str());
-	if (newXsldoc == NULL) {
-		return false; // <Error> Syntax Error - Invalid or empty XSL document.
-	}	
-		
-	// --- Analyse the syntax of the HTML DTD file. The link to this DTD can be found into the attribute xmlns:xsl of the element xsl:stylesheet.
+
+	// --- Analyse the syntax of the HTML DTD file. The link to this DTD can be found into the attribute xmlns:xsl of the element xsl:stylesheet of the XSL.
 	
 	// --------- Finding the path to the HTML DTD, contained by the attribut "xmlns:xsl" of the element "xsl:stylesheet" :
-	xml::Element* rootXSL = dynamic_cast<xml::Element*>(xslDoc->getRoot());
+	xml::Element* rootXSL = dynamic_cast<xml::Element*>(newXsldoc->getRoot());
 	if (rootXSL == NULL) {
 		return false; // <Error> Invalid or empty XSL document.
 	}
