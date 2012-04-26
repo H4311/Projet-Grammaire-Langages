@@ -1,17 +1,22 @@
 CXX = g++
 LD = g++
-EXE = xmlparser
+EXE = test_xml
 CXXFLAGS = -g -Wall -DYYDEBUG=1
 LDFLAGS = 
-OBJ = lex.xml.o xml.tab.o Data.o Element.o EmptyElement.o Content.o Comment.o Document.o ProcessingInstruction.o
+OBJ = lex.xml.o xml.tab.o Data.o Element.o EmptyElement.o Content.o Comment.o Document.o ProcessingInstruction.o Test.o
 
 all: analyseXML
 
 analyseXML: flexbison $(OBJ)
+	$(LD) -o $(EXE) $(OBJ) $(LDFLAGS)
+	rm Test.o
 
 flexbison: xml.l xml.y
 	flex -P xml xml.l
 	bison -p xml --debug --verbose --defines=xml.tab.h xml.y
+
+test: analyseXML
+	./$(EXE)
 
 .PHONY: clean mrproper
 clean:
