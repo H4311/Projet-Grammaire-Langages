@@ -356,7 +356,7 @@ list_mixed
 %%
 
 extern FILE *dtdin;
-// extern void yylex_destroy();
+extern void dtdlex_destroy();
 
 Document* parseDTD(const char * file)
 {
@@ -378,7 +378,7 @@ Document* parseDTD(const char * file)
     }
     else  printf("Parse ended with success\n", err);
     fclose(dtdin);
-    // yylex_destroy();
+    dtdlex_destroy();
   }
   
   return document;
