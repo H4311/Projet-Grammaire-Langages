@@ -43,7 +43,7 @@ namespace xml {
 			* @param _d Pair<string,string> contenant respectivement
 			* l'élément racine et le nom de la dtd associée.
 			*/
-			void setDoctype(Doctype * _d) { doctype = _d->first; rootName = _d->second;}
+			void setDoctype(Doctype _d) { doctype = _d.first; rootName = _d.second;}
 
 			/**
 			* Mutateur : Définit le prologue xml.
@@ -61,7 +61,7 @@ namespace xml {
 			* Mutateur : définit les commentaires présents à la suite du document.
 			* @param _c Liste des commentaires
 			*/
-			void setComments(std::list<Comment*> * _c) { comments = *_c; }
+			void setComments(std::list<Comment*> _c) { comments = _c; }
 			
 			/**
 			* Accesseur : renvoie l'élément racine du document.
