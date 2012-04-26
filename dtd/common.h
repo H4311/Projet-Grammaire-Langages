@@ -14,6 +14,7 @@
 #include "Document.hpp"
 #include "Declaration.hpp"
 #include "Attribute.hpp"
+#include "AttributeList.hpp"
 #include "Element.hpp"
 #include "ContentSpec.hpp"
 #include "Children.hpp"
@@ -24,6 +25,7 @@
 
 typedef std::list<dtd::Declaration*> DeclarationList;
 typedef std::list<dtd::Children*> ChildrenList;
-typedef std::list<std::string> AttDefList;
+typedef std::list<dtd::Attribute*> AttDefList;
+typedef std::list<std::string> AttTypeList;
 
 #endif

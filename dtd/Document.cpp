@@ -21,15 +21,10 @@ namespace dtd {
 	}
 	
 	std::ostream& Document::put(std::ostream& out) {
-		/*
-		// TODO supprimer cette partie de debug et remplacer par originale.
 		std::list<Declaration*>::iterator it;
 		for(it=declarations->begin(); it!=declarations->end(); it++) {
 			out << *it << std::endl;
 		}
-		return out;
-		*/
-		out << declarations->size();
 		return out;
 	}
 	

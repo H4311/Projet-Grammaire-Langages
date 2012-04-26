@@ -10,7 +10,7 @@
 namespace dtd {
 	class Name : public Children {
 		public:
-			Name(std::string _name = "", char card = 0);
+			Name(std::string _name = "");
 			virtual ~Name();
 			virtual std::ostream& put(std::ostream& out);
 			virtual std::string getRegex();

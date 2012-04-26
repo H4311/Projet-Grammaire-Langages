@@ -6,8 +6,8 @@ namespace dtd {
 
 	// ------------------------------------------------------------- Class Name
 	
-	Name::Name(std::string _name, char card)
-		: Children(card), name(_name) {}
+	Name::Name(std::string _name)
+		: name(_name) {}
 	
 	Name::~Name() {}
 	

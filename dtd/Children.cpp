@@ -4,8 +4,7 @@ namespace dtd {
 
 	// --------------------------------------------------------- Class Children
 	
-	Children::Children(char _card)
-		: card(_card) {}
+	Children::Children() : card(0) {}
 	
 	Children::~Children() {}
 

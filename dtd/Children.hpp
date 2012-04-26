@@ -9,7 +9,8 @@
 namespace dtd {
 	class Children : public ContentSpec {
 		public:
-			Children(char _card = 0);
+			Children();
+			void SetCard(char _c) { card = _c; }
 			virtual ~Children();
 			virtual std::ostream& put(std::ostream& out) = 0;
 			virtual std::string getRegex() = 0;

@@ -18,8 +18,6 @@ namespace dtd {
 			virtual char getSep() = 0;
 			virtual char getRegexSep() = 0;
 
-			void SetCard(char _c) { card = _c; }
-		
 		protected:
 			std::list<Children*> children;
 	};

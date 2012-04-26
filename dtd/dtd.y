@@ -18,6 +18,7 @@ int yylex(void);
 	AttDefList *adl;
 	DeclarationList *dl;
 	ChildrenList *cl;
+	AttTypeList *atl;
 	dtd::Element *e;
 	dtd::Attribute *a;
 	dtd::ContentSpec *cs;
@@ -30,14 +31,16 @@ int yylex(void);
 %token <s> IDENT TOKENTYPE DECLARATION STRING
 
 %type <dl> dtd_list_opt
-%type <stds> ident attribute att_type enumerate enum_list enum_list_plus item_enum default_declaration 
+%type <stds> ident item_enum default_declaration 
 %type <adl> att_definition_opt
 %type <cs> contentspec
 %type <s> card_opt ast_opt
 %type <dtdc> choice
 %type <dtds> seq
-%type <ch> children cp
-%type <cl> list_choice list_seq_opt
+%type <ch> children cp mixed
+%type <cl> list_choice list_seq_opt list_mixed
+%type <a> attribute
+%type <atl> att_type enumerate enum_list enum_list_plus
 
 %parse-param { Document** doc } 
 /* Elements à définir : */
@@ -72,7 +75,7 @@ ident
 dtd_list_opt
 : dtd_list_opt ATTLIST ident att_definition_opt CLOSE
 	{
-		$1->push_back(new Attribute(*$3, *$4));
+		$1->push_back(new AttributeList(*$3, *$4));
 		delete $3;
 		delete $4;
 		$$ = $1;
@@ -92,8 +95,7 @@ dtd_list_opt
 att_definition_opt
 : att_definition_opt attribute
 	{
-		$1->push_back(*$2);
-		delete $2;
+		$1->push_back($2);
 		$$ = $1;
 	}
 | /* empty */
@@ -105,22 +107,23 @@ att_definition_opt
 attribute
 : ident att_type default_declaration
 	{
-		*$1 += *$2;
+		$$ = new Attribute(*$1, *$2, *$3); // TODO 4ème argument ?
+		delete $1;
 		delete $2;
-		*$1 += *$3;
 		delete $3;
-		$$ = $1;
 	}
 ;
 
 att_type
 : CDATA    
 	{
-		$$ = new string("CDATA");
+		$$ = new AttTypeList;
+		$$->push_back("CDATA"); // TODO vérifier
 	}
 | TOKENTYPE
 	{
-		$$ = new string($1);
+		$$ = new AttTypeList;
+		$$->push_back(string($1));
 		free($1);
 	}
 | enumerate
@@ -132,18 +135,14 @@ att_type
 enumerate
 : OPENPAR enum_list_plus CLOSEPAR
 	{
-		$$ = new string("(");
-		*$$ += *$2;
-		delete $2;
-		*$$ += ')';
+		$$ = $2;
 	}
 ;
 
 enum_list_plus
 : enum_list PIPE item_enum
 	{
-		*$1 += '|';
-		*$1 += *$3;
+		$1->push_back(*$3);
 		delete $3;
 		$$ = $1;
 	}
@@ -152,12 +151,13 @@ enum_list_plus
 enum_list
 : item_enum               
 	{
-		$$ = $1;
+		$$ = new AttTypeList;
+		$$->push_back(*$1);
+		delete $1;
 	}
 | enum_list PIPE item_enum
 	{
-		*$1 += '|';
-		*$1 += *$3;
+		$1->push_back(*$3);
 		delete $3;
 		$$ = $1;
 	}
@@ -183,7 +183,7 @@ default_declaration
 	}
 | FIXED STRING 
 	{
-		$$ = new string("FIXED");	
+		$$ = new string("#FIXED");	
 		*$$ += string($2);
 		free($2);
 	}
@@ -205,9 +205,7 @@ contentspec
 	}
 | mixed
 	{
-		// TODO
-		// Dixit arnaud : "on le gère comme un Choice, avec 
-		// juste #PCDATA en premier membre."
+		$$ = $1;
 	}
 ;
 
@@ -226,21 +224,27 @@ card_opt
 	}
 | /* empty */
 	{
-		$$ = new char;
+		$$ = NULL;
 	}
 ;
 
 children
 : choice card_opt
 	{
-		$1->SetCard(*$2);
-		delete $2;
+		if ($2 != NULL)
+		{
+			$1->SetCard(*$2);
+			delete $2;
+		}
 		$$ = $1;
 	}
 | seq card_opt
 	{
-		$1->SetCard(*$2);
-		delete $2;
+		if ($2 != NULL)
+		{
+			$1->SetCard(*$2);
+			delete $2;
+		}
 		$$ = $1;
 	}
 ;
@@ -252,9 +256,13 @@ cp
 	}
 | IDENT card_opt
 	{
-		$$ = new Name($1, *$2);
+		$$ = new Name($1);
+		if ($2 != NULL)
+		{
+			((Name*)$$)->SetCard(*$2);
+			delete $2;
+		}
 		free($1);
-		delete $2;
 	}
 ;
 
@@ -303,7 +311,20 @@ list_seq_opt
 
 mixed
 : OPENPAR PCDATA list_mixed CLOSEPAR AST
+	{
+		// Une liste mixed est un choix pour lequel le premier
+		// élément est PCDATA.
+		$3->push_front(new Name("#PCDATA"));
+		$$ = new Choice(*$3);
+		((Choice*)$$)->SetCard('*');
+		delete $3;
+	}
 | OPENPAR PCDATA CLOSEPAR ast_opt
+	{
+		$$ = new Name("(#PCDATA)");
+		if ($4 != NULL) { ((Name*)$$)->SetCard(*$4); }
+		delete $4;
+	}
 ;
 
 ast_opt
@@ -313,13 +334,23 @@ ast_opt
 	}
 | /* empty */
 	{
-		$$ = new char;
+		$$ = NULL;
 	}
 ;
 
 list_mixed
 : list_mixed PIPE IDENT
+	{
+		$1->push_back(new Name($3));
+		free($3);
+		$$ = $1;
+	}
 | PIPE IDENT
+	{
+		$$ = new ChildrenList;
+		$$->push_back(new Name($2));
+		free($2);
+	}
 ;
 
 %%

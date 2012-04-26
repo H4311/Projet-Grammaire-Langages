@@ -7,6 +7,12 @@
 #include "Declaration.hpp"
 
 namespace dtd {	
+	/**
+	* @brief Document dtd
+	* 
+	* Classe représentant un document dtd et permettant de naviguer à l'intérieur.
+	* @author Arnaud Lahache
+	*/
 	class Document {
 		public:
 			Document(std::list<Declaration*>* _declarations = NULL);

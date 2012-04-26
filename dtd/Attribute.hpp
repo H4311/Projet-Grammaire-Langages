@@ -8,18 +8,23 @@
 #include "Document.hpp"
 
 namespace dtd {
-	class AttDef;
-
-	class Attribute : public Declaration {
+	class Attribute {
 		public:
-			Attribute(std::string _name = "", std::list<std::string> _attDefs = NULL);
+			Attribute(std::string _name = "",
+				std::list<std::string> _type = NULL,
+				std::string _defaultDecl = "",
+				std::string _attValue = "");
 			virtual ~Attribute();
 			virtual std::ostream& put(std::ostream& out);
 
 		protected:
 			std::string name;
-			std::list<std::string> attDefs;
+			std::list<std::string> type;
+			std::string defaultDecl;
+			std::string attValue;
 	};
 }
+
+std::ostream& operator<<(std::ostream& out, dtd::Attribute* a);
 
 #endif

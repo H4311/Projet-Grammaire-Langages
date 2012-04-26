@@ -1,23 +1,35 @@
-#include "Attribute.hpp"
+#include "AttributeList.hpp"
+
+std::ostream& operator<<(std::ostream& out, dtd::Attribute* a) {
+	return a->put(out);
+}
 
 namespace dtd {
 
 	// -------------------------------------------------------- Class Attribute
 	
-	Attribute::Attribute(std::string _name, std::list<std::string> _attDefs)
-		: name(_name), attDefs(_attDefs) {}
+	Attribute::Attribute(std::string _name, std::list<std::string> _type, std::string _defaultDecl, std::string _attValue)
+		: name(_name), type(_type), defaultDecl(_defaultDecl), attValue(_attValue) {}
 	
 	Attribute::~Attribute() {}
 
 	std::ostream& Attribute::put(std::ostream& out) {
 		std::list<std::string>::iterator it;
-		out << "<!ATTLIST " << name;
+		out << name << " ";
 		
-		for(it=attDefs.begin(); it != attDefs.end(); it++) {
-			out << std::endl << *it << " CDATA #IMPLIED";
+		if(type.size() > 1) out << "(";
+		
+		it=type.begin();
+		out << *it;
+		
+		for(it++; it != type.end(); it++) {
+			out << "|" << *it;
 		}
 		
-		out << ">";
+		if(type.size() > 1) out << ")";
+		
+		if(defaultDecl != "") out << " " << defaultDecl;
+		if(attValue != "") out << " \"" << attValue << "\"";
 		
 		return out;
 	}
