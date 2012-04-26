@@ -81,6 +81,8 @@ int main(int argc, char** argv) {
 	body->SetChildren(childs);
 
 	std::cout << doc << std::endl;
+
+
 	
 	// Tests Validation Node
 	cout << "==== Test validationChild ====" << endl;

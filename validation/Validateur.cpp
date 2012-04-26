@@ -9,8 +9,12 @@
 #include "../dtd/Element.hpp"
 #include "../dtd/Attribute.hpp"
 
+/**
+ * @file Validateur.cpp
+ * Implémenation des fonctions de la classe Validateur
+ */
+
 bool Validateur::validationChild(std::string dtdNode, std::string xmlChildren) {
-    std::cout << "[" << dtdNode << "] [" << xmlChildren << "]" << std::endl;
     boost::regex reg(dtdNode);
 	
 	if (regex_match(xmlChildren.c_str(), reg)) {
@@ -93,6 +97,7 @@ bool Validateur::validationDocument(dtd::Document& dtd, xml::Document& xml) {
 	for(it = declarations->begin(); it != declarations->end(); it++) {
 		dtd::Element* elem = dynamic_cast<dtd::Element*>(*it);
 		
+		// Soit un element, soit un attribut
 		if(elem != NULL) {
 			elements.push_back(elem);
 		} else {
