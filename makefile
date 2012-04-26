@@ -27,7 +27,7 @@ clean:
 
 rebuild: clean all
 
-$(EXEC_NAME): $(OBJ_FILES) $(OBJ_FILES_DEP)
+$(EXEC_NAME): $(OBJ_FILES) dtd/ xml/ xsl/
 	$(CXX) -o $(EXEC_NAME) $(OBJ_FILES) $(OBJ_FILES_DEP) $(LIBS)
 
 Main.o: Main.cpp

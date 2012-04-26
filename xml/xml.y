@@ -37,6 +37,27 @@ int yylex(void);
 
 %parse-param { xml::Document** doc } 
 
+%destructor { free($$); } <s>
+%destructor { delete $$; } <en> <c> <ee> <dt> <at>
+%destructor 
+{ 
+	list<xml::Comment*>::iterator it;
+	for (it = $$->begin(); it != $$->end(); ++it)
+	{
+		delete *it;
+	}
+	delete $$;
+} <ld>
+%destructor 
+{ 
+	list<xml::Content*>::iterator it;
+	for (it = $$->begin(); it != $$->end(); ++it)
+	{
+		delete *it;
+	}
+	delete $$;
+} <lc>
+
 %%
 
 document
@@ -47,9 +68,16 @@ document
 			(*doc)->setDoctype(*$1);
 			delete $1;
 		}
-		(*doc)->setComments(*$3);
-		delete $3;
+
+		if ($3 != NULL) {
+			(*doc)->setComments(*$3);
+			delete $3;
+		}
 		(*doc)->setRoot($2);
+	}
+ | error
+	{
+		yyerror(doc, "Erreur au niveau du document.");
 	}
  ;
 
@@ -62,6 +90,11 @@ misc_seq_opt
  | /*empty*/		
 	{ 
 		$$ = new list<Comment*>; 
+	}
+ | error
+	{
+		yyerror(doc, "Contenu interdit après la balise racine");	
+		$$ = NULL;
 	}
  ;
 
@@ -222,6 +255,6 @@ int xmlwrap(void)
 
 void xmlerror(xml::Document** doc, char *msg)
 {
-  fprintf(stderr, "(%d) Error found : %s.\n", xmllineno, msg);
+  fprintf(stderr, "(Ligne %d) Erreur : %s.\n", xmllineno, msg);
 }
 
