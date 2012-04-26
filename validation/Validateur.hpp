@@ -11,7 +11,7 @@
 #include "../dtd/Document.hpp"
 #include "../xml/Document.hpp"
 #include "../dtd/Element.hpp"
-#include "../dtd/Attribute.hpp"
+#include "../dtd/AttributeList.hpp"
 
 class Validateur {
 
@@ -35,7 +35,7 @@ public:
 	 */
     static bool validationNode(xml::Content* content,
     		std::list<dtd::Element*> elements,
-    		std::list<dtd::Attribute*> attributes);
+    		std::list<dtd::AttributeList*> attributes);
     
     /**
 	 * Valide un document XML par rapport à une DTD
