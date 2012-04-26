@@ -24,7 +24,7 @@ namespace xml {
 		}
 	}
 	
-	list<Content*> Element::getChildren() 
+	list<Content*> & Element::getChildren() 
 	{
 		return children;
 	}
