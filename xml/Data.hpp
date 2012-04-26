@@ -33,6 +33,15 @@ namespace xml {
 		} 
 		
 		/**
+		Retourne la valeur de la donnée
+		@returns la chaine de caractère
+		*/
+		std::string getData()
+		{ 
+			return data;
+		}
+		
+		/**
 		Affiche la donnée telle qu'elle est représentée.
 		@param stream Le flux sur lequel on écrit.
 		@param depth La profondeur dans l'arbre.

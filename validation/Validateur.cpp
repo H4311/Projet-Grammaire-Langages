@@ -105,10 +105,12 @@ bool Validateur::validationDocument(dtd::Document& dtd, xml::Document& xml) {
 			if(att != NULL) {
 				attributes.push_back(att);
 			} else {
+				// TODO : AttributeList
 				std::cerr << "E: Une déclaration de la DTD n'est ni un dtd::Element ni un dtd::Attribute" << std::endl;
 			}
 		}
 	}
+	
 	
 	return validationNode(xml.getRoot(), elements, attributes);
 }
