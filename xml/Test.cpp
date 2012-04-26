@@ -151,6 +151,7 @@ struct TestAttributs : public TestCase
 	bool operator()()
 	{
 		Document & doc = getDoc();
+		cout << "Vérifier que le contenu de l'attribut 'alt' de 'a' est 'Google.fr'... ";
 		Element * root = static_cast<Element*>(doc.getRoot());
 		if (root == NULL) return false;
 		Element * body = static_cast<Element*>( *(++root->getChildren().begin()) );

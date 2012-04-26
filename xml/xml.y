@@ -237,10 +237,9 @@ xml::Document* parseXML(const char* file)
     err = yyparse(&document);
     if (err != 0) 
     {
-	printf("Parse ended with %d error(s)\n", err);
+	fprintf(stderr, "Parse ended with %d error(s)\n", err);
 	document = NULL;
     }
-    else  printf("Parse ended with success\n");
     fclose(xmlin);
     xmllex_destroy();
   }
