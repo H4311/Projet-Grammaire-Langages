@@ -1,4 +1,5 @@
 %option 8bit 
+%option yylineno
 
 %{
 #include "common.h"
@@ -28,29 +29,29 @@ nl		(\r\n|\r|\n)
 ws		[ \t\r\n]+
 open		{nl}?"<"
 close		">"{nl}?
-openpar "("
-closepar ")"
-comma ","
-pipe "|"
+openpar 	"("
+closepar 	")"
+comma 		","
+pipe 		"|"
 esc		"&#"[0-9]+";"|"&#x"[0-9a-fA-F]+";"
 namestart	[A-Za-z\200-\377_]
 namechar	[A-Za-z\200-\377_0-9.-]
 colon		":"
-tokentype "ID"|"IDREF"|"IDREFS"|"ENTITY"|"ENTITIES"|"NMTOKEN"|"NMTOKENS"
+tokentype 	"ID"|"IDREF"|"IDREFS"|"ENTITY"|"ENTITIES"|"NMTOKEN"|"NMTOKENS"
 name		{namestart}{namechar}*
 comment		{open}"!--"([^-]|"-"[^-])*"--"{close}
 string		\"([^"&]|{esc})*\"|\'([^'&]|{esc})*\'
-element {open}"!ELEMENT"{ws}
-attlist {open}"!ATTLIST"{ws}
-declaration "#"("REQUIRED"|"IMPLIED"){ws}?
-fixed "#FIXED"{ws}
-pcdata "#PCDATA"{ws}?
-cdata "CDATA"{ws}?
-qmark "?"
-ast "*"
-plus "+"
-empty "EMPTY"{ws}?
-any "ANY"{ws}?
+element 	{open}"!ELEMENT"{ws}
+attlist 	{open}"!ATTLIST"{ws}
+declaration 	"#"("REQUIRED"|"IMPLIED"){ws}?
+fixed 		"#FIXED"{ws}
+pcdata 		"(#)?PCDATA"{ws}?
+cdata 		"CDATA"{ws}?
+qmark 		"?"
+ast 		"*"
+plus 		"+"
+empty 		"EMPTY"{ws}?
+any 		"ANY"{ws}?
 
 %s INSIDE
 

@@ -12,6 +12,8 @@ int yylex(void);
 
 %}
 
+%locations
+
 %union { 
 	char *s;
 	std::string *stds;
@@ -357,6 +359,7 @@ list_mixed
 
 extern FILE *dtdin;
 extern void dtdlex_destroy();
+extern int dtdlineno;
 
 Document* parseDTD(const char * file)
 {
@@ -391,7 +394,7 @@ int dtdwrap(void)
 
 int dtderror(Document** doc, char *msg)
 {
-  fprintf(stderr, "%s\n", msg);
+  fprintf(stderr, "(%d) Error found : %s.\n", dtdlineno, msg);
 }
 
 

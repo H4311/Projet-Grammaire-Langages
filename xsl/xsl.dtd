@@ -13,6 +13,6 @@
 <!ELEMENT xsl:value-of EMPTY>
 <!ATTLIST xsl:value-of select CDATA #REQUIRED>
 
-<!ELEMENT xsl:attribute PCDATA>
+<!ELEMENT xsl:attribute (PCDATA)>
 <!ATTLIST xsl:attribute name CDATA #REQUIRED>
 
