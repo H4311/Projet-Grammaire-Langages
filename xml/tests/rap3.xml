@@ -4,10 +4,7 @@
   <auteur>
     <prenom> Nino </prenom>
     <nom> Silverio </nom>
-  </auteur>
-
-  <!-- Erreur ligne suivante -->
-  <a>
+  </auteur>   
 
   <resume> Ceci est extrait du livre "Réaliser un compilateur : 
 	les outils Lex et Yacc" de Nino Silverio. </resume>
@@ -29,3 +26,4 @@
     </section>
   </chapitre>
 </rapport>
+<balise_supplementaire_qui_n_a_rien_a_faire_ici />

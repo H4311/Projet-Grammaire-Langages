@@ -30,7 +30,10 @@ namespace xml {
 		/**
 		@todo Rajouter des méthodes.
 		*/
-		//ProcessingInstruction(ElementName _name) : EmptyElement(_name) { /* empty */ }
+		ProcessingInstruction(ElementName _name) 
+		{
+			setName(_name); 
+		}
 	};
 }
 #endif

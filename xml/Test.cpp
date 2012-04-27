@@ -22,7 +22,7 @@ using namespace xml;
 
 # include "../tests/TestFramework.hpp"
 
-# include "xml_processor.h"m 
+# include "xml_processor.h" 
 
 static Document * singleton = NULL;
 
@@ -35,15 +35,12 @@ static Document & getDoc()
 
 	singleton = new Document;
 	Document & doc = *singleton;
-	doc.setDoctype(Doctype("html.dtd", "html"));
+	doc.setDoctype(Doctype("html", "html.dtd"));
 
 	AttList attributes;
 	list<Content*> childs;
 
-	ProcessingInstruction* se = new ProcessingInstruction;
-	ElementName * seName = new ElementName("", "xml");
-	se->setName(*seName);
-	delete seName;
+	ProcessingInstruction* se = new ProcessingInstruction(ElementName("", "xml"));
 
 	attributes.push_back(Attribut("version", "2.0"));
 	attributes.push_back(Attribut("encoding", "utf8"));
@@ -198,12 +195,26 @@ struct TestParsingAvecErreur : public TestCase
 	{
 		Document *dXML = parseXML("tests/rap2.xml");
 		if (dXML == NULL) {
-			delete dXML;
 			return true;
 		} else {
+			delete dXML;
 			return false;
 		}
-		
+	}
+};
+
+struct TestParsingRepriseErreur : public TestCase
+{
+	TestParsingRepriseErreur() : TestCase("Vérifie que la reprise sur erreur (contenu après balise principale) fonctionne.") {}
+	bool operator()()
+	{
+		Document* doc = parseXML("tests/rap3.xml");
+		if (doc == NULL) {
+			return false;
+		} else {
+			delete doc;
+			return true;
+		}
 	}
 };
 
@@ -216,6 +227,7 @@ int main(int argc, char** argv)
 	suite.add(new TestAttributs);
 	suite.add(new TestParsingSansErreur);
 	suite.add(new TestParsingAvecErreur);
+	suite.add(new TestParsingRepriseErreur);
 	suite.launch();
 
 	delete singleton;
