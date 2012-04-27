@@ -15,7 +15,6 @@
 # include "xml/Content.hpp"
 # include "xml/Document.hpp"
 # include "xml/Element.hpp"
-# include "xml/Document.hpp"
 
 # include "dtd/Document.hpp"
 
