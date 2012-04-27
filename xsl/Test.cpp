@@ -361,9 +361,9 @@ struct HTMLGenerationTest_NoRoot : public TestCase
 			dtdXSL = parseDTD("./tests/xsl.dtd");
 			xsl::XSLProcessor xslProcessor = XSLProcessor();
 			xslProcessor.setXslDTD(dtdXSL);
-			documentXSL = parseXML("testNoRoot.xsl");
+			documentXSL = parseXML("tests/testNoRoot.xsl");
 			xslProcessor.processXslFile(documentXSL);
-			documentXML = parseXML("testComplex.xml");
+			documentXML = parseXML("tests/testComplex.xml");
 			documentHTML = xslProcessor.generateHtmlFile(documentXML);
 		}catch(string s){
 			delete documentXSL;
