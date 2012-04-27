@@ -25,5 +25,9 @@ namespace dtd {
 	std::string Element::getName() {
 		return name;
 	}
+
+	ContentSpec* Element::getContentSpec() {
+		return content;
+	}
 	
 }
