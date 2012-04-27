@@ -1,8 +1,9 @@
-//#include "Test.h"
+# include "mainTest4.hpp"
 
-string getStrP1_1(int);
-string getStrP1_2(int);
-string getStrP2();
+/**
+@file mainTest4.cpp
+@author Jose GONZALEZ
+*/
 
 int mainTest4(){
 	freopen("test4.xml","w",stdout);

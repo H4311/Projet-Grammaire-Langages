@@ -1,0 +1,18 @@
+<!DOCTYPE rapport SYSTEM "rap1.dtd">
+<rapport>
+  <titre>Réaliser un compilateur</titre>
+  <auteur>
+    <prenom> Nino </prenom>
+    <nom> Silverio </nom>
+  </auteur>
+  <resume> Ceci est extrait du livre "Réaliser un compilateur : 
+	les outils Lex et Yacc" de Nino Silverio. </resume>
+  <chapitre>
+    <section>
+      <titre>Réalisation d'un compilateur</titre>
+      <p>Comme l'écriture d'un compilateur est une tâche fort complexe, 
+	le programmateur a tout intérêt à travailler en utilisant un langage 
+	de programmation de haut niveau.</p>
+    </section>
+  </chapitre>
+</rapport>
