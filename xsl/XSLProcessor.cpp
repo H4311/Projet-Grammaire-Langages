@@ -76,10 +76,6 @@ void xsl::XSLProcessor::processXslFile(xml::Document* newXslDoc) throw (string) 
 	if (htmlDTDdoc == NULL) {
 		throw(ERROR_INVALID_HTML_DTD);
 	}	
-	
-	cout << htmlDTDdoc;
-	cout << "______________________________________________________\n";
-	cout << xslDTDdoc;
 
 	// --- Fusion the XSL DTD and the HTML DTD into a new DTD (only valid used for this XSL) : we copy the XSL DTD into the HTML one.
 	list<dtd::Declaration*>* htmlDeclarationsCopy =  new list<dtd::Declaration*>(*htmlDTDdoc->getDeclarations()); // We keep a copy of the original HTML declarations list.
@@ -90,10 +86,15 @@ void xsl::XSLProcessor::processXslFile(xml::Document* newXslDoc) throw (string) 
 	}
 
 	// --- Semantic analysis :
-	if (Validateur::validationDocument(*htmlDTDdoc, *newXslDoc)) {
+	bool semanticValid = false;
+	try {
+		semanticValid = Validateur::validationDocument(*htmlDTDdoc, *newXslDoc);
+	}
+	catch (string s) {
 		throw(ERROR_INVALID_XSL_SEMANTIC);
 	}
-	
+	if (!semanticValid) { throw(ERROR_INVALID_XSL_SEMANTIC); }
+
 	// --- Everything is OK with the new XSL : we delete the ancient one and replace by the new.
 	delete xslDoc;
 	xslDoc = newXslDoc;
