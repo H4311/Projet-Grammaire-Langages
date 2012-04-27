@@ -174,9 +174,9 @@ struct TestAttributs : public TestCase
 	}
 };
 
-struct TestValidationSansErreur : public TestCase
+struct TestParsingSansErreur : public TestCase
 {
-	TestValidationSansErreur() : TestCase("Vérifie que le document XML est syntaxiquement valide.") {}
+	TestParsingSansErreur() : TestCase("Vérifie que le document XML est syntaxiquement valide.") {}
 	bool operator()()
 	{
 		Document *dXML = parseXML("tests/rap1.xml");
@@ -191,6 +191,22 @@ struct TestValidationSansErreur : public TestCase
 };
 
 
+struct TestParsingAvecErreur : public TestCase
+{
+	TestParsingAvecErreur() : TestCase("Vérifie que le document XML n'est pas syntaxiquement valide (commentaires dans une balise).") {}
+	bool operator()()
+	{
+		Document *dXML = parseXML("tests/rap2.xml");
+		if (dXML == NULL) {
+			delete dXML;
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+};
+
 int main(int argc, char** argv)
 {
 	TestSuite suite;
@@ -198,8 +214,8 @@ int main(int argc, char** argv)
 	suite.add(new TestAffichage);
 	suite.add(new TestEnfants);
 	suite.add(new TestAttributs);
-	suite.add(new TestValidationSansErreur);
-	
+	suite.add(new TestParsingSansErreur);
+	suite.add(new TestParsingAvecErreur);
 	suite.launch();
 
 	delete singleton;
