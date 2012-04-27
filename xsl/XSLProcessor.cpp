@@ -74,34 +74,31 @@ void xsl::XSLProcessor::processXslFile(xml::Document* newXsldoc) throw (string) 
 	if (htmlDTDdoc == NULL) {
 		throw(ERROR_INVALID_HTML_DTD);
 	}	
+	
+	cout << htmlDTDdoc;
+	cout << "______________________________________________________\n";
+	cout << xslDTDdoc;
 
 	// --- Fusion the XSL DTD and the HTML DTD into a new DTD (only valid used for this XSL) : we copy the XSL DTD into the HTML one.
 	list<dtd::Declaration*> htmlDeclarationsCopy =  *(htmlDTDdoc->getDeclarations()); // We keep a copy of the original HTML declarations list.
 	list<dtd::Declaration*>* htmlDeclarations =  htmlDTDdoc->getDeclarations();
 	list<dtd::Declaration*>* xslDeclarations =  xslDTDdoc->getDeclarations();
 	for( list<dtd::Declaration*>::iterator it = xslDeclarations->begin();  it != xslDeclarations->end(); it++) {
-		list<dtd::Declaration*>::iterator it2 = it;
-		it2++;
-		if ( it2 == xslDeclarations->end()) { break;}
 		htmlDeclarations->push_back(*it);
-		cout << *it;
 	}
-	htmlDTDdoc->setDeclarations(htmlDeclarations);
-	
-	cout << htmlDTDdoc;
-	
+
 	// --- Semantic analysis :
-	//~ if (Validateur::validationDocument(*htmlDTDdoc, *xslDoc)) {
-		//~ throw(ERROR_INVALID_XSL_SEMANTIC);
-	//~ }
+	if (Validateur::validationDocument(*htmlDTDdoc, *xslDoc)) {
+		throw(ERROR_INVALID_XSL_SEMANTIC);
+	}
 	
-	//~ // --- Everything is OK with the new XSL : we delete the ancient one and replace by the new.
-	//~ delete xslDoc;
-	//~ xslDoc = newXsldoc;
+	// --- Everything is OK with the new XSL : we delete the ancient one and replace by the new.
+	delete xslDoc;
+	xslDoc = newXsldoc;
 	
-	//~ htmlDTDdoc->setDeclarations(&htmlDeclarationsCopy); // We restore the original list, so when deleting the HTML DTD and its list of declarations, we won't destroy the XSL declarations (the XSL DTD can be reused).
-	//~ delete htmlDTDdoc;
-	
+	htmlDTDdoc->setDeclarations(&htmlDeclarationsCopy); // We restore the original list, so when deleting the HTML DTD and its list of declarations, we won't destroy the XSL declarations (the XSL DTD can be reused).
+	delete htmlDTDdoc;
+
 	return;
 }
 
