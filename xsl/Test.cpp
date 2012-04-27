@@ -237,7 +237,24 @@ struct HTMLGenerationTest_ApplyTemplates : public TestCase
 	HTMLGenerationTest_ApplyTemplates() : TestCase("<fr> Vérifier le HTML généré, avec un XSL contenant des noeuds apply-templates") {}
 	bool operator()()
 	{
-		/** @todo Implement the test. */
+		xml::Document* documentXSL = NULL;
+		xml::Document* documentXML = NULL;
+		try{
+			documentXSL = parseXSL("testApplyTemplates.xsl");
+			documentXML = parseXML("testSimple.xml");
+			xsl::XSLProcessor xslProcessor = XSLProcessor();
+			xml::Document* documentHTML = xslProcessor.generateHtmlFile(documentXML);
+		}catch(string s){
+			delete documentXSL;
+			delete documentXML;
+			delete documentHTML;
+			return false;
+		}
+		// Validation Humaine
+		cout << documentHTML << endl;
+		delete documentXSL;
+		delete documentXML;
+		delete documentHTML;
 		return true;
 	}
 };
@@ -247,7 +264,24 @@ struct HTMLGenerationTest_Attribute : public TestCase
 	HTMLGenerationTest_Attribute() : TestCase("<fr> Vérifier le HTML généré, avec un XSL contenant des noeuds attributes") {}
 	bool operator()()
 	{
-		/** @todo Implement the test. */
+		xml::Document* documentXSL = NULL;
+		xml::Document* documentXML = NULL;
+		try{
+			documentXSL = parseXSL("testAttribute.xsl");
+			documentXML = parseXML("testSimple.xml");
+			xsl::XSLProcessor xslProcessor = XSLProcessor();
+			xml::Document* documentHTML = xslProcessor.generateHtmlFile(documentXML);
+		}catch(string s){
+			delete documentXSL;
+			delete documentXML;
+			delete documentHTML;
+			return false;
+		}
+		// Validation Humaine
+		cout << documentHTML << endl;
+		delete documentXSL;
+		delete documentXML;
+		delete documentHTML;
 		return true;
 	}
 };
