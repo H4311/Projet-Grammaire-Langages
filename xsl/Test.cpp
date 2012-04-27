@@ -203,7 +203,7 @@ struct XSLProcessTest_OK : public TestCase
 		} catch(string s) {
 			delete docXml;
 			delete docDtd;
-			return false
+			return false;
 		}
 		
 		delete docXml;
@@ -243,9 +243,10 @@ struct HTMLGenerationTest_Simple : public TestCase
 		xml::Document* documentXML = NULL;
 		xml::Document* documentHTML = NULL;
 		try{
-			documentXSL = parseXSL("testSimple.xsl");
-			documentXML = parseXML("testSimple.xml");
 			xsl::XSLProcessor xslProcessor = XSLProcessor();
+			documentXSL = parseXML("testSimple.xsl");
+			xslProcessor.processXslFile(documentXSL);
+			documentXML = parseXML("testSimple.xml");
 			documentHTML = xslProcessor.generateHtmlFile(documentXML);
 		}catch(string s){
 			delete documentXSL;
@@ -328,11 +329,13 @@ struct HTMLGenerationTest_Complex : public TestCase
 	{
 		xml::Document* documentXSL = NULL;
 		xml::Document* documentXML = NULL;
+		xml::Document* documentHTML = NULL;
 		try{
-			documentXSL = parseXSL("testComplex.xsl");
+			xsl::XSLProcessor xslProcessor = XSLProcessor();
+			documentXSL = parseXML("testComplex.xsl");
+			xslProcessor.processXslFile(documentXSL);
 			documentXML = parseXML("testComplex.xml");
-			XSLProcessor xslProcessor = XSLProcessor();
-			xml::Document* documentHTML = xslProcessor.generateHtmlFile(documentXML);
+			documentHTML = xslProcessor.generateHtmlFile(documentXML);
 		}catch(string s){
 			delete documentXSL;
 			delete documentXML;
@@ -356,12 +359,13 @@ struct HTMLGenerationTest_NoRoot : public TestCase
 	{
 		xml::Document* documentXSL = NULL;
 		xml::Document* documentXML = NULL;
+		xml::Document* documentHTML = NULL;
 		try{
-			
-			documentXSL = parseXSL("testNoRoot.xsl");
+			xsl::XSLProcessor xslProcessor = XSLProcessor();
+			documentXSL = parseXML("testNoRoot.xsl");
+			xslProcessor.processXslFile(documentXSL);
 			documentXML = parseXML("testComplex.xml");
-			XSLProcessor xslProcessor = XSLProcessor();
-			xml::Document* documentHTML = xslProcessor.generateHtmlFile(documentXML);
+			documentHTML = xslProcessor.generateHtmlFile(documentXML);
 		}catch(string s){
 			delete documentXSL;
 			delete documentXML;
@@ -369,7 +373,8 @@ struct HTMLGenerationTest_NoRoot : public TestCase
 			return false;
 		}
 		// On test si root == "null"
-		if( !(dynamic_cast<xml::Element*>(documentHTML->getRoot()) == "null") ){
+		xml::Element* elRoot = dynamic_cast<xml::Element*>(documentHTML->getRoot());
+		if ((elRoot == NULL)  || (elRoot->getName() != "null")) {
 			delete documentXSL;
 			delete documentXML;
 			delete documentHTML;
