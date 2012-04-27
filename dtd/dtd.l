@@ -29,7 +29,7 @@ nl		(\r\n|\r|\n)
 ws		[ \t\r\n]+
 open		{nl}?"<"
 close		">"{nl}?
-openpar 	"("
+openpar 	"("{ws}?
 closepar 	")"
 comma 		","
 pipe 		"|"
@@ -86,4 +86,4 @@ any 		"ANY"{ws}?
 {comment}		               { /* skip comments stringreturn(COMMENT); */ }
 
 {nl}                    {printf("%s",yytext);/* skip, must be an extra one at EOF */;}
-.			{ fprintf(stderr, "!ERROR(%c)\n", *yytext);}
+.			{ fprintf(stderr, "[Lexical DTD] Unknown expression : (%c) at line %d\n", *yytext, yylineno);}
