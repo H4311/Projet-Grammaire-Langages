@@ -41,6 +41,14 @@ namespace xsl {
 			dtd::Document* xslDTDdoc; /** < Structure of the processed XSL DTD file, which will be used to validate the XSL files. */
 
 		public:
+			// Errors :
+			static const string ERROR_NO_DTD;
+			static const string ERROR_INVALID_XSL;
+			static const string ERROR_NO_STYLESHEET;
+			static const string ERROR_NO_XMLNS;
+			static const string ERROR_INVALID_HTML_DTD;
+			static const string ERROR_INVALID_XSL_SEMANTIC;
+		
 			// Getters and setters
 			
 			/**
@@ -99,6 +107,7 @@ namespace xsl {
 			 * @param xmlElementName Name of the element for which we want to find a template.
 			 */
 			xml::Element* findTemplate( string xmlElementName );
+			
 
 	};
 
