@@ -1,4 +1,4 @@
-CXX = clang++
+CXX = g++
 LD = g++
 EXE = test_xml
 CXXFLAGS = -g -Wall -DYYDEBUG=1 -I../../xml/
@@ -10,7 +10,7 @@ all: test
 test: test.o
 	$(CXX) -o $(EXE) $(OBJ) $(LDFLAGS)
 
-test.o: test.cpp
+test.o: Test.cpp
 	$(CXX) -o test.o -c $< $(CXXFLAGS)
 	
 

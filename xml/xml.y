@@ -254,6 +254,6 @@ int xmlwrap(void)
 
 void xmlerror(xml::Document** doc, char *msg)
 {
-  fprintf(stderr, "(Ligne %d) Erreur : %s.\n", xmllineno, msg);
+  fprintf(stderr, "[XML Syntax] Error : %s, at line %d.\n", msg, xmllineno);
 }
 

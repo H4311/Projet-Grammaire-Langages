@@ -123,7 +123,7 @@ closespecial 	"?>"{nl}?
 
 <CONTENT>{ws}?{pcdata}		{ xmllval.s = strdup(skipSpace(yytext)); return DATA;}
 
-.			{ fprintf(stderr, "!ERROR(%c)\n", *yytext);}
+.			{ fprintf(stderr, "[Lexical XML] Unknown expression : (%c) at line %d\n", *yytext, yylineno);}
 
 %%
 
