@@ -33,6 +33,8 @@ xsl::XSLProcessor::XSLProcessor() {
 
 }
 
+xsl::XSLProcessor::~XSLProcessor() {}
+
 void xsl::XSLProcessor::setXslDTD(dtd::Document* newXslDTDdoc) {
 	delete xslDTDdoc;
 	xslDTDdoc = newXslDTDdoc;

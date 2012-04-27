@@ -14,12 +14,14 @@
 using namespace std;
 
 #include "XSLProcessor.hpp"
+#include "../xml/xml_processor.h"
+#include "../dtd/dtd.h"
 
 # include "../tests/TestFramework.hpp"
 
 struct XSLProcessTest_NoXSLDTD : public TestCase
 {
-	XSLProcessTest_NoXSLDTD() : XSLProcessTest_NoXSLDTD("<fr> Vérifier que le traitement s'arrête en l'absence de DTD XSL") {}
+	XSLProcessTest_NoXSLDTD() : TestCase("<fr> Vérifier que le traitement s'arrête en l'absence de DTD XSL") {}
 	bool operator()()
 	{
 		try{
@@ -40,7 +42,7 @@ struct XSLProcessTest_NoXSLDTD : public TestCase
 
 struct XSLProcessTest_NoHTMLDTD : public TestCase
 {
-	XSLProcessTest_NoHTMLDTD() : XSLProcessTest_NoHTMLDTD("<fr> Vérifier que le traitement s'arrête en l'absence de DTD HTML") {}
+	XSLProcessTest_NoHTMLDTD() : TestCase("<fr> Vérifier que le traitement s'arrête en l'absence de DTD HTML") {}
 	bool operator()()
 	{
 		try{
@@ -64,17 +66,31 @@ struct XSLProcessTest_NoHTMLDTD : public TestCase
 
 struct XSLProcessTest_InvalidHTMLDTD : public TestCase
 {
-	XSLProcessTest_InvalidHTMLDTD () : XSLProcessTest_InvalidHTMLDTD ("<fr> Vérifier que le traitement s'arrête si la DTD HTML est invalide") {}
+	XSLProcessTest_InvalidHTMLDTD () : TestCase("<fr> Vérifier que le traitement s'arrête si la DTD HTML est invalide") {}
 	bool operator()()
 	{
-		/** @todo Implement the test. */
-		return true;
+		xml::Document* docXml;
+		dtd::Document* docDtd;
+		xsl::XSLProcessor proc;
+		
+		docXml = parseXML("tests/rapport.xsl");
+		docDtd = parseDTD("tests/html.dtd");
+		
+		try {
+			proc.setXslDTD(docDtd);
+			proc.processXslFile(docXml);
+		} catch(std::string s) {
+			if(s == "<Error> Syntax Error - Invalid, empty or unfound XSL document.")
+				return true;
+		}
+		
+		return false;
 	}
 };
 
 struct XSLProcessTest_InvalidXSL : public TestCase
 {
-	XSLProcessTest_InvalidXSL() : XSLProcessTest_InvalidXSL("<fr> Vérifier que le traitement s'arrête si le XSL est invalide") {}
+	XSLProcessTest_InvalidXSL() : TestCase("<fr> Vérifier que le traitement s'arrête si le XSL est invalide") {}
 	bool operator()()
 	{
 		try{
@@ -148,7 +164,7 @@ struct XSLProcessTest_InvalidSemanticHTML : public TestCase
 
 struct XSLProcessTest_OK : public TestCase
 {
-	XSLProcessTest_OK() : XSLProcessTest_OK("<fr> Vérifier que la structure XSL générée correspond au document donné") {}
+	XSLProcessTest_OK() : TestCase("<fr> Vérifier que la structure XSL générée correspond au document donné") {}
 	bool operator()()
 	{
 		/** @todo Implement the test. */
@@ -158,7 +174,7 @@ struct XSLProcessTest_OK : public TestCase
 
 struct HTMLGenerationTest_NoXSL : public TestCase
 {
-	HTMLGenerationTest_NoXSL() : HTMLGenerationTest_NoXSL("<fr> Vérifier que la génération HTML s'arrête en l'absence de XSL") {}
+	HTMLGenerationTest_NoXSL() : TestCase("<fr> Vérifier que la génération HTML s'arrête en l'absence de XSL") {}
 	bool operator()()
 	{
 		/** @todo Implement the test. */
@@ -168,7 +184,7 @@ struct HTMLGenerationTest_NoXSL : public TestCase
 
 struct HTMLGenerationTest_Simple : public TestCase
 {
-	HTMLGenerationTest_Simple() : HTMLGenerationTest_Simple("<fr> Vérifier le HTML généré, avec des documents XSL et XML simples") {}
+	HTMLGenerationTest_Simple() : TestCase("<fr> Vérifier le HTML généré, avec des documents XSL et XML simples") {}
 	bool operator()()
 	{
 		/** @todo Implement the test. */
@@ -178,7 +194,7 @@ struct HTMLGenerationTest_Simple : public TestCase
 
 struct HTMLGenerationTest_Complex : public TestCase
 {
-	HTMLGenerationTest_Complex() : HTMLGenerationTest_Complex("<fr> Vérifier le HTML généré, avec des documents XSL et XML plus complexes") {}
+	HTMLGenerationTest_Complex() : TestCase("<fr> Vérifier le HTML généré, avec des documents XSL et XML plus complexes") {}
 	bool operator()()
 	{
 		/** @todo Implement the test. */
@@ -188,7 +204,7 @@ struct HTMLGenerationTest_Complex : public TestCase
 
 struct HTMLGenerationTest_ApplyTemplates : public TestCase
 {
-	HTMLGenerationTest_ApplyTemplates() : HTMLGenerationTest_ApplyTemplates("<fr> Vérifier le HTML généré, avec un XSL contenant des noeuds apply-templates") {}
+	HTMLGenerationTest_ApplyTemplates() : TestCase("<fr> Vérifier le HTML généré, avec un XSL contenant des noeuds apply-templates") {}
 	bool operator()()
 	{
 		/** @todo Implement the test. */
@@ -198,7 +214,7 @@ struct HTMLGenerationTest_ApplyTemplates : public TestCase
 
 struct HTMLGenerationTest_Attribute : public TestCase
 {
-	HTMLGenerationTest_Attribute() : HTMLGenerationTest_Attribute("<fr> Vérifier le HTML généré, avec un XSL contenant des noeuds attributes") {}
+	HTMLGenerationTest_Attribute() : TestCase("<fr> Vérifier le HTML généré, avec un XSL contenant des noeuds attributes") {}
 	bool operator()()
 	{
 		/** @todo Implement the test. */
@@ -208,7 +224,7 @@ struct HTMLGenerationTest_Attribute : public TestCase
 
 struct HTMLGenerationTest_NoRoot : public TestCase
 {
-	HTMLGenerationTest_NoRoot() : HTMLGenerationTest_NoRoot("<fr> Vérifier le HTML généré, avec un XSL n'ayant pas de template pour la racine XML") {}
+	HTMLGenerationTest_NoRoot() : TestCase("<fr> Vérifier le HTML généré, avec un XSL n'ayant pas de template pour la racine XML") {}
 	bool operator()()
 	{
 		/** @todo Implement the test. */
