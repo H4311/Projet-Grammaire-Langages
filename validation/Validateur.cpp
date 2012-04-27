@@ -30,7 +30,7 @@ bool Validateur::validationNode(xml::Content* content, std::list<dtd::Element*> 
 	//Pas besoin de valider ses noeuds enfants
 	if(elem != NULL) {
 		//Récupérer le nom de la balise
-		std::string nomBalise = elem->getName();
+		std::string nomBalise = elem->getFullName();
 		
 		//Valider les attributs
 		//TODO: pour l'instant on ne valide que le nom de l'attribut

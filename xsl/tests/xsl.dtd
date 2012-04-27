@@ -12,6 +12,6 @@
 <!ELEMENT xsl:attribute (PCDATA)>
 <!ATTLIST xsl:attribute
 	name CDATA #REQUIRED
-	test CDATA #IMPLIED>
+	xmlns:xsl CDATA #IMPLIED>
 
 <!ELEMENT xsl:apply-template EMPTY>

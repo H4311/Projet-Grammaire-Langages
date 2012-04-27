@@ -1,10 +1,59 @@
 <!ELEMENT html (head, body)>
-<!ELEMENT body ( p | img | h1 | h2 | h3 | h4 | a | small | div )+>
+<!ELEMENT body ( PCDATA | p | img | h1 | h2 | h3 | h4 | a | small | div )*>
 <!ATTLIST body
 	class CDATA #IMPLIED
 	style CDATA #IMPLIED
 >
-<!ELEMENT head ( meta | link | script | title )+>
+<!ELEMENT div ( PCDATA | p | img | h1 | h2 | h3 | h4 | a | small | div )*>
+<!ELEMENT p ( PCDATA | p | img | h1 | h2 | h3 | h4 | a | small | div )*>
+<!ELEMENT img EMPTY>
+<!ELEMENT h1 ( PCDATA | p | img | h1 | h2 | h3 | h4 | a | small | div )*>
+<!ELEMENT h2 ( PCDATA | p | img | h1 | h2 | h3 | h4 | a | small | div )*>
+<!ELEMENT h3 ( PCDATA | p | img | h1 | h2 | h3 | h4 | a | small | div )*>
+<!ELEMENT h4 ( PCDATA | p | img | h1 | h2 | h3 | h4 | a | small | div )*>
+<!ELEMENT a ( PCDATA | p | img | h1 | h2 | h3 | h4 | a | small | div )*>
+<!ELEMENT small ( PCDATA | p | img | h1 | h2 | h3 | h4 | a | small | div )*>
+<!ATTLIST div
+	class CDATA #IMPLIED
+	style CDATA #IMPLIED
+>
+<!ATTLIST a
+	class CDATA #IMPLIED
+	style CDATA #IMPLIED
+>
+<!ATTLIST p
+	class CDATA #IMPLIED
+	style CDATA #IMPLIED
+>
+<!ATTLIST h1
+	class CDATA #IMPLIED
+	style CDATA #IMPLIED
+>
+<!ATTLIST h2
+	class CDATA #IMPLIED
+	style CDATA #IMPLIED
+>
+<!ATTLIST h3
+	class CDATA #IMPLIED
+	style CDATA #IMPLIED
+>
+<!ATTLIST h4
+	class CDATA #IMPLIED
+	style CDATA #IMPLIED
+>
+<!ATTLIST a
+	class CDATA #IMPLIED
+	style CDATA #IMPLIED
+>
+<!ATTLIST small
+	class CDATA #IMPLIED
+	style CDATA #IMPLIED
+>
+<!ELEMENT head ( meta | link | script | title )*>
+<!ELEMENT meta EMPTY>
+<!ELEMENT link EMPTY>
+<!ELEMENT script EMPTY>
+<!ELEMENT title (PCDATA)*>
 <!ATTLIST head
 	dir CDATA #IMPLIED
 	lang CDATA #IMPLIED
@@ -27,4 +76,6 @@
 <!ATTLIST img
 	src CDATA #IMPLIED
 	title CDATA #IMPLIED
+	class CDATA #IMPLIED
+	style CDATA #IMPLIED
 >

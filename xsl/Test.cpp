@@ -143,6 +143,7 @@ struct XSLProcessTest_InvalidSemanticHTML : public TestCase
 		documentXSL = parseXML("./tests/rapportSemanticHTML.xsl");
 		dtd::Document* documentDTD = NULL;
 		documentDTD = parseDTD("./tests/xsl.dtd");
+
 		try{
 			XSLProcessor xslProcessor = XSLProcessor();
 			xslProcessor.setXslDTD(documentDTD);

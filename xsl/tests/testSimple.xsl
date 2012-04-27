@@ -3,6 +3,9 @@
 
 	<xsl:template match="rapport">
 		<html>
+			<head>
+				<title>Test</title>
+			</head>
 			<body>
 				<p>Hello World !</p>
 			</body>

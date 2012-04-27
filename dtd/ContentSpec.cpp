@@ -20,7 +20,7 @@ namespace dtd {
 	}
 	
 	std::string Any::getRegex() {
-		return "*";
+		return ".*";
 	}
 	
 	// ------------------------------------------------------------ Class Empty
