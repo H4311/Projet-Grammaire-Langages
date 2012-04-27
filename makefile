@@ -15,11 +15,11 @@ all: fils $(EXEC_NAME)
 
 test: all
 	@echo "\n\nTESTS XML\n\n"
-	@./$(XML_REP)/test_xml
+	@(cd $(XML_REP) && ./test_xml)
 	@echo "\n\nTESTS DTD\n\n"
-	@./$(DTD_REP)/test_dtd
+	@(cd $(DTD_REP) && ./test_dtd)
 	@echo "\n\nTESTS VALIDATION\n\n"
-	@./$(VAL_REP)/test_validation
+	@(cd $(VAL_REP) && ./test_validation)
 
 fils:
 	make -C $(XML_REP)
@@ -34,7 +34,7 @@ clean:
 	make clean -C $(DTD_REP)
 	make clean -C $(VAL_REP)
 #	make clean -C $(XSL_REP)
-	rm $(EXEC_NAME) $(OBJ_FILES)
+	rm -rf $(EXEC_NAME) $(OBJ_FILES)
 
 rebuild: clean all
 

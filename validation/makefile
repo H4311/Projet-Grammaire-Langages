@@ -19,7 +19,7 @@ test: all
 clean:
 	make clean -C $(XML_REP)
 	make clean -C $(DTD_REP)
-	rm $(EXEC_NAME) $(OBJ_FILES)
+	rm -rf $(EXEC_NAME) $(OBJ_FILES)
 
 rebuild: clean all
 
@@ -27,7 +27,7 @@ $(EXEC_NAME): $(OBJ_FILES)
 	make -C $(XML_REP)
 	make -C $(DTD_REP)
 	$(CXX) -o $(EXEC_NAME) $(OBJ_FILES) $(OBJ_FILES_DEP) $(LIBS)
-	rm Test.o
+	rm -rf Test.o
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ -c $<
