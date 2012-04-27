@@ -33,7 +33,6 @@ namespace dtd {
 	}
 
 	void Document::setDeclarations(std::list<Declaration*>* dec) {
-
 		declarations = dec;
 	}
 
