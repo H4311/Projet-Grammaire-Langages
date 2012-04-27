@@ -1,6 +1,6 @@
 CXX = g++
 LD = g++
-EXE = xpath
+EXE = test_xpath
 CXXFLAGS = -g -Wall -DYYDEBUG=1 -I..
 LDFLAGS = -lboost_regex
 OBJ = XPath.o Test.o

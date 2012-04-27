@@ -71,7 +71,6 @@ document
 	{ 
 		*doc  = new Document();
 
-		printf("Valeur pointeur $1 : %p\n", $1);
 		if ($1 != NULL) {
 			(*doc)->setXmlProlog($1);
 		}
