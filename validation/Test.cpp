@@ -54,43 +54,42 @@ struct TestValidationSansErreur : public TestCase
 	}
 };
 
+struct TestValidationAvecErreur : public TestCase
+{
+	TestValidationAvecErreur() : TestCase("Vérifie que la validation du doc échoue conformément à la DTD.") {}
+	bool operator()()
+	{
+		dXML = parseXML("../tests/rap2.xml");
+		dDTD = parseDTD("../tests/rap2.dtd");
+		bool result = Validateur::validationDocument(*dDTD, *dXML);
+		delete dXML;
+		delete dDTD;
+		return !result;
+	}
+};
+
+struct TestValidationSansErreur2 : public TestCase
+{
+	TestValidationSansErreur2() : TestCase("Vérifie qu'une validation de doc conforme au dtd réussit.") {}
+	bool operator()()
+	{
+		dDTD = parseDTD("../tests/rap3.dtd");
+		dXML = parseXML("../tests/rap3.xml");
+		bool result = Validateur::validationDocument(*dDTD, *dXML);
+		delete dXML;
+		delete dDTD;
+		return !result;
+	}
+};
+
 int main(int argc, char** argv) {
 	
 	TestSuite t;
 	t.add(new TestValidationChildren);
 	t.add(new TestValidationSansErreur);
+	t.add(new TestValidationAvecErreur);
+	t.add(new TestValidationSansErreur2);
 	t.launch();
-	
-	dXML = parseXML("../tests/rap2.xml");
-	dDTD = parseDTD("../tests/rap2.dtd");
-	
-	//cout << dDTD << endl;
-	
-	cout << "==== Test 2 validationDocument ====" << endl;
-	
-	if(Validateur::validationDocument(*dDTD, *dXML)) {
-		cout << "Document 2 validé" << endl;
-	} else {
-		cout << "Document 2 non validé" << endl;
-	}
-	delete dXML;
-	delete dDTD;
-	
-	dXML = parseXML("../tests/rap3.xml");
-	dDTD = parseDTD("../tests/rap3.dtd");
-	
-	//cout << dDTD << endl;
-	
-	cout << "==== Test 3 validationDocument ====" << endl;
-	
-	if(Validateur::validationDocument(*dDTD, *dXML)) {
-		cout << "Document 3 validé" << endl;
-	} else {
-		cout << "Document 3 non validé" << endl;
-	}
-	
-	delete dXML;
-	delete dDTD;
 	
 	return 0;
 }
