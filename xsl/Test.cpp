@@ -170,7 +170,7 @@ struct XSLProcessTest_OK : public TestCase
 		dtd::Document* docDtd;
 		xsl::XSLProcessor proc;
 		
-		docXml = parseXML("./tests/rapport.xsl");
+		docXml = parseXML("./tests/testSimple.xsl");
 		docDtd = parseDTD("./tests/xsl.dtd");
 		
 		try {

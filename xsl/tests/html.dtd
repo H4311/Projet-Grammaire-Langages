@@ -1,18 +1,18 @@
 <!ELEMENT html (head, body)>
-<!ELEMENT body ( PCDATA | p | img | h1 | h2 | h3 | h4 | a | small | div )*>
+<!ELEMENT body ANY>
 <!ATTLIST body
 	class CDATA #IMPLIED
 	style CDATA #IMPLIED
 >
-<!ELEMENT div ( PCDATA | p | img | h1 | h2 | h3 | h4 | a | small | div )*>
-<!ELEMENT p ( PCDATA | p | img | h1 | h2 | h3 | h4 | a | small | div )*>
-<!ELEMENT img EMPTY>
-<!ELEMENT h1 ( PCDATA | p | img | h1 | h2 | h3 | h4 | a | small | div )*>
-<!ELEMENT h2 ( PCDATA | p | img | h1 | h2 | h3 | h4 | a | small | div )*>
-<!ELEMENT h3 ( PCDATA | p | img | h1 | h2 | h3 | h4 | a | small | div )*>
-<!ELEMENT h4 ( PCDATA | p | img | h1 | h2 | h3 | h4 | a | small | div )*>
-<!ELEMENT a ( PCDATA | p | img | h1 | h2 | h3 | h4 | a | small | div )*>
-<!ELEMENT small ( PCDATA | p | img | h1 | h2 | h3 | h4 | a | small | div )*>
+<!ELEMENT div ANY>
+<!ELEMENT p ANY>
+<!ELEMENT img ANY>
+<!ELEMENT h1 ANY>
+<!ELEMENT h2 ANY>
+<!ELEMENT h3 ANY>
+<!ELEMENT h4 ANY>
+<!ELEMENT a ANY>
+<!ELEMENT small ANY>
 <!ATTLIST div
 	class CDATA #IMPLIED
 	style CDATA #IMPLIED
@@ -49,7 +49,7 @@
 	class CDATA #IMPLIED
 	style CDATA #IMPLIED
 >
-<!ELEMENT head ( meta | link | script | title )*>
+<!ELEMENT head ANY>
 <!ELEMENT meta EMPTY>
 <!ELEMENT link EMPTY>
 <!ELEMENT script EMPTY>

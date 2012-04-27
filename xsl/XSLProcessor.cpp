@@ -86,14 +86,9 @@ void xsl::XSLProcessor::processXslFile(xml::Document* newXslDoc) throw (string) 
 	}
 
 	// --- Semantic analysis :
-	bool semanticValid = false;
-	try {
-		semanticValid = Validateur::validationDocument(*htmlDTDdoc, *newXslDoc);
-	}
-	catch (string s) {
+	if (!Validateur::validationDocument(*htmlDTDdoc, *newXslDoc)) {
 		throw(ERROR_INVALID_XSL_SEMANTIC);
 	}
-	if (!semanticValid) { throw(ERROR_INVALID_XSL_SEMANTIC); }
 
 	// --- Everything is OK with the new XSL : we delete the ancient one and replace by the new.
 	delete xslDoc;

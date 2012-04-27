@@ -6,7 +6,7 @@
 	version CDATA #IMPLIED
 	xmlns:xsl CDATA #IMPLIED>
 
-<!ELEMENT xsl:template (PCDATA | apply-template | value-of)* >
+<!ELEMENT xsl:template ANY >
 <!ATTLIST xsl:template match CDATA #REQUIRED>
 
 <!ELEMENT xsl:attribute (PCDATA)>
