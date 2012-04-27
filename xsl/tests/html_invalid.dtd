@@ -13,8 +13,9 @@
 <!ATTLIST meta
 	charset CDATA #IMPLIED
 	content CDATA #IMPLIED
->
-<!ATTLIST script
+
+
+<!XXXX script
 	type CDATA #REQUIRED
 	href CDATA #IMPLIED
 >
