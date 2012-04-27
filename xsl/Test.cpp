@@ -44,10 +44,13 @@ struct XSLProcessTest_NoHTMLDTD : public TestCase
 	bool operator()()
 	{
 		try{
-			xml::Document* document = NULL;
-			document = parseXML("rapportNoHTMLDTD.xsl");
+			xml::Document* documentXSL = NULL;
+			document = parseXML("testNoRoot.xsl");
+			xml::Document* documentDTD = NULL;
+			document = parseXML("xsl.dtd");
 			xml::XSLProcessor xslProcessor = XSLProcessor();
-			xslProcessor.processXslFile(document);
+			xslProcessor.setXslDTD(documentDTD);
+			xslProcessor.processXslFile(documentXSL);
 			xslProcessor = ~xml::XSLProcessor();
 		}catch(string s){
 			if( s == "<Error> Unfound element containing the path to HTML DTD file." ){
@@ -74,22 +77,72 @@ struct XSLProcessTest_InvalidXSL : public TestCase
 	XSLProcessTest_InvalidXSL() : XSLProcessTest_InvalidXSL("<fr> Vérifier que le traitement s'arrête si le XSL est invalide") {}
 	bool operator()()
 	{
-		xml::Document* document = NULL;
-		document = parseXML("rapport.xsl");
-		
-		bool returnValue = processXslFile(document);
-		
-		return returnValue;
+		try{
+			xml::Document* documentXSL = NULL;
+			document = parseXML("rapportInvalidXSL.xsl");
+			xml::Document* documentDTD = NULL;
+			document = parseXML("xsl.dtd");
+			xml::XSLProcessor xslProcessor = XSLProcessor();
+			xslProcessor.setXslDTD(documentDTD);
+			xslProcessor.processXslFile(documentXSL);
+			xslProcessor = ~xml::XSLProcessor();
+		}catch(string s){
+			if( s == "<Error> Invalid or empty XSL document." ){
+				return true;
+			}else{
+				return false;
+			}
+		}
 	}
 };
 
-struct XSLProcessTest_InvalidHTML : public TestCase
+
+
+struct XSLProcessTest_InvalidSemanticXSL : public TestCase
 {
-	XSLProcessTest_InvalidHTML() : XSLProcessTest_InvalidHTML("<fr> Vérifier que le traitement s'arrête si le HTML est invalide") {}
+	XSLProcessTest_InvalidSemanticXSL() : TestCase("<fr> Vérifier que le traitement s'arrête si le XSL est invalide") {}
 	bool operator()()
 	{
-		/** @todo Implement the test. */
-		return true;
+		try{
+			xml::Document* documentXSL = NULL;
+			document = parseXML("rapportSemanticXSL.xsl");
+			xml::Document* documentDTD = NULL;
+			document = parseXML("xsl.dtd");
+			xml::XSLProcessor xslProcessor = XSLProcessor();
+			xslProcessor.setXslDTD(documentDTD);
+			xslProcessor.processXslFile(documentXSL);
+			xslProcessor = ~xml::XSLProcessor();
+		}catch(string s){
+			if( s == "<Error> Invalid or empty XSL document." ){
+				return true;
+			}else{
+				return false;
+			}
+		}
+	}
+};
+
+struct XSLProcessTest_InvalidSemanticHTML : public TestCase
+{
+	XSLProcessTest_InvalidSemanticHTML() : TestCase("<fr> Vérifier que le traitement s'arrête si le HTML est invalide") {}
+	bool operator()()
+	{
+		try{
+			xml::Document* documentXSL = NULL;
+			document = parseXML("rapportSemanticHTML.xsl");
+			xml::Document* documentDTD = NULL;
+			document = parseXML("xsl.dtd");
+			xml::XSLProcessor xslProcessor = XSLProcessor();
+			xslProcessor.setXslDTD(documentDTD);
+			xslProcessor.processXslFile(documentXSL);
+			xslProcessor = ~xml::XSLProcessor();
+		}catch(string s){
+			if( s == "<Error> Semantic Error - Invalid XSL file : doesn't respect the given DTD." ){
+				return true;
+			}else{
+				return false;
+			}
+		}
 	}
 };
 

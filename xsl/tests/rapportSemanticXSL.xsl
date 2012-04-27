@@ -7,6 +7,12 @@
 				<p>Hello World !</p>
 			</body>
 		</html>
+		<xsl:for-each select="catalog/cd">
+        <tr>
+          <td><xsl:value-of select="title"/></td>
+          <td><xsl:value-of select="artist"/></td>
+        </tr>
+      </xsl:for-each>
 	</xsl:template>
 
 </xsl:stylesheet> 

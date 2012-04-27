@@ -76,7 +76,7 @@ void xsl::XSLProcessor::processXslFile(xml::Document* newXsldoc) throw (string) 
 	// --------- Opening, validating ant getting the structure of the HTML DTD file :
 	dtd::Document * htmlDTDdoc = parseDTD(attrXMLNS.c_str());
 	if (htmlDTDdoc == NULL) {
-		throw("<Error> Syntax Error - Invalid, empty or unfound XSL document.");
+		throw("<Error> Syntax Error - Invalid, empty or unfound HTML DTD document.");
 	}	
 
 	// --- Fusion the XSL DTD and the HTML DTD into a new DTD (only valid used for this XSL) : we copy the XSL DTD into the HTML one.
