@@ -4,9 +4,8 @@
 	xmlns:xsl CDATA #FIXED "http://www.w3.org/1999/XSL/Transform"
 >
 
-<!ELEMENT xsl:template (apply-template | value-of | PCDATA)* >
+<!ELEMENT xsl:template (PCDATA | apply-template | value-of)* >
 <!ATTLIST xsl:template match CDATA #REQUIRED>
-
 
 <!ELEMENT xsl:apply-template EMPTY>
 
@@ -15,4 +14,3 @@
 
 <!ELEMENT xsl:attribute (PCDATA)>
 <!ATTLIST xsl:attribute name CDATA #REQUIRED>
-

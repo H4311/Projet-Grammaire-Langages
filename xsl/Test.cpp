@@ -84,7 +84,7 @@ struct XSLProcessTest_InvalidHTMLDTD : public TestCase
 		XSLProcessor proc = XSLProcessor();
 		
 		docXml = parseXML("tests/rapport.xsl");
-		docDtd = parseDTD("tests/html.dtd");
+		docDtd = parseDTD("tests/invalid_html.dtd");
 		
 		try {
 			proc.setXslDTD(docDtd);
@@ -190,7 +190,25 @@ struct XSLProcessTest_OK : public TestCase
 	XSLProcessTest_OK() : TestCase("<fr> Vérifier que la structure XSL générée correspond au document donné") {}
 	bool operator()()
 	{
-		/** @todo Implement the test. */
+		xml::Document* docXml;
+		dtd::Document* docDtd;
+		xsl::XSLProcessor proc;
+		
+		docXml = parseXML("tests/rapport.xsl");
+		docDtd = parseDTD("tests/html.dtd");
+		
+		try {
+			proc.setXslDTD(docDtd);
+			proc.processXslFile(docXml);
+		} catch(string s) {
+			delete docXml;
+			delete docDtd;
+			return false
+		}
+		
+		delete docXml;
+		delete docDtd;
+
 		return true;
 	}
 };
