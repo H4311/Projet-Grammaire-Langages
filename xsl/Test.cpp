@@ -165,33 +165,41 @@ struct HTMLGenerationTest_NoRoot : public TestCase
 
 int main(int argc, char** argv)
 {
-	TestSuite suite;
+	//~ TestSuite suite;
 	
-	suite.add(new XSLProcessTest_NoXSLDTD);
+	//~ suite.add(new XSLProcessTest_NoXSLDTD);
 
-	suite.add(new XSLProcessTest_NoHTMLDTD);
+	//~ suite.add(new XSLProcessTest_NoHTMLDTD);
 
-	suite.add(new XSLProcessTest_InvalidHTMLDTD);
+	//~ suite.add(new XSLProcessTest_InvalidHTMLDTD);
 
-	suite.add(new XSLProcessTest_InvalidXSL);
+	//~ suite.add(new XSLProcessTest_InvalidXSL);
 
-	suite.add(new XSLProcessTest_InvalidHTML);
+	//~ suite.add(new XSLProcessTest_InvalidHTML);
 
-	suite.add(new XSLProcessTest_OK);
+	//~ suite.add(new XSLProcessTest_OK);
 
-	suite.add(new HTMLGenerationTest_NoXSL);
+	//~ suite.add(new HTMLGenerationTest_NoXSL);
 
-	suite.add(new HTMLGenerationTest_Simple);
+	//~ suite.add(new HTMLGenerationTest_Simple);
 
-	suite.add(new HTMLGenerationTest_Complex);
+	//~ suite.add(new HTMLGenerationTest_Complex);
 
-	suite.add(new HTMLGenerationTest_ApplyTemplates);
+	//~ suite.add(new HTMLGenerationTest_ApplyTemplates);
 
-	suite.add(new HTMLGenerationTest_Attribute);
+	//~ suite.add(new HTMLGenerationTest_Attribute);
 
-	suite.add(new HTMLGenerationTest_NoRoot);
+	//~ suite.add(new HTMLGenerationTest_NoRoot);
 	
-	suite.launch();
+	//~ suite.launch();
+	
+	XSLProcessor proc();
+	dtd::Document* dtdXSL = parseDTD("./tests/xsl.dtd);
+	proc.setXslDTD(dtdXSL);
+	xml::Document* document = parseXML("rapportNoHTMLDTD.xsl");
+	xml::XSLProcessor xslProcessor = XSLProcessor();
+	xslProcessor.processXslFile(document);
+	xslProcessor = ~xml::XSLProcessor();
 }
 
 
