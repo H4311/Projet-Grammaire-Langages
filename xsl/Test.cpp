@@ -167,7 +167,23 @@ struct XSLProcessTest_OK : public TestCase
 	XSLProcessTest_OK() : TestCase("<fr> Vérifier que la structure XSL générée correspond au document donné") {}
 	bool operator()()
 	{
-		/** @todo Implement the test. */
+		xml::Document* docXml;
+		dtd::Document* docDtd;
+		xsl::XSLProcessor proc;
+		
+		docXml = parseXML("tests/rapport.xsl");
+		docDtd = parseDTD("tests/html.dtd");
+		
+		try {
+			proc.setXslDTD(docDtd);
+			proc.processXslFile(docXml);
+			
+			
+			
+		} catch(string s) {
+			return false
+		}
+		
 		return true;
 	}
 };
