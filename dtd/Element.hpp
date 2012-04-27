@@ -30,6 +30,7 @@ namespace dtd {
 			virtual std::ostream& put(std::ostream& out);
 			virtual std::string getRegex();
 			std::string getName();
+			ContentSpec* getContentSpec();
 
 		protected:
 			std::string name;

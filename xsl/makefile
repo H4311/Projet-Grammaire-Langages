@@ -10,6 +10,9 @@ VALID_OBJ = ../validation/*.o
 
 all: exe
 
+test: exe
+	./$(EXE)
+
 exe: deps  $(OBJ)
 	$(CXX) -o $(EXE) $(XML_OBJ) $(DTD_OBJ) $(VALID_OBJ) $(OBJ) $(LDFLAGS)
 
