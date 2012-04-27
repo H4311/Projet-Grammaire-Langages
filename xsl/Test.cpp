@@ -303,9 +303,9 @@ struct HTMLGenerationTest_Attribute : public TestCase
 		xml::Document* documentHTML = NULL;
 		try{
 			documentXSL = parseXML("testAttribute.xsl");
+			XSLProcessor xslProcessor = XSLProcessor();
 			xslProcessor.processXslFile(documentXSL);
 			documentXML = parseXML("testSimple.xml");
-			xsl::XSLProcessor xslProcessor = XSLProcessor();
 			documentHTML = xslProcessor.generateHtmlFile(documentXML);
 		}catch(string s){
 			delete documentXSL;
