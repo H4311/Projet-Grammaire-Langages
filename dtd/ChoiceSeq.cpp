@@ -34,16 +34,21 @@ namespace dtd {
 	std::string ChoiceSeq::getRegex() {
 		std::stringstream oss;
 		std::list<Children*>::iterator it;
-		
+		char regexSep = getRegexSep();		
+
 		oss << "(";
 		
 		it=children.begin();
 		oss << (*it)->getRegex();
 		
 		for(it++; it != children.end(); it++)
-			oss << getRegexSep() << (*it)->getRegex();
+		{
+			if (regexSep) oss << regexSep;
+			oss << (*it)->getRegex();
+		}
     	
-    	oss << ")" << card;
+    	oss << ")";
+	if (card) oss << card;
     	
     	return oss.str();
 	}

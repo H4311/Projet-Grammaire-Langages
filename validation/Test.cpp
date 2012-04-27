@@ -21,6 +21,7 @@
 #include <iostream>
 #include <list>
 
+#include "../tests/TestFramework.hpp"
 
 // Doc XML
 xml::Document* dXML;
@@ -28,21 +29,37 @@ xml::Document* dXML;
 // Doc DTD
 dtd::Document* dDTD;
 
+struct TestValidationChildren : public TestCase
+{
+	TestValidationChildren() : TestCase("Vérifie que ValidationChildren fonctionne correctement.") {}
+	bool operator()()
+	{
+		return Validateur::validationChild(
+			"((titre,)(auteur,)+(resume,)(chapitre,)+)", 
+			"titre,auteur,resume,chapitre,");
+	}
+};
+
+struct TestValidationSansErreur : public TestCase
+{
+	TestValidationSansErreur() : TestCase("Vérifie qu'une validation de doc conforme au dtd réussit.") {}
+	bool operator()()
+	{
+		dXML = parseXML("../tests/rap1.xml");
+		dDTD = parseDTD("../tests/rap1.dtd");
+		bool result = Validateur::validationDocument(*dDTD, *dXML);
+		delete dXML;
+		delete dDTD;
+		return result;
+	}
+};
+
 int main(int argc, char** argv) {
 	
-	
-	dXML = parseXML("../tests/rap1.xml");
-	dDTD = parseDTD("../tests/rap1.dtd");
-	
-	//cout << dDTD << endl;
-	
-	cout << "==== Test 1 validationDocument ====" << endl;
-	
-	if(Validateur::validationDocument(*dDTD, *dXML)) {
-		cout << "Document 1 validé" << endl;
-	} else {
-		cout << "Document 1 non validé" << endl;
-	}
+	TestSuite t;
+	t.add(new TestValidationChildren);
+	t.add(new TestValidationSansErreur);
+	t.launch();
 	
 	dXML = parseXML("../tests/rap2.xml");
 	dDTD = parseDTD("../tests/rap2.dtd");
@@ -56,6 +73,8 @@ int main(int argc, char** argv) {
 	} else {
 		cout << "Document 2 non validé" << endl;
 	}
+	delete dXML;
+	delete dDTD;
 	
 	dXML = parseXML("../tests/rap3.xml");
 	dDTD = parseDTD("../tests/rap3.dtd");

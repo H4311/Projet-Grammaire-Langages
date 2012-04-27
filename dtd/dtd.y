@@ -376,10 +376,9 @@ Document* parseDTD(const char * file)
     err = dtdparse(&document);
     if (err != 0) 
     {
-	printf("Parse ended with %d error(s)\n", err);
+	fprintf(stderr, "Parse ended with %d error(s)\n", err);
 	if (document != NULL) delete document;
     }
-    else  printf("Parse ended with success\n", err);
     fclose(dtdin);
     dtdlex_destroy();
   }

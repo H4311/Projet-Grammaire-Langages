@@ -18,7 +18,8 @@ namespace dtd {
 	
 	std::string Name::getRegex() {
 		std::stringstream oss;
-		oss << "(" + name + ",)" << card;
+		oss << "(" + name + ",)";
+		if (card) oss << card;
 		return oss.str();
 	}
 

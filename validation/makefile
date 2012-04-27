@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -Wall #-Werror -pedantic
-EXEC_NAME = main
+EXEC_NAME = test_validation
 INCLUDES = 
 LIBS = -lboost_regex
 OBJ_FILES = Test.o Validateur.o
@@ -12,6 +12,9 @@ DTD_REP = ../dtd/
 all: $(EXEC_NAME)
 
 .PHONY: clean rebuild
+
+test: all
+	./$(EXEC_NAME)
 
 clean:
 	make clean -C $(XML_REP)

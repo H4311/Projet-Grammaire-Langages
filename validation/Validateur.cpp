@@ -16,18 +16,11 @@
  * @file Validateur.cpp
  * Implémenation des fonctions de la classe Validateur
  */
-
 bool Validateur::validationChild(std::string dtdNode, std::string xmlChildren) {
     boost::regex reg(dtdNode);
-    std::cout << dtdNode << " " << xmlChildren << std::endl;
-	
-	if (regex_match(xmlChildren.c_str(), reg)) {
-		return true;
-	} else {
-		std::cout << "non" << std::endl;
-		return false;
-	}
-    
+    //std::cout << dtdNode << " " << xmlChildren << std::endl;
+
+    return regex_match(xmlChildren, reg);
 }
 
 bool Validateur::validationNode(xml::Content* content, std::list<dtd::Element*> elements, std::list<dtd::AttributeList*> attributesList) {
@@ -100,12 +93,12 @@ bool Validateur::validationNode(xml::Content* content, std::list<dtd::Element*> 
 		for(it = children.begin(); it != children.end(); it++) {
 			xml::EmptyElement* curElem = dynamic_cast<xml::Element*>(*it);
 			if(curElem == NULL) {
-				curElem = dynamic_cast<xml::EmptyElement*>(content);
+				curElem = dynamic_cast<xml::EmptyElement*>(*it);
 			}
 			if(curElem != NULL) {
 				chaineChildren += curElem->getName() + ",";
 			} else {
-				xml::Data* data = dynamic_cast<xml::Data*>(content);
+				xml::Data* data = dynamic_cast<xml::Data*>(*it);
 				if(data != NULL) {
 					chaineChildren += "#PCDATA,";
 				}
