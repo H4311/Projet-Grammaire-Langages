@@ -4,6 +4,22 @@ avec vérification de la xml pour une dtd donnée. En outre, ce processeur conti
 également un processeur XSLT qui va générer un fichier HTML à partir d'une feuille
 XSL donnée.
 
+## Compilation
+Pour compiler, il est nécessaire de posséder les librairies Boost, utilisées pour
+les regex et les options en ligne de commande :
+
+	sudo apt-get install libboost-all-dev
+
+Puis il suffit de lance
+
+	make
+
+dans le répertoire principal pour compiler le programme principal.
+
+Le makefile contient une règle test qui compile le programme et lance tous les tests.
+
+	make tests
+
 ## Utilisation
 Le programme principal prend un certain nombre d'options en paramètres :
 
