@@ -51,7 +51,7 @@ void xsl::XSLProcessor::setXslDTD(dtd::Document* newXslDTDdoc) {
 }
 
 
-void xsl::XSLProcessor::processXslFile(xml::Document* newXsldoc) throw (string) {
+void xsl::XSLProcessor::processXslFile(xml::Document* newXslDoc) throw (string) {
 
 	// --- Checking if a DTD has been processed
 	if (xslDTDdoc == NULL) {
@@ -61,7 +61,7 @@ void xsl::XSLProcessor::processXslFile(xml::Document* newXsldoc) throw (string) 
 	// --- Analyse the syntax of the HTML DTD file. The link to this DTD can be found into the attribute xmlns:xsl of the element xsl:stylesheet of the XSL.
 	
 	// --------- Finding the path to the HTML DTD, contained by the attribut "xmlns:xsl" of the element "xsl:stylesheet" :
-	xml::Element* rootXSL = dynamic_cast<xml::Element*>(newXsldoc->getRoot());
+	xml::Element* rootXSL = dynamic_cast<xml::Element*>(newXslDoc->getRoot());
 	if (rootXSL == NULL) {
 		throw(ERROR_INVALID_XSL);
 	}
@@ -76,14 +76,9 @@ void xsl::XSLProcessor::processXslFile(xml::Document* newXsldoc) throw (string) 
 	if (htmlDTDdoc == NULL) {
 		throw(ERROR_INVALID_HTML_DTD);
 	}	
-	
-	cout << htmlDTDdoc;
-	cout << "______________________________________________________\n";
-	cout << xslDTDdoc;
 
 	// --- Fusion the XSL DTD and the HTML DTD into a new DTD (only valid used for this XSL) : we copy the XSL DTD into the HTML one.
-	list<dtd::Declaration*>* htmlDeclarationsCopy = new list<dtd::Declaration*>();
-	*htmlDeclarationsCopy =  *(htmlDTDdoc->getDeclarations()); // We keep a copy of the original HTML declarations list.
+	list<dtd::Declaration*>* htmlDeclarationsCopy =  new list<dtd::Declaration*>(*htmlDTDdoc->getDeclarations()); // We keep a copy of the original HTML declarations list.
 	list<dtd::Declaration*>* htmlDeclarations =  htmlDTDdoc->getDeclarations();
 	list<dtd::Declaration*>* xslDeclarations =  xslDTDdoc->getDeclarations();
 	for( list<dtd::Declaration*>::iterator it = xslDeclarations->begin();  it != xslDeclarations->end(); it++) {
@@ -91,13 +86,18 @@ void xsl::XSLProcessor::processXslFile(xml::Document* newXsldoc) throw (string) 
 	}
 
 	// --- Semantic analysis :
-	//~ if (Validateur::validationDocument(*htmlDTDdoc, *xslDoc)) {
-		//~ throw(ERROR_INVALID_XSL_SEMANTIC);
-	//~ }
-	
+	bool semanticValid = false;
+	try {
+		semanticValid = Validateur::validationDocument(*htmlDTDdoc, *newXslDoc);
+	}
+	catch (string s) {
+		throw(ERROR_INVALID_XSL_SEMANTIC);
+	}
+	if (!semanticValid) { throw(ERROR_INVALID_XSL_SEMANTIC); }
+
 	// --- Everything is OK with the new XSL : we delete the ancient one and replace by the new.
 	delete xslDoc;
-	xslDoc = newXsldoc;
+	xslDoc = newXslDoc;
 	
 	htmlDTDdoc->setDeclarations(htmlDeclarationsCopy); // We restore the original list, so when deleting the HTML DTD and its list of declarations, we won't destroy the XSL declarations (the XSL DTD can be reused).
 	delete htmlDTDdoc;

@@ -120,7 +120,6 @@ struct XSLProcessTest_InvalidSemanticXSL : public TestCase
 			xslProcessor.setXslDTD(documentDTD);
 			xslProcessor.processXslFile(documentXSL);
 		}catch(string s) {
-			cout << s;
 			if( s == XSLProcessor::ERROR_INVALID_XSL_SEMANTIC ){
 				delete documentXSL;
 				delete documentDTD;
@@ -149,8 +148,7 @@ struct XSLProcessTest_InvalidSemanticHTML : public TestCase
 			xslProcessor.setXslDTD(documentDTD);
 			xslProcessor.processXslFile(documentXSL);
 		}catch(string s){
-			cout << s;
-			
+		
 			if( s == XSLProcessor::ERROR_INVALID_XSL_SEMANTIC ){
 				delete documentXSL;
 				delete documentDTD;
@@ -173,12 +171,13 @@ struct XSLProcessTest_OK : public TestCase
 		xsl::XSLProcessor proc;
 		
 		docXml = parseXML("./tests/rapport.xsl");
-		docDtd = parseDTD("./tests/html.dtd");
+		docDtd = parseDTD("./tests/xsl.dtd");
 		
 		try {
 			proc.setXslDTD(docDtd);
 			proc.processXslFile(docXml);
 		} catch(string s) {
+			cout << s;
 			delete docXml;
 			delete docDtd;
 			return false;
@@ -362,21 +361,15 @@ int main(int argc, char** argv)
 
 	suite.add(new HTMLGenerationTest_Simple);
 
-	//~ suite.add(new HTMLGenerationTest_Complex);
+	suite.add(new HTMLGenerationTest_Complex);
 
-	//~ suite.add(new HTMLGenerationTest_ApplyTemplates);
+	suite.add(new HTMLGenerationTest_ApplyTemplates);
 
-	//~ suite.add(new HTMLGenerationTest_Attribute);
+	suite.add(new HTMLGenerationTest_Attribute);
 
-	//~ suite.add(new HTMLGenerationTest_NoRoot);
+	suite.add(new HTMLGenerationTest_NoRoot);
 	
 	suite.launch();
-	
-	//~ XSLProcessor proc = XSLProcessor();
-	//~ dtd::Document* dtdXSL = parseDTD("./tests/xsl.dtd");
-	//~ proc.setXslDTD(dtdXSL);
-	//~ xml::Document* document = parseXML("rapportNoHTMLDTD.xsl");
-	//~ proc.processXslFile(document);
 	
 }
 
