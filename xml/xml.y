@@ -5,8 +5,11 @@ using namespace std;
 using namespace xml;
 
 int xmlwrap(void);
-void xmlerror(Document** doc, char *msg);
+void xmlerror(Document** doc, const char *msg);
 int yylex(void);
+
+const char* ERR_DOCUMENT = "Erreur au niveau Document";
+const char* ERR_CONTENU_APRES_RACINE = "Contenu interdit après la balise racine";
 
 %}
 
@@ -77,7 +80,7 @@ document
 	}
  | error
 	{
-		yyerror(doc, "Erreur au niveau du document.");
+		yyerror(doc, ERR_DOCUMENT);
 	}
  ;
 
@@ -93,7 +96,7 @@ misc_seq_opt
 	}
  | error
 	{
-		yyerror(doc, "Contenu interdit après la balise racine");	
+		yyerror(doc, ERR_CONTENU_APRES_RACINE);
 		$$ = NULL;
 	}
  ;
@@ -252,7 +255,7 @@ int xmlwrap(void)
   return 1;
 }
 
-void xmlerror(xml::Document** doc, char *msg)
+void xmlerror(xml::Document** doc, const char *msg)
 {
   fprintf(stderr, "[XML Syntax] Error : %s, at line %d.\n", msg, xmllineno);
 }

@@ -43,7 +43,11 @@ namespace xml {
 			* @param _d Pair<string,string> contenant respectivement
 			* l'élément racine et le nom de la dtd associée.
 			*/
-			void setDoctype(Doctype _d) { doctype = _d.first; rootName = _d.second;}
+			void setDoctype(Doctype _d) 
+			{ 
+				rootName = _d.first;
+				doctype = _d.second; 
+			}
 
 			/**
 			* Mutateur : Définit le prologue xml.
