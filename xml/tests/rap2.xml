@@ -5,7 +5,11 @@
     <prenom> Nino </prenom>
     <nom> Silverio </nom>
   </auteur>
-  <resume <!-- Commentaire resume --> > Ceci est extrait du livre "Réaliser un compilateur : 
+
+  <!-- Erreur ligne suivante -->
+  <a>
+
+  <resume> Ceci est extrait du livre "Réaliser un compilateur : 
 	les outils Lex et Yacc" de Nino Silverio. </resume>
   <chapitre>
     <titre> Introduction : concepts de base </titre>

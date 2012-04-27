@@ -9,7 +9,8 @@ void xmlerror(Document** doc, const char *msg);
 int yylex(void);
 
 const char* ERR_DOCUMENT = "Erreur au niveau Document";
-const char* ERR_CONTENU_APRES_RACINE = "Contenu interdit après la balise racine";
+const char* ERR_CONTENU_APRES_RACINE = "Contenu interdit après la balise racine. Ce contenu sera ignoré.";
+const char* ERR_COMMENTAIRE = "Commentaire mal formé";
 
 %}
 
@@ -24,6 +25,7 @@ const char* ERR_CONTENU_APRES_RACINE = "Contenu interdit après la balise racine
    AttList *al;				/* liste d'attributs */
    Doctype *dt;				/* doctype */
    list<xml::Comment*> * ld;		/* liste de commentaires */
+   xml::ProcessingInstruction* p;
 }
 
 %token EQ SLASH CLOSE CLOSESPECIAL DOCTYPE END NSEND
@@ -37,11 +39,12 @@ const char* ERR_CONTENU_APRES_RACINE = "Contenu interdit après la balise racine
 %type <al> attribut_opt
 %type <dt> declaration declarations_opt
 %type <ld> misc_seq_opt
+%type <p> prolog_opt 
 
 %parse-param { xml::Document** doc } 
 
 %destructor { free($$); } <s>
-%destructor { delete $$; } <en> <c> <ee> <dt> <at>
+%destructor { delete $$; } <en> <c> <ee> <dt> <at> <p>
 %destructor 
 { 
 	list<xml::Comment*>::iterator it;
@@ -64,30 +67,50 @@ const char* ERR_CONTENU_APRES_RACINE = "Contenu interdit après la balise racine
 %%
 
 document
- : declarations_opt xml_element misc_seq_opt 
+ : prolog_opt declarations_opt xml_element misc_seq_opt 
 	{ 
 		*doc  = new Document();
+
 		if ($1 != NULL) {
-			(*doc)->setDoctype(*$1);
-			delete $1;
+			(*doc)->setXmlProlog($1);
 		}
 
-		if ($3 != NULL) {
-			(*doc)->setComments(*$3);
-			delete $3;
+		if ($2 != NULL) {
+			(*doc)->setDoctype(*$2);
+			delete $2;
 		}
-		(*doc)->setRoot($2);
+
+		if ($4 != NULL) {
+			(*doc)->setComments(*$4);
+			delete $4;
+		}
+
+		(*doc)->setRoot($3);
 	}
  | error
 	{
 		yyerror(doc, ERR_DOCUMENT);
+	}
+;
+
+prolog_opt
+ : STARTSPECIAL attribut_opt CLOSESPECIAL
+	{
+		$$ = new ProcessingInstruction(*$1);
+		delete $1;
+		$$->setAttList(*$2);	
+		delete $2;
+	}
+ | /* empty */
+	{
+		$$ = NULL;
 	}
  ;
 
 misc_seq_opt
  : misc_seq_opt comment	
 	{ 
-		$1->push_back(static_cast<Comment*>($2));
+		if ($2 != NULL) $1->push_back(static_cast<Comment*>($2));
 		$$ = $1;
 	}
  | /*empty*/		

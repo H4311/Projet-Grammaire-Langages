@@ -33,11 +33,8 @@ namespace dtd {
 	}
 
 	void Document::setDeclarations(std::list<Declaration*>* dec) {
-		std::cout << "HIP\n";
 		delete declarations;
-		std::cout << "HUP\n";
 		declarations = dec;
-		std::cout << "HEP\n";
 	}
 
 }

@@ -24,6 +24,8 @@
 #include "dtd/dtd.h"
 
 #include "validation/Validateur.hpp"
+
+#include "xpath/XPath.hpp"
  
 using namespace std;
 
@@ -138,13 +140,15 @@ list<xml::Content*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode
 			xml::Content* htmlChild;
 			xml::Element* itXSLEle = dynamic_cast<xml::Element*>(*itXSL);
 			if (itXSLEle != NULL) { // If it's an element 
-				htmlChild = new xml::Element();
+				
 				if (itXSLEle->getNamespace() != "xsl") { // If it's HTML :
+					htmlChild = new xml::Element();
 					((xml::Element*)htmlChild)->setName(ElementName(itXSLEle->getNamespace(), itXSLEle->getName()));
 					((xml::Element*)htmlChild)->setAttList(itXSLEle->getAttList());
 					((xml::Element*)htmlChild)->appendChildren(generateHtmlElement(itXSLEle, xmlNode, ((xml::Element*)htmlChild)));
 				}
 				else if (itXSLEle->getName() == "apply-templates") {
+					htmlChild = new xml::Element();
 					// For each child of the current XML node, we try to apply another template :
 					xml::Element* xmlEle = dynamic_cast<xml::Element*>(xmlNode);
 					if (xmlEle != NULL) { // If it's an element 
@@ -159,7 +163,15 @@ list<xml::Content*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode
 					}
 				}
 				else if (itXSLEle->getName() == "value-of") {
-					/** @todo Process "value-of" element (overquality) */
+					// We'd like to get the value of an XPATH value :
+					EmptyElement *elem = dynamic_cast<xml::EmptyElement*>(xmlNode);
+					if(elem != NULL) {
+						string select = itXSLEle->getAttributeValue("select");
+						string xPathResult = xpath::find(elem, select);
+						
+						// Create the data content that contains the xpath result
+						htmlChild = new xml::Data(xPathResult);
+					}
 				}
 				else if (itXSLEle->getName() == "attribute") {
 					// Processing the data inside this XSL element :

@@ -14,5 +14,6 @@ parse d'un fichier xml.
 #include "Element.hpp"
 #include "Data.hpp"
 #include "Comment.hpp"
+#include "ProcessingInstruction.hpp"
 
 #endif
