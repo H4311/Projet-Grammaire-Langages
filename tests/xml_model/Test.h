@@ -1,11 +1,24 @@
-#include<cstdio>
-#include "Content.cpp"
-#include "Data.cpp"
-#include "EmptyElement.cpp"
-#include "Comment.cpp"
-#include "Element.cpp"
+#include <cstdio>
+#include "Content.hpp"
+#include "Data.hpp"
+#include "EmptyElement.hpp"
+#include "Comment.hpp"
+#include "Element.hpp"
 
-#define name(namespace,nom) make_pair(namespace,nom)
-#define new_Element(str) new xml::Element(name("",str))
-#define new_EmptyElement(str) new xml::EmptyElement(name("",str))
-#define Att(AttName,AttVal) make_pair(AttName,AttVal)
+#include "mainTest1.hpp"
+#include "mainTest2.hpp"
+#include "mainTest3.hpp"
+#include "mainTest4.hpp"
+
+/**
+@file Test.h
+@author Jose GONZALEZ
+*/
+
+pair<string, string> name(string namespaceStr,string nomStr);
+
+xml::Element *new_Element(string str);
+
+xml::EmptyElement *new_EmptyElement(string str);
+
+pair<string, string> Att(string AttName,string AttVal);

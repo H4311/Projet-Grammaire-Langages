@@ -28,6 +28,7 @@
 using namespace std;
 
 const string xsl::XSLProcessor::ERROR_NO_DTD("No DTD. Please process a XSL DTD first.");
+const string xsl::XSLProcessor::ERROR_NO_XSL("No XSL. Please process a XSL stylesheet first.");
 const string xsl::XSLProcessor::ERROR_INVALID_XSL("Invalid or empty XSL document.");
 const string xsl::XSLProcessor::ERROR_NO_STYLESHEET("Unfound element containing the path to HTML DTD file.");
 const string xsl::XSLProcessor::ERROR_NO_XMLNS("Unfound \"xmlns:xsl\" attribute.");
@@ -114,6 +115,10 @@ void xsl::XSLProcessor::processXslFile(xml::Document* newXsldoc) throw (string) 
 
 
 xml::Document* xsl::XSLProcessor::generateHtmlFile(xml::Document* xmlDoc) {
+	// --- Checking if a XSL has been processed
+	if (xslDoc == NULL) {
+		throw(ERROR_NO_XSL);
+	}
 	xml::EmptyElement* rootXML = dynamic_cast<xml::EmptyElement*>(xmlDoc->getRoot());
 	xml::Element* xslNode;
 	if (rootXML != NULL) { // If it's an empty element or element, we try to find a template to apply :
