@@ -17,6 +17,8 @@ using namespace std;
 #include "../xml/xml_processor.h"
 #include "../dtd/dtd.h"
 
+using namespace xsl;
+
 # include "../tests/TestFramework.hpp"
 
 struct XSLProcessTest_NoXSLDTD : public TestCase
@@ -28,11 +30,11 @@ struct XSLProcessTest_NoXSLDTD : public TestCase
 		try{
 			document = NULL;
 			document = parseXML("testSimple.xsl");
-			xsl::XSLProcessor xslProcessor = xsl::XSLProcessor();
+			XSLProcessor xslProcessor = XSLProcessor();
 			xslProcessor.processXslFile(document);
 		}catch(string s){
 			delete document;
-			if( s == xsl::XSLProcessor::ERROR_NO_DTD){
+			if( s == XSLProcessor::ERROR_NO_DTD){
 				return true;
 			}else{
 				return false;
@@ -53,14 +55,14 @@ struct XSLProcessTest_NoHTMLDTD : public TestCase
 		
 		docDtd = parseDTD("tests/html.dtd");
 		document = parseXML("tests/testNoHTMLDTD.xsl");
-		xsl::XSLProcessor xslProcessor = xsl::XSLProcessor();
+		XSLProcessor xslProcessor = XSLProcessor();
 		try{
 			xslProcessor.setXslDTD(docDtd);
 			xslProcessor.processXslFile(document);
 		}catch(string s){
 			delete document;
 			delete docDtd;
-			if( s == xsl::XSLProcessor::ERROR_NO_XMLNS){
+			if( s == XSLProcessor::ERROR_NO_XMLNS){
 				return true;
 			}else{
 				return false;
@@ -79,7 +81,7 @@ struct XSLProcessTest_InvalidHTMLDTD : public TestCase
 	{
 		xml::Document* docXml;
 		dtd::Document* docDtd;
-		xsl::XSLProcessor proc = xsl::XSLProcessor();
+		XSLProcessor proc = XSLProcessor();
 		
 		docXml = parseXML("tests/rapport.xsl");
 		docDtd = parseDTD("tests/html.dtd");
@@ -88,7 +90,7 @@ struct XSLProcessTest_InvalidHTMLDTD : public TestCase
 			proc.setXslDTD(docDtd);
 			proc.processXslFile(docXml);
 		} catch(std::string s) {
-			if (s == xsl::XSLProcessor::ERROR_INVALID_HTML_DTD) {
+			if (s == XSLProcessor::ERROR_INVALID_HTML_DTD) {
 				delete docDtd;
 				delete docXml;
 				return true;
@@ -105,23 +107,81 @@ struct XSLProcessTest_InvalidXSL : public TestCase
 	XSLProcessTest_InvalidXSL() : TestCase("<fr> Vérifier que le traitement s'arrête si le XSL est invalide") {}
 	bool operator()()
 	{
-		xml::Document* document = NULL;
-		document = parseXML("tests/rapport.xsl");
-		xsl::XSLProcessor proc = xsl::XSLProcessor();
-		
-		//bool returnValue = proc.processXslFile(document);
-		
-		return true;
+		xml::Document* documentXSL = NULL;
+		dtd::Document* documentDTD = NULL;
+		try{
+			
+			documentXSL = parseXML("rapportInvalidXSL.xsl");
+			documentDTD = parseDTD("xsl.dtd");
+			XSLProcessor xslProcessor = XSLProcessor();
+			xslProcessor.setXslDTD(documentDTD);
+			xslProcessor.processXslFile(documentXSL);
+		}catch(string s){
+			delete documentXSL;
+			delete documentDTD;
+			if( s == XSLProcessor::ERROR_INVALID_HTML_DTD ){
+				return true;
+			}
+		}
+		delete documentXSL;
+		delete documentDTD;
+		return false;
 	}
 };
 
-struct XSLProcessTest_InvalidHTML : public TestCase
+
+
+struct XSLProcessTest_InvalidSemanticXSL : public TestCase
 {
-	XSLProcessTest_InvalidHTML() : TestCase("<fr> Vérifier que le traitement s'arrête si le HTML est invalide") {}
+	XSLProcessTest_InvalidSemanticXSL() : TestCase("<fr> Vérifier que le traitement s'arrête si le XSL est invalide") {}
 	bool operator()()
 	{
-		/** @todo Implement the test. */
-		return true;
+		xml::Document* documentXSL = NULL;
+		documentXSL = parseXML("rapportSemanticXSL.xsl");
+		dtd::Document* documentDTD = NULL;
+		documentDTD = parseDTD("xsl.dtd");
+		try{
+			
+			XSLProcessor xslProcessor = XSLProcessor();
+			xslProcessor.setXslDTD(documentDTD);
+			xslProcessor.processXslFile(documentXSL);
+		}catch(string s) {
+			delete documentXSL;
+			delete documentDTD;
+			
+			if( s == XSLProcessor::ERROR_INVALID_XSL ){
+				return true;
+			}
+		}
+		delete documentXSL;
+		delete documentDTD;
+		return false;
+	}
+};
+
+struct XSLProcessTest_InvalidSemanticHTML : public TestCase
+{
+	XSLProcessTest_InvalidSemanticHTML() : TestCase("<fr> Vérifier que le traitement s'arrête si le HTML est invalide") {}
+	bool operator()()
+	{
+		xml::Document* documentXSL = NULL;
+		documentXSL = parseXML("rapportSemanticHTML.xsl");
+		dtd::Document* documentDTD = NULL;
+		documentDTD = parseDTD("xsl.dtd");
+		try{
+			xsl::XSLProcessor xslProcessor = xsl::XSLProcessor();
+			xslProcessor.setXslDTD(documentDTD);
+			xslProcessor.processXslFile(documentXSL);
+		}catch(string s){
+			delete documentXSL;
+			delete documentDTD;
+			if( s == XSLProcessor::ERROR_INVALID_XSL_SEMANTIC ){
+				return true;
+			}
+		}
+		delete documentXSL;
+		delete documentDTD;
+		return false;
 	}
 };
 
@@ -140,8 +200,19 @@ struct HTMLGenerationTest_NoXSL : public TestCase
 	HTMLGenerationTest_NoXSL() : TestCase("<fr> Vérifier que la génération HTML s'arrête en l'absence de XSL") {}
 	bool operator()()
 	{
-		/** @todo Implement the test. */
-		return true;
+		xml::Document* documentXML = NULL;
+		documentXML = parseXML("undefined.xml");
+		try{
+			XSLProcessor xslProcessor = XSLProcessor();
+			xslProcessor.generateHtmlFile(documentXML);
+		}catch(string s){
+			if( s == XSLProcessor::ERROR_NO_XSL ){
+				delete documentXML;
+				return true;
+			}
+		}
+		delete documentXML;
+		return false;
 	}
 };
 
@@ -150,7 +221,24 @@ struct HTMLGenerationTest_Simple : public TestCase
 	HTMLGenerationTest_Simple() : TestCase("<fr> Vérifier le HTML généré, avec des documents XSL et XML simples") {}
 	bool operator()()
 	{
-		/** @todo Implement the test. */
+		xml::Document* documentXSL = NULL;
+		xml::Document* documentXML = NULL;
+		xml::Document* documentHTML = NULL;
+		try{
+			XSLProcessor xslProcessor = XSLProcessor();
+			documentXSL = xslProcessor.processXslFile("testSimple.xsl");
+			documentXML = parseXML("testSimple.xml");
+			documentHTML = xslProcessor.generateHtmlFile(documentXML);
+		}catch(string s){
+			delete documentXSL;
+			delete documentXML;
+			delete documentHTML;
+			return false;
+		}
+		delete documentXSL;
+		delete documentXML;
+		delete documentHTML;
+		// TODO : test
 		return true;
 	}
 };
@@ -205,15 +293,17 @@ int main(int argc, char** argv)
 
 	suite.add(new XSLProcessTest_InvalidHTMLDTD);
 
-	//~ suite.add(new XSLProcessTest_InvalidXSL);
+	suite.add(new XSLProcessTest_InvalidXSL);
+	
+	suite.add(new XSLProcessTest_InvalidSemanticXSL);
 
-	//~ suite.add(new XSLProcessTest_InvalidHTML);
+	suite.add(new XSLProcessTest_InvalidSemanticHTML);
 
-	//~ suite.add(new XSLProcessTest_OK);
+	suite.add(new XSLProcessTest_OK);
 
-	//~ suite.add(new HTMLGenerationTest_NoXSL);
+	suite.add(new HTMLGenerationTest_NoXSL);
 
-	//~ suite.add(new HTMLGenerationTest_Simple);
+	suite.add(new HTMLGenerationTest_Simple);
 
 	//~ suite.add(new HTMLGenerationTest_Complex);
 
@@ -225,7 +315,7 @@ int main(int argc, char** argv)
 	
 	suite.launch();
 	
-	//~ xsl::XSLProcessor proc = xsl::XSLProcessor();
+	//~ XSLProcessor proc = XSLProcessor();
 	//~ dtd::Document* dtdXSL = parseDTD("./tests/xsl.dtd");
 	//~ proc.setXslDTD(dtdXSL);
 	//~ xml::Document* document = parseXML("rapportNoHTMLDTD.xsl");
