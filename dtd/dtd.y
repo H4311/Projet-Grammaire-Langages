@@ -44,6 +44,39 @@ int yylex(void);
 %type <a> attribute
 %type <atl> att_type enumerate enum_list enum_list_plus
 
+%destructor { free($$); } <s>
+%destructor { delete $$; } <stds> <e> <a> <cs> <ch> <dtdc> <dtds>
+%destructor
+	{
+		for(AttDefList::iterator it = $$->begin();
+			it != $$->end();
+			++it)
+		{
+			delete *it;
+		}
+		delete $$;
+	} <adl>
+%destructor
+	{
+		for(ChildrenList::iterator it = $$->begin();
+			it != $$->end();
+			++it)
+		{
+			delete *it;
+		}
+		delete $$;
+	} <cl>
+%destructor
+	{
+		for(DeclarationList::iterator it = $$->begin();
+			it != $$->end();
+			++it)
+		{
+			delete *it;
+		}
+		delete $$;
+	} <dl>
+
 %parse-param { Document** doc } 
 /* Elements à définir : */
 /* main ident dtd_list_opt att_definition_opt attribute att_type enumerate
@@ -393,7 +426,7 @@ int dtdwrap(void)
 
 int dtderror(Document** doc, char *msg)
 {
-  fprintf(stderr, "(%d) Error found : %s.\n", dtdlineno, msg);
+  fprintf(stderr, "[DTD Syntax] Error : %s, at line %d.\n", msg, dtdlineno);
 }
 
 

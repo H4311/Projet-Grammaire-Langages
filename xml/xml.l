@@ -51,7 +51,7 @@ static char * nameSpace(char *s)  /* extrait la première partie, l'espace de no
 
 static char *split_namespace(char *s) { /* extrait la deuxième partie après l'espace de nom */
    char *name;
-   int i,k;
+   int i;
    for (i=0;s[i]!=':';i++) ;
    i++;
    name = (char*) malloc((strlen(s+i)+1)*sizeof(char));
@@ -123,7 +123,7 @@ closespecial 	"?>"{nl}?
 
 <CONTENT>{ws}?{pcdata}		{ xmllval.s = strdup(skipSpace(yytext)); return DATA;}
 
-.			{ fprintf(stderr, "!ERROR(%c)\n", *yytext);}
+.			{ fprintf(stderr, "[Lexical XML] Unknown expression : (%c) at line %d\n", *yytext, yylineno);}
 
 %%
 

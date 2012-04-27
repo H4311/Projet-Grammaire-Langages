@@ -14,18 +14,20 @@ VAL_REP = validation/
 all: fils $(EXEC_NAME) 
 
 test: all
-	@echo "\n\nTESTS XML\n\n"
+	@echo "TESTS XML"
 	@(cd $(XML_REP) && ./test_xml)
-	@echo "\n\nTESTS DTD\n\n"
+	@echo "\n\nTESTS DTD"
 	@(cd $(DTD_REP) && ./test_dtd)
-	@echo "\n\nTESTS VALIDATION\n\n"
+	@echo "\n\nTESTS VALIDATION"
 	@(cd $(VAL_REP) && ./test_validation)
+	@echo "\n\nTESTS XSL"
+	@(cd $(XSL_REP) && ./test_xsl)
 
 fils:
 	make -C $(XML_REP)
 	make -C $(DTD_REP)
 	make -C $(VAL_REP)
-	#make -C $(XSL_REP)
+	make -C $(XSL_REP)
 
 .PHONY: clean rebuild
 
@@ -33,7 +35,7 @@ clean:
 	make clean -C $(XML_REP)
 	make clean -C $(DTD_REP)
 	make clean -C $(VAL_REP)
-#	make clean -C $(XSL_REP)
+	make clean -C $(XSL_REP)
 	rm -rf $(EXEC_NAME) $(OBJ_FILES)
 
 rebuild: clean all

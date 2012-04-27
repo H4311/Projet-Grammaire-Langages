@@ -81,7 +81,7 @@ bool Validateur::validationNode(xml::Content* content, std::list<dtd::Element*> 
 		}
 		if(regex == "") {
 			//Balise non définie dans la DTD
-			std::cerr << "E: Balise non trouvée" << std::endl;
+			std::cerr << "E: Balise " << nomBalise << " non trouvée" << std::endl;
 			return false;
 		}
 		
@@ -117,9 +117,8 @@ bool Validateur::validationNode(xml::Content* content, std::list<dtd::Element*> 
 				return false;
 			}
 		}
-		
 	}
-	
+
 	return true;
 }
 
@@ -145,6 +144,7 @@ bool Validateur::validationDocument(dtd::Document& dtd, xml::Document& xml) {
 				std::cerr << "E: Une déclaration de la DTD n'est ni un dtd::Element ni un dtd::AttributeList" << std::endl;
 			}
 		}
+		
 	}
 	
 	

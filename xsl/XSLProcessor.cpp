@@ -66,21 +66,7 @@ void xsl::XSLProcessor::processXslFile(xml::Document* newXsldoc) throw (string) 
 		throw(ERROR_INVALID_XSL);
 	}
 	
-	list<xml::Content*>::iterator itelementXSL = rootXSL->getChildren().begin();
-	xml::EmptyElement* elStylesheet;
-	while  (itelementXSL != rootXSL->getChildren().end()) {
-		xml::EmptyElement* elXSL = dynamic_cast<xml::Element*>(*itelementXSL);
-		if ( (elXSL != NULL) && (elXSL->getName() == "stylesheet") ) {
-			elStylesheet = elXSL;
-			break;
-		 }
-		itelementXSL++;
-	}
-	if (itelementXSL == rootXSL->getChildren().end()) {
-		throw(ERROR_NO_STYLESHEET);
-	}	
-	
-	string attrXMLNS = elStylesheet->getAttributeValue("xmlns:xsl");
+	string attrXMLNS = rootXSL->getAttributeValue("xmlns:xsl");
 	if (attrXMLNS.empty()) {
 		throw(ERROR_NO_XMLNS);
 	}		
@@ -95,22 +81,28 @@ void xsl::XSLProcessor::processXslFile(xml::Document* newXsldoc) throw (string) 
 	list<dtd::Declaration*> htmlDeclarationsCopy =  *(htmlDTDdoc->getDeclarations()); // We keep a copy of the original HTML declarations list.
 	list<dtd::Declaration*>* htmlDeclarations =  htmlDTDdoc->getDeclarations();
 	list<dtd::Declaration*>* xslDeclarations =  xslDTDdoc->getDeclarations();
-	for( list<dtd::Declaration*>::const_iterator it = xslDeclarations->begin();  it != xslDeclarations->end(); it++) {
+	for( list<dtd::Declaration*>::iterator it = xslDeclarations->begin();  it != xslDeclarations->end(); it++) {
+		list<dtd::Declaration*>::iterator it2 = it;
+		it2++;
+		if ( it2 == xslDeclarations->end()) { break;}
 		htmlDeclarations->push_back(*it);
+		cout << *it;
 	}
 	htmlDTDdoc->setDeclarations(htmlDeclarations);
 	
+	cout << htmlDTDdoc;
+	
 	// --- Semantic analysis :
-	if (Validateur::validationDocument(*htmlDTDdoc, *xslDoc)) {
-		throw(ERROR_INVALID_XSL_SEMANTIC);
-	}
+	//~ if (Validateur::validationDocument(*htmlDTDdoc, *xslDoc)) {
+		//~ throw(ERROR_INVALID_XSL_SEMANTIC);
+	//~ }
 	
-	// --- Everything is OK with the new XSL : we delete the ancient one and replace by the new.
-	delete xslDoc;
-	xslDoc = newXsldoc;
+	//~ // --- Everything is OK with the new XSL : we delete the ancient one and replace by the new.
+	//~ delete xslDoc;
+	//~ xslDoc = newXsldoc;
 	
-	htmlDTDdoc->setDeclarations(&htmlDeclarationsCopy); // We restore the original list, so when deleting the HTML DTD and its list of declarations, we won't destroy the XSL declarations (the XSL DTD can be reused).
-	delete htmlDTDdoc;
+	//~ htmlDTDdoc->setDeclarations(&htmlDeclarationsCopy); // We restore the original list, so when deleting the HTML DTD and its list of declarations, we won't destroy the XSL declarations (the XSL DTD can be reused).
+	//~ delete htmlDTDdoc;
 	
 	return;
 }
