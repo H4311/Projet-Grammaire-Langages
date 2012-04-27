@@ -70,7 +70,7 @@ struct TestValidationAvecErreur : public TestCase
 
 struct TestValidationSansErreur2 : public TestCase
 {
-	TestValidationSansErreur2() : TestCase("Vérifie qu'une validation de doc conforme au dtd réussit.") {}
+	TestValidationSansErreur2() : TestCase("Vérifie qu'une validation de doc échoue conformément à la DTD.") {}
 	bool operator()()
 	{
 		dDTD = parseDTD("../tests/rap3.dtd");
