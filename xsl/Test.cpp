@@ -243,9 +243,9 @@ struct HTMLGenerationTest_Simple : public TestCase
 		xml::Document* documentXML = NULL;
 		xml::Document* documentHTML = NULL;
 		try{
-			XSLProcessor xslProcessor = XSLProcessor();
-			documentXSL = xslProcessor.processXslFile("testSimple.xsl");
+			documentXSL = parseXSL("testSimple.xsl");
 			documentXML = parseXML("testSimple.xml");
+			xsl::XSLProcessor xslProcessor = XSLProcessor();
 			documentHTML = xslProcessor.generateHtmlFile(documentXML);
 		}catch(string s){
 			delete documentXSL;
@@ -253,20 +253,12 @@ struct HTMLGenerationTest_Simple : public TestCase
 			delete documentHTML;
 			return false;
 		}
+		// Validation Humaine
+		cout << documentHTML << endl;
 		delete documentXSL;
 		delete documentXML;
 		delete documentHTML;
-		// TODO : test
-		return true;
-	}
-};
 
-struct HTMLGenerationTest_Complex : public TestCase
-{
-	HTMLGenerationTest_Complex() : TestCase("<fr> Vérifier le HTML généré, avec des documents XSL et XML plus complexes") {}
-	bool operator()()
-	{
-		/** @todo Implement the test. */
 		return true;
 	}
 };
@@ -291,12 +283,65 @@ struct HTMLGenerationTest_Attribute : public TestCase
 	}
 };
 
+struct HTMLGenerationTest_Complex : public TestCase
+{
+	HTMLGenerationTest_Complex() : TestCase("<fr> Vérifier le HTML généré, avec des documents XSL et XML plus complexes") {}
+	bool operator()()
+	{
+		xml::Document* documentXSL = NULL;
+		xml::Document* documentXML = NULL;
+		try{
+			documentXSL = parseXSL("testComplex.xsl");
+			documentXML = parseXML("testComplex.xml");
+			XSLProcessor xslProcessor = XSLProcessor();
+			xml::Document* documentHTML = xslProcessor.generateHtmlFile(documentXML);
+		}catch(string s){
+			delete documentXSL;
+			delete documentXML;
+			delete documentHTML;
+			return false;
+		}
+		// Validation Humaine
+		cout << documentHTML << endl;
+		delete documentXSL;
+		delete documentXML;
+		delete documentHTML;
+		return true;
+	}
+};
+
+
 struct HTMLGenerationTest_NoRoot : public TestCase
 {
 	HTMLGenerationTest_NoRoot() : TestCase("<fr> Vérifier le HTML généré, avec un XSL n'ayant pas de template pour la racine XML") {}
 	bool operator()()
 	{
-		/** @todo Implement the test. */
+		xml::Document* documentXSL = NULL;
+		xml::Document* documentXML = NULL;
+		try{
+			
+			documentXSL = parseXSL("testNoRoot.xsl");
+			documentXML = parseXML("testComplex.xml");
+			XSLProcessor xslProcessor = XSLProcessor();
+			xml::Document* documentHTML = xslProcessor.generateHtmlFile(documentXML);
+		}catch(string s){
+			delete documentXSL;
+			delete documentXML;
+			delete documentHTML;
+			return false;
+		}
+		// On test si root == "null"
+		if( !(dynamic_cast<xml::Element*>(documentHTML->getRoot()) == "null") ){
+			delete documentXSL;
+			delete documentXML;
+			delete documentHTML;
+			return false;
+		}
+		// Validation Humaine
+		cout << documentHTML << endl;
+		delete documentXSL;
+		delete documentXML;
+		delete documentHTML;
 		return true;
 	}
 };
