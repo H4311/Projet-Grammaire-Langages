@@ -10,6 +10,7 @@ XPATH_OBJ = ../xpath/*.o
 VALID_OBJ = ../validation/*.o
 
 all: exe
+	rm -rf Test.o
 
 test: exe
 	./$(EXE)
@@ -20,6 +21,7 @@ exe: deps  $(OBJ)
 deps:
 	make -C ../validation
 	make -C ../xpath
+
 %.o: %.cpp %.hpp
 	$(CXX) -o $@ -c $< $(CXXFLAGS)
 	
