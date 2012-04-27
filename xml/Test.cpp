@@ -174,9 +174,9 @@ struct TestAttributs : public TestCase
 	}
 };
 
-struct TestValidationSansErreur : public TestCase
+struct TestParsingSansErreur : public TestCase
 {
-	TestValidationSansErreur() : TestCase("Vérifie que le document XML est syntaxiquement valide.") {}
+	TestParsingSansErreur() : TestCase("Vérifie que le document XML est syntaxiquement valide.") {}
 	bool operator()()
 	{
 		Document *dXML = parseXML("tests/rap1.xml");
@@ -189,7 +189,6 @@ struct TestValidationSansErreur : public TestCase
 		
 	}
 };
-
 
 int main(int argc, char** argv)
 {
