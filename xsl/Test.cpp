@@ -129,7 +129,7 @@ struct HTMLGenerationTest_Attribute : public TestCase
 
 struct HTMLGenerationTest_NoRoot : public TestCase
 {
-	HTMLGenerationTest_Complex() : HTMLGenerationTest_Complex("<fr> Vérifier le HTML généré, avec un XSL n'ayant pas de template pour la racine XML") {}
+	HTMLGenerationTest_NoRoot() : HTMLGenerationTest_NoRoot("<fr> Vérifier le HTML généré, avec un XSL n'ayant pas de template pour la racine XML") {}
 	bool operator()()
 	{
 		/** @todo Implement the test. */
