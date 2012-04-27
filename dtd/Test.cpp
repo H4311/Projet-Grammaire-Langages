@@ -11,6 +11,8 @@
 #include "AttributeList.hpp"
 #include "Attribute.hpp"
 
+#include "dtd.h"
+
 using namespace std;
 #include "../tests/TestFramework.hpp"
 
@@ -140,11 +142,35 @@ généré") {}
 	}
 };
 
+struct TestDtdValide : public TestCase
+{
+	TestDtdValide() : TestCase("Vérifie qu'une dtd valide est parsée correctement.") {}
+	bool operator()()
+	{
+		Document * dtd = parseDTD("../tests/rap1.dtd");
+		bool result = dtd != NULL;
+		delete dtd;
+		return result;
+	}
+};
+
+struct TestDtdInvalide : public TestCase
+{
+	TestDtdInvalide() : TestCase("Vérifie qu'une dtd invalide est parsée avec erreur.") {}
+	bool operator()()
+	{
+		Document * dtd = parseDTD("../tests/rap1.error.dtd");
+		return dtd == NULL;
+	}
+};
+
 int main(int argc, char** argv) {
 	TestSuite suite;
 	suite.add(new TestAffichage);
 	suite.add(new TestRegex);
 	suite.add(new TestContenu);
+	suite.add(new TestDtdValide);
+//	suite.add(new TestDtdInvalide);
 	
 	suite.launch();
 	delete singleton;
