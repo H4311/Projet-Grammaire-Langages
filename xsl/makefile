@@ -1,9 +1,9 @@
-CXX = clang++
-LD = clang++
+CXX = g++
+LD = g++
 EXE = xsl
 CXXFLAGS = -g -Wall -DYYDEBUG=1 -I..
 LDFLAGS = -lboost_regex
-OBJ = XSLProcessor.o
+OBJ = XSLProcessor.o Test.o
 XML_OBJ = ../xml/*.o
 DTD_OBJ = ../dtd/*.o
 VALID_OBJ = ../validation/*.o

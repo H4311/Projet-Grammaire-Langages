@@ -15,7 +15,6 @@
 # include "xml/Content.hpp"
 # include "xml/Document.hpp"
 # include "xml/Element.hpp"
-# include "xml/Document.hpp"
 
 # include "dtd/Document.hpp"
 
@@ -51,7 +50,7 @@ namespace xsl {
 			 * 
 			 * @param newXslDTDdoc New DTD structure.
 			 */
-			void setXslDTDFile(Document* newXslDTDdoc)			
+			void setXslDTD(dtd::Document* newXslDTDdoc);			
 
 			/**
 			 * @brief XSL Validator
@@ -59,10 +58,9 @@ namespace xsl {
 			 * Validate and process the given XSL file using the previously processed DTD file, and set the XSL attribute.
 			 * If the given document is invalid, or the HTML DTD it uses, the previous one will be kept as attribute.
 			 *
-			 * @return true if the XSL is conformed to the given XSL and HTML DTD, and save the document structure for the next HTML generation.
-			 * @param xslFileName Path to the xsl file to evaluate.
+			 * @param xslDoc XSL document to evaluate.
 			 */
-			bool processXslFile(Document* xslDoc);
+			void processXslFile(xml::Document* xslDoc) throw (string);
 
 			/**
 			 * @brief Setter - XML to HTML Processor
