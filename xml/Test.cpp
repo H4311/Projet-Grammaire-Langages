@@ -197,7 +197,7 @@ struct TestParsingAvecErreur : public TestCase
 	bool operator()()
 	{
 		Document *dXML = parseXML("tests/rap2.xml");
-		if (dXML != NULL) {
+		if (dXML == NULL) {
 			delete dXML;
 			return true;
 		} else {
