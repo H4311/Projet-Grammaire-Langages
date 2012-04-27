@@ -170,7 +170,7 @@ int main(int argc, char** argv) {
 	suite.add(new TestRegex);
 	suite.add(new TestContenu);
 	suite.add(new TestDtdValide);
-//	suite.add(new TestDtdInvalide);
+	suite.add(new TestDtdInvalide);
 	
 	suite.launch();
 	delete singleton;
