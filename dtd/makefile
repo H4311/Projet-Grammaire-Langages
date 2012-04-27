@@ -1,7 +1,7 @@
 CXX = g++
 LD = g++
 EXE = test_dtd
-OBJ = Document.o Declaration.o AttributeList.o Attribute.o Element.o ContentSpec.o Children.o ChoiceSeq.o Choice.o Seq.o Name.o TestPut.o
+OBJ = Document.o Declaration.o AttributeList.o Attribute.o Element.o ContentSpec.o Children.o ChoiceSeq.o Choice.o Seq.o Name.o Test.o
 CXXFLAGS = -g
 LDFLAGS =
 
@@ -17,7 +17,7 @@ flexbison: dtd.l dtd.y
 
 dtd: $(OBJ)
 	$(LD) -o $(EXE) $^ $(LDFLAGS)
-	rm TestPut.o
+	rm Test.o
 
 %.o: %.cpp %.hpp
 	$(CXX) -o $@ -c $< $(CXXFLAGS)
