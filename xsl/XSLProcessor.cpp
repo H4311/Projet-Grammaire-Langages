@@ -33,13 +33,13 @@ xsl::XSLProcessor::XSLProcessor() {
 
 }
 
-void xsl::XSLProcessor::setXslDTDFile(Document* newXslDTDdoc) {
+void xsl::XSLProcessor::setXslDTD(dtd::Document* newXslDTDdoc) {
 	delete xslDTDdoc;
 	xslDTDdoc = newXslDTDdoc;
 }
 
 
-bool xsl::XSLProcessor::processXslFile(Document* newXsldoc) {
+bool xsl::XSLProcessor::processXslFile(xml::Document* newXsldoc) {
 	
 	// --- Checking if a DTD has been processed
 	if (xslDTDdoc == NULL) {
