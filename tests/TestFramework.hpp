@@ -58,11 +58,10 @@ class TestSuite
 		/**
 		@brief Affiche le numéro de test suivi de sa description.
 		@param desc Description textuelle du test.
+		@param testNum Numéro du test.
 		*/
-		void printTestHeader(string desc)
+		void printTestHeader(string desc, int testNum)
 		{
-			static int testNum = 0;
-			++testNum;
 			cout.width(80);
 			cout.fill('*');
 			cout << "\n";
@@ -103,21 +102,28 @@ class TestSuite
 	/**
 	@brief Lance la suite des tests.
 	
-	Lance l'ensemble des tests un par un, tant qu'ils réussissent. Au premier
-	test qui échoue, l'exécution de la suite de tests s'arrête.
+	Lance l'ensemble des tests un par un.
+	Affiche le nombre de tests réussis sur le nombre de tests total.
 	*/
 	void launch()
 	{
+		int nbTests = 0;
+		int okTests = 0;
 		for(list<TestCase*>::iterator it = tests.begin(); it != tests.end(); ++it)
 		{
-			printTestHeader((*it)->desc);
+			++nbTests;
+			printTestHeader((*it)->desc, nbTests);
 			bool isOk = (**it)();
 			cout << "Test " << ( ( isOk ) ? "réussi" : "échoué") << endl;
-			if (!isOk) return;
+			if(isOk)
+			{
+				++okTests;
+			}
 		}
 		cout.width(80);
 		cout.fill('*');
 		cout << '\n' << endl;
+		cout << "Test(s) réussis : " << okTests << "/" << nbTests << endl;
 	}
 };
 
