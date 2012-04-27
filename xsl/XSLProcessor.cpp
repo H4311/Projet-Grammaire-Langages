@@ -39,11 +39,11 @@ void xsl::XSLProcessor::setXslDTD(dtd::Document* newXslDTDdoc) {
 }
 
 
-bool xsl::XSLProcessor::processXslFile(xml::Document* newXsldoc) {
+void xsl::XSLProcessor::processXslFile(xml::Document* newXsldoc) throw (string) {
 	
 	// --- Checking if a DTD has been processed
 	if (xslDTDdoc == NULL) {
-		return false; // <Error> No DTD. Please process a XSL DTD first.
+		throw("<Error> No DTD. Please process a XSL DTD first.");
 	}
 
 	// --- Analyse the syntax of the HTML DTD file. The link to this DTD can be found into the attribute xmlns:xsl of the element xsl:stylesheet of the XSL.
@@ -51,7 +51,7 @@ bool xsl::XSLProcessor::processXslFile(xml::Document* newXsldoc) {
 	// --------- Finding the path to the HTML DTD, contained by the attribut "xmlns:xsl" of the element "xsl:stylesheet" :
 	xml::Element* rootXSL = dynamic_cast<xml::Element*>(newXsldoc->getRoot());
 	if (rootXSL == NULL) {
-		return false; // <Error> Invalid or empty XSL document.
+		throw("<Error> Invalid or empty XSL document.");
 	}
 	
 	list<xml::Content*>::iterator itelementXSL = rootXSL->getChildren().begin();
@@ -65,18 +65,18 @@ bool xsl::XSLProcessor::processXslFile(xml::Document* newXsldoc) {
 		itelementXSL++;
 	}
 	if (itelementXSL == rootXSL->getChildren().end()) {
-		return false; // <Error> Unfound elementcontaining the path to HTML DTD file.
+		throw("<Error> Unfound element containing the path to HTML DTD file.");
 	}	
 	
 	string attrXMLNS = elStylesheet->getAttributeValue("xmlns:xsl");
 	if (attrXMLNS.empty()) {
-		return false; // <Error> Unfound "xmlns:xsl" attribute.
+		throw("<Error> Unfound \"xmlns:xsl\" attribute.");
 	}		
 	
 	// --------- Opening, validating ant getting the structure of the HTML DTD file :
 	dtd::Document * htmlDTDdoc = parseDTD(attrXMLNS.c_str());
 	if (htmlDTDdoc == NULL) {
-		return false; // <Error> Syntax Error - Invalid, empty or unfound XSL document.
+		throw("<Error> Syntax Error - Invalid, empty or unfound XSL document.");
 	}	
 
 	// --- Fusion the XSL DTD and the HTML DTD into a new DTD (only valid used for this XSL) : we copy the XSL DTD into the HTML one.
@@ -90,7 +90,7 @@ bool xsl::XSLProcessor::processXslFile(xml::Document* newXsldoc) {
 	
 	// --- Semantic analysis :
 	if (Validateur::validationDocument(*htmlDTDdoc, *xslDoc)) {
-		return false; // <Error> Semantic Error - Invalid XSL file : doesn't respect the given DTD.
+		throw("<Error> Semantic Error - Invalid XSL file : doesn't respect the given DTD.");
 	}
 	
 	// --- Everything is OK with the new XSL : we delete the ancient one and replace by the new.
@@ -100,7 +100,7 @@ bool xsl::XSLProcessor::processXslFile(xml::Document* newXsldoc) {
 	htmlDTDdoc->setDeclarations(&htmlDeclarationsCopy); // We restore the original list, so when deleting the HTML DTD and its list of declarations, we won't destroy the XSL declarations (the XSL DTD can be reused).
 	delete htmlDTDdoc;
 	
-	return true;
+	return;
 }
 
 

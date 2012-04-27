@@ -22,8 +22,19 @@ struct XSLProcessTest_NoXSLDTD : public TestCase
 	XSLProcessTest_NoXSLDTD() : XSLProcessTest_NoXSLDTD("<fr> Vérifier que le traitement s'arrête en l'absence de DTD XSL") {}
 	bool operator()()
 	{
-		/** @todo Implement the test. */
-		return true;
+		try{
+			xml::Document* document = NULL;
+			document = parseXML("testSimple.xsl");
+			xml::XSLProcessor xslProcessor = XSLProcessor();
+			xslProcessor.processXslFile(document);
+			xslProcessor = ~xml::XSLProcessor();
+		}catch(string s){
+			if( s == "<Error> No DTD. Please process a XSL DTD first." ){
+				return true;
+			}else{
+				return false;
+			}
+		}
 	}
 };
 
@@ -32,8 +43,19 @@ struct XSLProcessTest_NoHTMLDTD : public TestCase
 	XSLProcessTest_NoHTMLDTD() : XSLProcessTest_NoHTMLDTD("<fr> Vérifier que le traitement s'arrête en l'absence de DTD HTML") {}
 	bool operator()()
 	{
-		/** @todo Implement the test. */
-		return true;
+		try{
+			xml::Document* document = NULL;
+			document = parseXML("rapportNoHTMLDTD.xsl");
+			xml::XSLProcessor xslProcessor = XSLProcessor();
+			xslProcessor.processXslFile(document);
+			xslProcessor = ~xml::XSLProcessor();
+		}catch(string s){
+			if( s == "<Error> Unfound element containing the path to HTML DTD file." ){
+				return true;
+			}else{
+				return false;
+			}
+		}
 	}
 };
 
@@ -52,8 +74,12 @@ struct XSLProcessTest_InvalidXSL : public TestCase
 	XSLProcessTest_InvalidXSL() : XSLProcessTest_InvalidXSL("<fr> Vérifier que le traitement s'arrête si le XSL est invalide") {}
 	bool operator()()
 	{
-		/** @todo Implement the test. */
-		return true;
+		xml::Document* document = NULL;
+		document = parseXML("rapport.xsl");
+		
+		bool returnValue = processXslFile(document);
+		
+		return returnValue;
 	}
 };
 

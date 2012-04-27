@@ -62,7 +62,7 @@ bool Validateur::validationNode(xml::Content* content, std::list<dtd::Element*> 
 				}
 				if(found == false) {
 					//L'attribut présent dans le xml n'existe pas dans la dtd
-					std::cout << "att non trouvé " << *itXmlAtt << std::endl;
+					std::cerr << "E: att non trouvé " << *itXmlAtt << std::endl;
 					return false;
 				}
 			}
@@ -81,6 +81,7 @@ bool Validateur::validationNode(xml::Content* content, std::list<dtd::Element*> 
 		}
 		if(regex == "") {
 			//Balise non définie dans la DTD
+			std::cerr << "E: Balise non trouvé " << std::endl;
 			return false;
 		}
 		
