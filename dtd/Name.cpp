@@ -12,7 +12,8 @@ namespace dtd {
 	Name::~Name() {}
 	
 	std::ostream& Name::put(std::ostream& out) {
-		out << name << card;
+		out << name;
+		if (card) out << card;
 		return out;
 	}
 	

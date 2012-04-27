@@ -78,10 +78,6 @@ int yylex(void);
 	} <dl>
 
 %parse-param { Document** doc } 
-/* Elements à définir : */
-/* main ident dtd_list_opt att_definition_opt attribute att_type enumerate
-enum_list_plus enum_list item_enum default_declaration contentspec card_opt 
-children cp choice list_choice seq list_seq_opt mixed ast_opt list_mixed */
 
 %%
 
@@ -142,7 +138,7 @@ att_definition_opt
 attribute
 : ident att_type default_declaration
 	{
-		$$ = new Attribute(*$1, *$2, *$3); // TODO 4ème argument ?
+		$$ = new Attribute(*$1, *$2, *$3);
 		delete $1;
 		delete $2;
 		delete $3;
@@ -153,7 +149,7 @@ att_type
 : CDATA    
 	{
 		$$ = new AttTypeList;
-		$$->push_back("CDATA"); // TODO vérifier
+		$$->push_back("CDATA");
 	}
 | TOKENTYPE
 	{
