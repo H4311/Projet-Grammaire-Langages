@@ -169,7 +169,7 @@ struct XSLProcessTest_InvalidSemanticHTML : public TestCase
 		dtd::Document* documentDTD = NULL;
 		documentDTD = parseDTD("xsl.dtd");
 		try{
-			xsl::XSLProcessor xslProcessor = xsl::XSLProcessor();
+			XSLProcessor xslProcessor = XSLProcessor();
 			xslProcessor.setXslDTD(documentDTD);
 			xslProcessor.processXslFile(documentXSL);
 		}catch(string s){
@@ -270,11 +270,13 @@ struct HTMLGenerationTest_ApplyTemplates : public TestCase
 	{
 		xml::Document* documentXSL = NULL;
 		xml::Document* documentXML = NULL;
+		xml::Document* documentHTML = NULL;
 		try{
-			documentXSL = parseXSL("testApplyTemplates.xsl");
+			documentXSL = parseXML("testApplyTemplates.xsl");
 			documentXML = parseXML("testSimple.xml");
 			xsl::XSLProcessor xslProcessor = XSLProcessor();
-			xml::Document* documentHTML = xslProcessor.generateHtmlFile(documentXML);
+			xslProcessor.processXslFile(documentXSL);
+			documentHTML = xslProcessor.generateHtmlFile(documentXML);
 		}catch(string s){
 			delete documentXSL;
 			delete documentXML;
@@ -297,11 +299,13 @@ struct HTMLGenerationTest_Attribute : public TestCase
 	{
 		xml::Document* documentXSL = NULL;
 		xml::Document* documentXML = NULL;
+		xml::Document* documentHTML = NULL;
 		try{
-			documentXSL = parseXSL("testAttribute.xsl");
+			documentXSL = parseXML("testAttribute.xsl");
 			documentXML = parseXML("testSimple.xml");
 			xsl::XSLProcessor xslProcessor = XSLProcessor();
-			xml::Document* documentHTML = xslProcessor.generateHtmlFile(documentXML);
+			xslProcessor.processXslFile(documentXSL);
+			documentHTML = xslProcessor.generateHtmlFile(documentXML);
 		}catch(string s){
 			delete documentXSL;
 			delete documentXML;
