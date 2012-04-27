@@ -252,7 +252,32 @@ struct HTMLGenerationTest_ApplyTemplates : public TestCase
 	HTMLGenerationTest_ApplyTemplates() : TestCase("<fr> Vérifier le HTML généré, avec un XSL contenant des noeuds apply-templates") {}
 	bool operator()()
 	{
-		/** @todo Implement the test. */
+		dtd::Document* dtdXSL = NULL;
+		xml::Document* documentXSL = NULL;
+		xml::Document* documentXML = NULL;
+		xml::Document* documentHTML = NULL;
+		try{
+			dtdXSL = parseDTD("./tests/xsl.dtd");
+			xsl::XSLProcessor xslProcessor = XSLProcessor();
+			xslProcessor.setXslDTD(dtdXSL);
+			documentXSL = parseXML("./tests/testApplyTemplates.xsl");
+			xslProcessor.processXslFile(documentXSL);
+			documentXML = parseXML("./tests/testApplyTemplates.xml");
+			documentHTML = xslProcessor.generateHtmlFile(documentXML);
+		}catch(string s){
+			delete dtdXSL;
+			delete documentXSL;
+			delete documentXML;
+			delete documentHTML;
+			return false;
+		}
+		// Validation Humaine
+		cout << documentHTML << endl;
+		delete dtdXSL;
+		delete documentXSL;
+		delete documentXML;
+		delete documentHTML;
+
 		return true;
 	}
 };
@@ -262,7 +287,32 @@ struct HTMLGenerationTest_Attribute : public TestCase
 	HTMLGenerationTest_Attribute() : TestCase("<fr> Vérifier le HTML généré, avec un XSL contenant des noeuds attributes") {}
 	bool operator()()
 	{
-		/** @todo Implement the test. */
+		dtd::Document* dtdXSL = NULL;
+		xml::Document* documentXSL = NULL;
+		xml::Document* documentXML = NULL;
+		xml::Document* documentHTML = NULL;
+		try{
+			dtdXSL = parseDTD("./tests/xsl.dtd");
+			xsl::XSLProcessor xslProcessor = XSLProcessor();
+			xslProcessor.setXslDTD(dtdXSL);
+			documentXSL = parseXML("./tests/testAttribute.xsl");
+			xslProcessor.processXslFile(documentXSL);
+			documentXML = parseXML("./tests/testAttribute.xml");
+			documentHTML = xslProcessor.generateHtmlFile(documentXML);
+		}catch(string s){
+			delete dtdXSL;
+			delete documentXSL;
+			delete documentXML;
+			delete documentHTML;
+			return false;
+		}
+		// Validation Humaine
+		cout << documentHTML << endl;
+		delete dtdXSL;
+		delete documentXSL;
+		delete documentXML;
+		delete documentHTML;
+
 		return true;
 	}
 };
