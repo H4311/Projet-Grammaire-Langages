@@ -40,10 +40,7 @@ static Document & getDoc()
 	AttList attributes;
 	list<Content*> childs;
 
-	ProcessingInstruction* se = new ProcessingInstruction;
-	ElementName * seName = new ElementName("", "xml");
-	se->setName(*seName);
-	delete seName;
+	ProcessingInstruction* se = new ProcessingInstruction(ElementName("", "xml"));
 
 	attributes.push_back(Attribut("version", "2.0"));
 	attributes.push_back(Attribut("encoding", "utf8"));

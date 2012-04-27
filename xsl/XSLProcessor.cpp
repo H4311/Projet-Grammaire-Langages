@@ -164,7 +164,7 @@ list<xml::Content*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode
 				}
 				else if (itXSLEle->getName() == "value-of") {
 					// We'd like to get the value of an XPATH value :
-					EmptyElement *elem = dynamic_cast<xml::EmptyElement*>(xmlNode);
+					xml::EmptyElement *elem = dynamic_cast<xml::EmptyElement*>(xmlNode);
 					if(elem != NULL) {
 						string select = itXSLEle->getAttributeValue("select");
 						string xPathResult = xpath::find(elem, select);
