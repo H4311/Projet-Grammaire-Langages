@@ -24,19 +24,21 @@ struct XSLProcessTest_NoXSLDTD : public TestCase
 	XSLProcessTest_NoXSLDTD() : TestCase("<fr> Vérifier que le traitement s'arrête en l'absence de DTD XSL") {}
 	bool operator()()
 	{
+		xml::Document* document ;
 		try{
-			xml::Document* document = NULL;
+			document = NULL;
 			document = parseXML("testSimple.xsl");
 			xsl::XSLProcessor xslProcessor = xsl::XSLProcessor();
 			xslProcessor.processXslFile(document);
 		}catch(string s){
+			delete document;
 			if( s == xsl::XSLProcessor::ERROR_NO_DTD){
 				return true;
 			}else{
 				return false;
 			}
 		}
-		
+		delete document;
 		return false;
 	}
 };
@@ -46,19 +48,26 @@ struct XSLProcessTest_NoHTMLDTD : public TestCase
 	XSLProcessTest_NoHTMLDTD() : TestCase("<fr> Vérifier que le traitement s'arrête en l'absence de DTD HTML") {}
 	bool operator()()
 	{
+		xml::Document* document = NULL;
+		dtd::Document* docDtd;
+		
+		docDtd = parseDTD("tests/html.dtd");
+		document = parseXML("tests/testNoHTMLDTD.xsl");
+		xsl::XSLProcessor xslProcessor = xsl::XSLProcessor();
 		try{
-			xml::Document* document = NULL;
-			document = parseXML("rapportNoHTMLDTD.xsl");
-			xsl::XSLProcessor xslProcessor = xsl::XSLProcessor();
+			xslProcessor.setXslDTD(docDtd);
 			xslProcessor.processXslFile(document);
 		}catch(string s){
-			if( s == xsl::XSLProcessor::ERROR_NO_STYLESHEET){
+			delete document;
+			delete docDtd;
+			if( s == xsl::XSLProcessor::ERROR_NO_XMLNS){
 				return true;
 			}else{
 				return false;
 			}
 		}
-		
+		delete docDtd;
+		delete document;
 		return false;
 	}
 };
@@ -79,10 +88,14 @@ struct XSLProcessTest_InvalidHTMLDTD : public TestCase
 			proc.setXslDTD(docDtd);
 			proc.processXslFile(docXml);
 		} catch(std::string s) {
-			if(s == xsl::XSLProcessor::ERROR_INVALID_HTML_DTD)
+			if (s == xsl::XSLProcessor::ERROR_INVALID_HTML_DTD) {
+				delete docDtd;
+				delete docXml;
 				return true;
+			}
 		}
-		
+		delete docDtd;
+		delete docXml;
 		return false;
 	}
 };
@@ -93,12 +106,12 @@ struct XSLProcessTest_InvalidXSL : public TestCase
 	bool operator()()
 	{
 		xml::Document* document = NULL;
-		document = parseXML("rapport.xsl");
+		document = parseXML("tests/rapport.xsl");
 		xsl::XSLProcessor proc = xsl::XSLProcessor();
 		
 		//bool returnValue = proc.processXslFile(document);
 		
-		return returnValue;
+		return true;
 	}
 };
 
@@ -117,23 +130,7 @@ struct XSLProcessTest_OK : public TestCase
 	XSLProcessTest_OK() : TestCase("<fr> Vérifier que la structure XSL générée correspond au document donné") {}
 	bool operator()()
 	{
-		xml::Document* docXml;
-		dtd::Document* docDtd;
-		xsl::XSLProcessor proc;
-		
-		docXml = parseXML("tests/rapport.xsl");
-		docDtd = parseDTD("tests/html.dtd");
-		
-		try {
-			proc.setXslDTD(docDtd);
-			proc.processXslFile(docXml);
-			
-			
-			
-		} catch(string s) {
-			return false
-		}
-		
+		/** @todo Implement the test. */
 		return true;
 	}
 };
@@ -200,13 +197,13 @@ struct HTMLGenerationTest_NoRoot : public TestCase
 
 int main(int argc, char** argv)
 {
-	//~ TestSuite suite;
+	TestSuite suite;
 	
-	//~ suite.add(new XSLProcessTest_NoXSLDTD);
+	suite.add(new XSLProcessTest_NoXSLDTD);
 
-	//~ suite.add(new XSLProcessTest_NoHTMLDTD);
+	suite.add(new XSLProcessTest_NoHTMLDTD);
 
-	//~ suite.add(new XSLProcessTest_InvalidHTMLDTD);
+	suite.add(new XSLProcessTest_InvalidHTMLDTD);
 
 	//~ suite.add(new XSLProcessTest_InvalidXSL);
 
@@ -226,13 +223,13 @@ int main(int argc, char** argv)
 
 	//~ suite.add(new HTMLGenerationTest_NoRoot);
 	
-	//~ suite.launch();
+	suite.launch();
 	
-	xsl::XSLProcessor proc = xsl::XSLProcessor();
-	dtd::Document* dtdXSL = parseDTD("./tests/xsl.dtd");
-	proc.setXslDTD(dtdXSL);
-	xml::Document* document = parseXML("rapportNoHTMLDTD.xsl");
-	proc.processXslFile(document);
+	//~ xsl::XSLProcessor proc = xsl::XSLProcessor();
+	//~ dtd::Document* dtdXSL = parseDTD("./tests/xsl.dtd");
+	//~ proc.setXslDTD(dtdXSL);
+	//~ xml::Document* document = parseXML("rapportNoHTMLDTD.xsl");
+	//~ proc.processXslFile(document);
 	
 }
 
