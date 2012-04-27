@@ -114,7 +114,7 @@ struct TestAffichage : public TestCase
 
 struct TestTitle : public TestCase
 {
-	TestTitle() : TestCase("Affichage du contenu de la balise <title> : Bienvenue)") {}
+	TestTitle() : TestCase("Affichage du contenu de la balise <title> : Bienvenue") {}
 	bool operator()()
 	{
 		Document & doc = getDoc();
@@ -131,7 +131,7 @@ struct TestTitle : public TestCase
 
 struct TestAttribute : public TestCase
 {
-	TestAttribute() : TestCase("Affichage du contenu de l'attribut alt de la balise <a> : Google.fr)") {}
+	TestAttribute() : TestCase("Affichage du contenu de l'attribut alt de la balise <a> : Google.fr") {}
 	bool operator()()
 	{
 		Document & doc = getDoc();
@@ -146,6 +146,22 @@ struct TestAttribute : public TestCase
 	}
 };
 
+struct TestChildren : public TestCase
+{
+	TestChildren() : TestCase("Affichage du contenu multiple de l'élément html (validation humaine)") {}
+	bool operator()()
+	{
+		Document & doc = getDoc();
+		Element* e = dynamic_cast<Element*>(doc.getRoot());
+		if(e == NULL) return false;
+		
+		string res = xpath::find(e, ".");
+		cout << res << endl;
+		
+		return true;
+	}
+};
+
 int main(int argc, char** argv)
 {
 	TestSuite suite;
@@ -153,6 +169,7 @@ int main(int argc, char** argv)
 	suite.add(new TestAffichage);
 	suite.add(new TestTitle);
 	suite.add(new TestAttribute);
+	suite.add(new TestChildren);
 	
 	suite.launch();
 
