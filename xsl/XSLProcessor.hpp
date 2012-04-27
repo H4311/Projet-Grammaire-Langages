@@ -50,7 +50,7 @@ namespace xsl {
 			 * 
 			 * @param newXslDTDdoc New DTD structure.
 			 */
-			void setXslDTDFile(Document* newXslDTDdoc)			
+			void setXslDTD(dtd::Document* newXslDTDdoc);			
 
 			/**
 			 * @brief XSL Validator
@@ -61,7 +61,7 @@ namespace xsl {
 			 * @return true if the XSL is conformed to the given XSL and HTML DTD, and save the document structure for the next HTML generation.
 			 * @param xslFileName Path to the xsl file to evaluate.
 			 */
-			bool processXslFile(Document* xslDoc);
+			bool processXslFile(xml::Document* xslDoc);
 
 			/**
 			 * @brief Setter - XML to HTML Processor

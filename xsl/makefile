@@ -1,5 +1,5 @@
-CXX = clang++
-LD = clang++
+CXX = g++
+LD = g++
 EXE = xsl
 CXXFLAGS = -g -Wall -DYYDEBUG=1 -I..
 LDFLAGS = -lboost_regex
