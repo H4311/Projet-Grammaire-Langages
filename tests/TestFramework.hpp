@@ -123,7 +123,16 @@ class TestSuite
 		cout.width(80);
 		cout.fill('*');
 		cout << '\n' << endl;
-		cout << "Test(s) réussis : " << okTests << "/" << nbTests << endl;
+		
+		int percent = (int)(okTests/(double)nbTests*100);
+		int rounded = percent/10;
+		
+		cout << "Tests réussis : " << percent << "% [";
+		
+		for(int i=0; i<10; i++) {
+			cout << (rounded-- > 0 ? '#' : '-');
+		}
+		cout << "] (" << okTests << "/" << nbTests << ")" << endl;
 	}
 };
 
