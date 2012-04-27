@@ -7,6 +7,9 @@ LDFLAGS =
 
 all: flexbison dtd 
 
+test: all
+	./$(EXE)
+
 flexbison: dtd.l dtd.y
 	flex -P dtd dtd.l
 	bison -p dtd --debug --verbose --defines=dtd.tab.h dtd.y
