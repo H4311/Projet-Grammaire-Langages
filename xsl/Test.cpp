@@ -28,7 +28,6 @@ struct XSLProcessTest_NoXSLDTD : public TestCase
 	{
 		xml::Document* document ;
 		try{
-			document = NULL;
 			document = parseXML("testSimple.xsl");
 			XSLProcessor xslProcessor = XSLProcessor();
 			xslProcessor.processXslFile(document);
@@ -261,7 +260,7 @@ struct HTMLGenerationTest_ApplyTemplates : public TestCase
 			xslProcessor.setXslDTD(dtdXSL);
 			documentXSL = parseXML("./tests/testApplyTemplates.xsl");
 			xslProcessor.processXslFile(documentXSL);
-			documentXML = parseXML("./tests/testApplyTemplates.xml");
+			documentXML = parseXML("./tests/testComplex.xml");
 			documentHTML = xslProcessor.generateHtmlFile(documentXML);
 		}catch(string s){
 			delete dtdXSL;
@@ -296,7 +295,7 @@ struct HTMLGenerationTest_Attribute : public TestCase
 			xslProcessor.setXslDTD(dtdXSL);
 			documentXSL = parseXML("./tests/testAttribute.xsl");
 			xslProcessor.processXslFile(documentXSL);
-			documentXML = parseXML("./tests/testAttribute.xml");
+			documentXML = parseXML("./tests/testComplex.xml");
 			documentHTML = xslProcessor.generateHtmlFile(documentXML);
 		}catch(string s){
 			delete dtdXSL;
@@ -329,9 +328,9 @@ struct HTMLGenerationTest_Complex : public TestCase
 			dtdXSL = parseDTD("./tests/xsl.dtd");
 			xsl::XSLProcessor xslProcessor = XSLProcessor();
 			xslProcessor.setXslDTD(dtdXSL);
-			documentXSL = parseXML("testComplex.xsl");
+			documentXSL = parseXML("./tests/testComplex.xsl");
 			xslProcessor.processXslFile(documentXSL);
-			documentXML = parseXML("testComplex.xml");
+			documentXML = parseXML("./tests/testComplex.xml");
 			documentHTML = xslProcessor.generateHtmlFile(documentXML);
 		}catch(string s){
 			delete documentXSL;

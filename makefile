@@ -27,11 +27,11 @@ test: all
 	@(cd $(XPA_REP) && ./test_xpath)
 
 fils:
-	make -C $(XML_REP)
-	make -C $(DTD_REP)
-	make -C $(VAL_REP)
+#	make -C $(XML_REP)
+#	make -C $(DTD_REP)
+#	make -C $(VAL_REP)
 	make -C $(XSL_REP)
-	make -C $(XPA_REP)
+#	make -C $(XPA_REP)
 
 .PHONY: clean rebuild
 
