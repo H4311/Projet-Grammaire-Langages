@@ -31,7 +31,7 @@ struct XSLProcessTest_NoXSLDTD : public TestCase
 			xslProcessor.processXslFile(document);
 			xslProcessor = ~xml::XSLProcessor();
 		}catch(string s){
-			if( s == "<Error> No DTD. Please process a XSL DTD first." ){
+			if( s == XSLProcessor::ERROR_NO_DTD){
 				return true;
 			}else{
 				return false;
@@ -52,7 +52,7 @@ struct XSLProcessTest_NoHTMLDTD : public TestCase
 			xslProcessor.processXslFile(document);
 			xslProcessor = ~xml::XSLProcessor();
 		}catch(string s){
-			if( s == "<Error> Unfound element containing the path to HTML DTD file." ){
+			if( s == XSLProcessor::ERROR_NO_STYLESHEET){
 				return true;
 			}else{
 				return false;
@@ -77,7 +77,7 @@ struct XSLProcessTest_InvalidHTMLDTD : public TestCase
 			proc.setXslDTD(docDtd);
 			proc.processXslFile(docXml);
 		} catch(std::string s) {
-			if(s == "<Error> Syntax Error - Invalid, empty or unfound XSL document.")
+			if(s == XSLProcessor::ERROR_INVALID_HTML_DTD)
 				return true;
 		}
 		
