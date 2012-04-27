@@ -103,7 +103,7 @@ struct XSLProcessTest_InvalidXSL : public TestCase
 			xslProcessor.processXslFile(documentXSL);
 			xslProcessor = ~xml::XSLProcessor();
 		}catch(string s){
-			if( s == "<Error> Invalid or empty XSL document." ){
+			if( s == XSLProcessor::ERROR_INVALID_HTML_DTD ){
 				return true;
 			}else{
 				return false;
@@ -129,7 +129,7 @@ struct XSLProcessTest_InvalidSemanticXSL : public TestCase
 			xslProcessor.processXslFile(documentXSL);
 			xslProcessor = ~xml::XSLProcessor();
 		}catch(string s){
-			if( s == "<Error> Invalid or empty XSL document." ){
+			if( s == XSLProcessor::ERROR_INVALID_XSL ){
 				return true;
 			}else{
 				return false;
@@ -153,7 +153,7 @@ struct XSLProcessTest_InvalidSemanticHTML : public TestCase
 			xslProcessor.processXslFile(documentXSL);
 			xslProcessor = ~xml::XSLProcessor();
 		}catch(string s){
-			if( s == "<Error> Semantic Error - Invalid XSL file : doesn't respect the given DTD." ){
+			if( s == XSLProcessor::ERROR_INVALID_XSL_SEMANTIC ){
 				return true;
 			}else{
 				return false;
@@ -177,8 +177,19 @@ struct HTMLGenerationTest_NoXSL : public TestCase
 	HTMLGenerationTest_NoXSL() : TestCase("<fr> Vérifier que la génération HTML s'arrête en l'absence de XSL") {}
 	bool operator()()
 	{
-		/** @todo Implement the test. */
-		return true;
+		try{
+			xml::Document* documentXML = NULL;
+			document = parseXML("undefined.xml");
+			xsl::XSLProcessor xslProcessor = XSLProcessor();
+			xslProcessor.generateHtmlFile(documentXML);
+		}catch(string s){
+			if( s == XSLProcessor::ERROR_NO_XSL ){
+				delete document;
+				return true;
+			}
+		}
+		delete document;
+		return false;
 	}
 };
 
@@ -187,7 +198,21 @@ struct HTMLGenerationTest_Simple : public TestCase
 	HTMLGenerationTest_Simple() : TestCase("<fr> Vérifier le HTML généré, avec des documents XSL et XML simples") {}
 	bool operator()()
 	{
-		/** @todo Implement the test. */
+		try{
+			xml::Document* documentXSL = NULL;
+			documentXSL = parseXSL("testSimple.xsl");
+			xml::Document* documentXML = NULL;
+			documentXML = parseXML("testSimple.xml");
+			xsl::XSLProcessor xslProcessor = XSLProcessor();
+			xslProcessor.generateHtmlFile(documentXML);
+		}catch(string s){
+			delete documentXSL;
+			delete documentXML;
+			return false;
+		}
+		delete documentXSL;
+		delete documentXML;
+		// TODO : test
 		return true;
 	}
 };
