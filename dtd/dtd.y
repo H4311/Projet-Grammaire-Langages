@@ -393,7 +393,7 @@ int dtdwrap(void)
 
 int dtderror(Document** doc, char *msg)
 {
-  fprintf(stderr, "(%d) Error found : %s.\n", dtdlineno, msg);
+  fprintf(stderr, "[DTD Syntax] Error : %s, at line %d.\n", msg, dtdlineno);
 }
 
 
