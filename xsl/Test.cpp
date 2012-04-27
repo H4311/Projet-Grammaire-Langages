@@ -73,7 +73,7 @@ struct XSLProcessTest_InvalidHTMLDTD : public TestCase
 		xsl::XSLProcessor proc = xsl::XSLProcessor();
 		
 		docXml = parseXML("tests/rapport.xsl");
-		docDtd = parseDTD("tests/html.dtd");
+		docDtd = parseDTD("tests/invalid_html.dtd");
 		
 		try {
 			proc.setXslDTD(docDtd);
@@ -173,12 +173,12 @@ struct XSLProcessTest_OK : public TestCase
 		try {
 			proc.setXslDTD(docDtd);
 			proc.processXslFile(docXml);
-			
-			
-			
 		} catch(string s) {
 			return false
 		}
+		
+		delete docXml;
+		delete docDtd;
 		
 		return true;
 	}
