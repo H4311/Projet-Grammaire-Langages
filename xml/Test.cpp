@@ -186,7 +186,6 @@ struct TestParsingSansErreur : public TestCase
 		} else {
 			return false;
 		}
-		
 	}
 };
 
@@ -202,7 +201,21 @@ struct TestParsingAvecErreur : public TestCase
 			delete dXML;
 			return false;
 		}
-		
+	}
+};
+
+struct TestParsingSansErreurAttributs : public TestCase
+{
+	TestParsingSansErreurAttributs() : TestCase("Vérifie que le document XML est syntaxiquement valide (avec des attributs).") {}
+	bool operator()()
+	{
+		Document *dXML = parseXML("tests/rap3.xml");
+		if (dXML != NULL) {
+			delete dXML;
+			return true;
+		} else {
+			return false;
+		}
 	}
 };
 
@@ -215,6 +228,7 @@ int main(int argc, char** argv)
 	suite.add(new TestAttributs);
 	suite.add(new TestParsingSansErreur);
 	suite.add(new TestParsingAvecErreur);
+	suite.add(new TestParsingSansErreurAttributs);
 	suite.launch();
 
 	delete singleton;
