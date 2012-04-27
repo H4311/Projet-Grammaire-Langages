@@ -22,8 +22,12 @@ struct XSLProcessTest_NoXSLDTD : public TestCase
 	XSLProcessTest_NoXSLDTD() : XSLProcessTest_NoXSLDTD("<fr> Vérifier que le traitement s'arrête en l'absence de DTD XSL") {}
 	bool operator()()
 	{
-		/** @todo Implement the test. */
-		return true;
+		xml::Document* document = NULL;
+		document = parseXML("rapport.xsl");
+		
+		bool returnValue = processXslFile(document);
+		
+		return returnValue;
 	}
 };
 
@@ -33,6 +37,12 @@ struct XSLProcessTest_NoHTMLDTD : public TestCase
 	bool operator()()
 	{
 		/** @todo Implement the test. */
+		xml::Document* document = NULL;
+		document = parseXML("rapportNoHTMLDTD.xsl");
+
+		bool returnValue = processXslFile(document);
+		
+		
 		return true;
 	}
 };
