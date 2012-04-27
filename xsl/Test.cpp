@@ -83,8 +83,8 @@ struct XSLProcessTest_InvalidHTMLDTD : public TestCase
 		dtd::Document* docDtd;
 		XSLProcessor proc = XSLProcessor();
 		
-		docXml = parseXML("tests/rapport.xsl");
-		docDtd = parseDTD("tests/invalid_html.dtd");
+		docXml = parseXML("./tests/testHtmlDtdInvalid.xsl");
+		docDtd = parseDTD("./tests/xsl.dtd");
 		
 		try {
 			proc.setXslDTD(docDtd);
@@ -102,54 +102,29 @@ struct XSLProcessTest_InvalidHTMLDTD : public TestCase
 	}
 };
 
-struct XSLProcessTest_InvalidXSL : public TestCase
-{
-	XSLProcessTest_InvalidXSL() : TestCase("<fr> Vérifier que le traitement s'arrête si le XSL est invalide") {}
-	bool operator()()
-	{
-		xml::Document* documentXSL = NULL;
-		dtd::Document* documentDTD = NULL;
-		try{
-			
-			documentXSL = parseXML("rapportInvalidXSL.xsl");
-			documentDTD = parseDTD("xsl.dtd");
-			XSLProcessor xslProcessor = XSLProcessor();
-			xslProcessor.setXslDTD(documentDTD);
-			xslProcessor.processXslFile(documentXSL);
-		}catch(string s){
-			delete documentXSL;
-			delete documentDTD;
-			if( s == XSLProcessor::ERROR_INVALID_HTML_DTD ){
-				return true;
-			}
-		}
-		delete documentXSL;
-		delete documentDTD;
-		return false;
-	}
-};
-
-
 
 struct XSLProcessTest_InvalidSemanticXSL : public TestCase
 {
-	XSLProcessTest_InvalidSemanticXSL() : TestCase("<fr> Vérifier que le traitement s'arrête si le XSL est invalide") {}
+	XSLProcessTest_InvalidSemanticXSL() : TestCase("<fr> Vérifier que le traitement s'arrête si le XSL est invalide sémantiquement") {}
 	bool operator()()
 	{
 		xml::Document* documentXSL = NULL;
-		documentXSL = parseXML("rapportSemanticXSL.xsl");
+		documentXSL = parseXML("./tests/rapportSemanticXSL.xsl");
 		dtd::Document* documentDTD = NULL;
-		documentDTD = parseDTD("xsl.dtd");
+		documentDTD = parseDTD("./tests/xsl.dtd");
+		dtd::Document* dtdHTML = parseDTD("./tests/xsl.dtd");
+		cout << dtdHTML;
+		cout << "______________________________________________________\n";
 		try{
 			
 			XSLProcessor xslProcessor = XSLProcessor();
 			xslProcessor.setXslDTD(documentDTD);
 			xslProcessor.processXslFile(documentXSL);
 		}catch(string s) {
-			delete documentXSL;
-			delete documentDTD;
-			
-			if( s == XSLProcessor::ERROR_INVALID_XSL ){
+			cout << s;
+			if( s == XSLProcessor::ERROR_INVALID_XSL_SEMANTIC ){
+				delete documentXSL;
+				delete documentDTD;
 				return true;
 			}
 		}
@@ -161,21 +136,23 @@ struct XSLProcessTest_InvalidSemanticXSL : public TestCase
 
 struct XSLProcessTest_InvalidSemanticHTML : public TestCase
 {
-	XSLProcessTest_InvalidSemanticHTML() : TestCase("<fr> Vérifier que le traitement s'arrête si le HTML est invalide") {}
+	XSLProcessTest_InvalidSemanticHTML() : TestCase("<fr> Vérifier que le traitement s'arrête si le HTML est invalide sémantiquement") {}
 	bool operator()()
 	{
 		xml::Document* documentXSL = NULL;
-		documentXSL = parseXML("rapportSemanticHTML.xsl");
+		documentXSL = parseXML("./tests/rapportSemanticHTML.xsl");
 		dtd::Document* documentDTD = NULL;
-		documentDTD = parseDTD("xsl.dtd");
+		documentDTD = parseDTD("./tests/xsl.dtd");
 		try{
 			XSLProcessor xslProcessor = XSLProcessor();
 			xslProcessor.setXslDTD(documentDTD);
 			xslProcessor.processXslFile(documentXSL);
 		}catch(string s){
-			delete documentXSL;
-			delete documentDTD;
+			cout << s;
+			
 			if( s == XSLProcessor::ERROR_INVALID_XSL_SEMANTIC ){
+				delete documentXSL;
+				delete documentDTD;
 				return true;
 			}
 		}
@@ -194,8 +171,8 @@ struct XSLProcessTest_OK : public TestCase
 		dtd::Document* docDtd;
 		xsl::XSLProcessor proc;
 		
-		docXml = parseXML("tests/rapport.xsl");
-		docDtd = parseDTD("tests/html.dtd");
+		docXml = parseXML("./tests/rapport.xsl");
+		docDtd = parseDTD("./tests/html.dtd");
 		
 		try {
 			proc.setXslDTD(docDtd);
@@ -219,7 +196,7 @@ struct HTMLGenerationTest_NoXSL : public TestCase
 	bool operator()()
 	{
 		xml::Document* documentXML = NULL;
-		documentXML = parseXML("undefined.xml");
+		documentXML = parseXML("./tests/undefined.xml");
 		try{
 			XSLProcessor xslProcessor = XSLProcessor();
 			xslProcessor.generateHtmlFile(documentXML);
@@ -239,16 +216,20 @@ struct HTMLGenerationTest_Simple : public TestCase
 	HTMLGenerationTest_Simple() : TestCase("<fr> Vérifier le HTML généré, avec des documents XSL et XML simples") {}
 	bool operator()()
 	{
+		dtd::Document* dtdXSL = NULL;
 		xml::Document* documentXSL = NULL;
 		xml::Document* documentXML = NULL;
 		xml::Document* documentHTML = NULL;
 		try{
+			dtdXSL = parseDTD("./tests/xsl.dtd");
 			xsl::XSLProcessor xslProcessor = XSLProcessor();
-			documentXSL = parseXML("testSimple.xsl");
+			xslProcessor.setXslDTD(dtdXSL);
+			documentXSL = parseXML("./tests/testSimple.xsl");
 			xslProcessor.processXslFile(documentXSL);
-			documentXML = parseXML("testSimple.xml");
+			documentXML = parseXML("./tests/testSimple.xml");
 			documentHTML = xslProcessor.generateHtmlFile(documentXML);
 		}catch(string s){
+			delete dtdXSL;
 			delete documentXSL;
 			delete documentXML;
 			delete documentHTML;
@@ -256,6 +237,7 @@ struct HTMLGenerationTest_Simple : public TestCase
 		}
 		// Validation Humaine
 		cout << documentHTML << endl;
+		delete dtdXSL;
 		delete documentXSL;
 		delete documentXML;
 		delete documentHTML;
@@ -327,11 +309,14 @@ struct HTMLGenerationTest_Complex : public TestCase
 	HTMLGenerationTest_Complex() : TestCase("<fr> Vérifier le HTML généré, avec des documents XSL et XML plus complexes") {}
 	bool operator()()
 	{
+		dtd::Document* dtdXSL = NULL;
 		xml::Document* documentXSL = NULL;
 		xml::Document* documentXML = NULL;
 		xml::Document* documentHTML = NULL;
 		try{
+			dtdXSL = parseDTD("./tests/xsl.dtd");
 			xsl::XSLProcessor xslProcessor = XSLProcessor();
+			xslProcessor.setXslDTD(dtdXSL);
 			documentXSL = parseXML("testComplex.xsl");
 			xslProcessor.processXslFile(documentXSL);
 			documentXML = parseXML("testComplex.xml");
@@ -357,11 +342,14 @@ struct HTMLGenerationTest_NoRoot : public TestCase
 	HTMLGenerationTest_NoRoot() : TestCase("<fr> Vérifier le HTML généré, avec un XSL n'ayant pas de template pour la racine XML") {}
 	bool operator()()
 	{
+		dtd::Document* dtdXSL = NULL;
 		xml::Document* documentXSL = NULL;
 		xml::Document* documentXML = NULL;
 		xml::Document* documentHTML = NULL;
 		try{
+			dtdXSL = parseDTD("./tests/xsl.dtd");
 			xsl::XSLProcessor xslProcessor = XSLProcessor();
+			xslProcessor.setXslDTD(dtdXSL);
 			documentXSL = parseXML("testNoRoot.xsl");
 			xslProcessor.processXslFile(documentXSL);
 			documentXML = parseXML("testComplex.xml");
@@ -376,12 +364,14 @@ struct HTMLGenerationTest_NoRoot : public TestCase
 		xml::Element* elRoot = dynamic_cast<xml::Element*>(documentHTML->getRoot());
 		if ((elRoot == NULL)  || (elRoot->getName() != "null")) {
 			delete documentXSL;
+			delete documentXSL;
 			delete documentXML;
 			delete documentHTML;
 			return false;
 		}
 		// Validation Humaine
 		cout << documentHTML << endl;
+		delete documentXSL;
 		delete documentXSL;
 		delete documentXML;
 		delete documentHTML;
@@ -398,8 +388,6 @@ int main(int argc, char** argv)
 	suite.add(new XSLProcessTest_NoHTMLDTD);
 
 	suite.add(new XSLProcessTest_InvalidHTMLDTD);
-
-	suite.add(new XSLProcessTest_InvalidXSL);
 	
 	suite.add(new XSLProcessTest_InvalidSemanticXSL);
 

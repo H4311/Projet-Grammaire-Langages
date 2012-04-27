@@ -183,10 +183,8 @@ struct TestParsingSansErreur : public TestCase
 		} else {
 			return false;
 		}
-		
 	}
 };
-
 
 struct TestParsingAvecErreur : public TestCase
 {
@@ -203,12 +201,27 @@ struct TestParsingAvecErreur : public TestCase
 	}
 };
 
+struct TestParsingSansErreurAttributs : public TestCase
+{
+	TestParsingSansErreurAttributs() : TestCase("Vérifie que le document XML est syntaxiquement valide (avec des attributs).") {}
+	bool operator()()
+	{
+		Document *dXML = parseXML("tests/rap3.xml");
+		if (dXML != NULL) {
+			delete dXML;
+			return true;
+		} else {
+			return false;
+		}
+	}
+};
+
 struct TestParsingRepriseErreur : public TestCase
 {
 	TestParsingRepriseErreur() : TestCase("Vérifie que la reprise sur erreur (contenu après balise principale) fonctionne.") {}
 	bool operator()()
 	{
-		Document* doc = parseXML("tests/rap3.xml");
+		Document* doc = parseXML("tests/rap4.xml");
 		if (doc == NULL) {
 			return false;
 		} else {
@@ -228,6 +241,7 @@ int main(int argc, char** argv)
 	suite.add(new TestParsingSansErreur);
 	suite.add(new TestParsingAvecErreur);
 	suite.add(new TestParsingRepriseErreur);
+	suite.add(new TestParsingSansErreurAttributs);
 	suite.launch();
 
 	delete singleton;
