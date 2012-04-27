@@ -64,21 +64,7 @@ void xsl::XSLProcessor::processXslFile(xml::Document* newXsldoc) throw (string) 
 		throw(ERROR_INVALID_XSL);
 	}
 	
-	list<xml::Content*>::iterator itelementXSL = rootXSL->getChildren().begin();
-	xml::EmptyElement* elStylesheet;
-	while  (itelementXSL != rootXSL->getChildren().end()) {
-		xml::EmptyElement* elXSL = dynamic_cast<xml::Element*>(*itelementXSL);
-		if ( (elXSL != NULL) && (elXSL->getName() == "stylesheet") ) {
-			elStylesheet = elXSL;
-			break;
-		 }
-		itelementXSL++;
-	}
-	if (itelementXSL == rootXSL->getChildren().end()) {
-		throw(ERROR_NO_STYLESHEET);
-	}	
-	
-	string attrXMLNS = elStylesheet->getAttributeValue("xmlns:xsl");
+	string attrXMLNS = rootXSL->getAttributeValue("xmlns:xsl");
 	if (attrXMLNS.empty()) {
 		throw(ERROR_NO_XMLNS);
 	}		
