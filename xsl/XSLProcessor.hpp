@@ -43,6 +43,7 @@ namespace xsl {
 		public:
 			// Errors :
 			static const string ERROR_NO_DTD;
+			static const string ERROR_NO_XSL;
 			static const string ERROR_INVALID_XSL;
 			static const string ERROR_NO_STYLESHEET;
 			static const string ERROR_NO_XMLNS;
