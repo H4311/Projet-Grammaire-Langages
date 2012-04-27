@@ -81,7 +81,7 @@ bool Validateur::validationNode(xml::Content* content, std::list<dtd::Element*> 
 		}
 		if(regex == "") {
 			//Balise non définie dans la DTD
-			std::cerr << "E: Balise non trouvée" << std::endl;
+			std::cerr << "E: Balise " << nomBalise << " non trouvée" << std::endl;
 			return false;
 		}
 		
