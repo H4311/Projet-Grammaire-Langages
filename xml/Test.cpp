@@ -22,6 +22,8 @@ using namespace xml;
 
 # include "../tests/TestFramework.hpp"
 
+# include "xml_processor.h"m 
+
 static Document * singleton = NULL;
 
 static Document & getDoc()
@@ -172,6 +174,23 @@ struct TestAttributs : public TestCase
 	}
 };
 
+struct TestValidationSansErreur : public TestCase
+{
+	TestValidationSansErreur() : TestCase("Vérifie que le document XML est syntaxiquement valide.") {}
+	bool operator()()
+	{
+		Document *dXML = parseXML("tests/rap1.xml");
+		if (dXML != NULL) {
+			delete dXML;
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+};
+
+
 int main(int argc, char** argv)
 {
 	TestSuite suite;
@@ -179,6 +198,7 @@ int main(int argc, char** argv)
 	suite.add(new TestAffichage);
 	suite.add(new TestEnfants);
 	suite.add(new TestAttributs);
+	suite.add(new TestValidationSansErreur);
 	
 	suite.launch();
 
