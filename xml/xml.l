@@ -112,7 +112,7 @@ closespecial 	"?>"{nl}?
 <INITIAL>{nsname}	{ xmllval.s = strdup(yytext); return NSIDENT;}
 <INITIAL>{string}	{ xmllval.s = strdup(getString(yytext)); return STRING;}
 
-{openspecial}{ws}?{name}	{ BEGIN(INITIAL); char * tmp = word(yytext); xmllval.en = new ElementName("",tmp); free(tmp); return STARTSPECIAL;}
+{openspecial}{ws}?{name}	{ BEGIN(INITIAL); printf("YYTEXT : %s\n", yytext); char * tmp = word(yytext); xmllval.en = new ElementName("",tmp); free(tmp); return STARTSPECIAL;}
 {open}{ws}?{name}	{ BEGIN(INITIAL); char * tmp = word(yytext); xmllval.en = new ElementName("",tmp); free(tmp); return START;}
 {open}{ws}?{nsname}	{ BEGIN(INITIAL); char *tmp1 = nameSpace(yytext); char * tmp2 = split_namespace(yytext); xmllval.en = new ElementName(tmp1,tmp2); free(tmp1); free(tmp2); return NSSTART;}
 

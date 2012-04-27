@@ -26,7 +26,8 @@ namespace dtd {
 		for(it++; it != children.end(); it++)
     		out << getSep() << *it;
     	
-    	out << ")" << card;
+    	out << ")";
+	if (card) out << card;
     	
     	return out;
 	}

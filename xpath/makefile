@@ -13,6 +13,7 @@ test: exe
 
 exe: deps  $(OBJ)
 	$(CXX) -o $(EXE) $(XML_OBJ) $(OBJ) $(LDFLAGS)
+	rm Test.o
 
 deps:
 	make -C ../xml
