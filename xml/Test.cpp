@@ -22,6 +22,8 @@ using namespace xml;
 
 # include "../tests/TestFramework.hpp"
 
+# include "xml_processor.h"m 
+
 static Document * singleton = NULL;
 
 static Document & getDoc()
@@ -172,6 +174,51 @@ struct TestAttributs : public TestCase
 	}
 };
 
+struct TestParsingSansErreur : public TestCase
+{
+	TestParsingSansErreur() : TestCase("Vérifie que le document XML est syntaxiquement valide.") {}
+	bool operator()()
+	{
+		Document *dXML = parseXML("tests/rap1.xml");
+		if (dXML != NULL) {
+			delete dXML;
+			return true;
+		} else {
+			return false;
+		}
+	}
+};
+
+struct TestParsingAvecErreur : public TestCase
+{
+	TestParsingAvecErreur() : TestCase("Vérifie que le document XML n'est pas syntaxiquement valide (commentaires dans une balise).") {}
+	bool operator()()
+	{
+		Document *dXML = parseXML("tests/rap2.xml");
+		if (dXML == NULL) {
+			return true;
+		} else {
+			delete dXML;
+			return false;
+		}
+	}
+};
+
+struct TestParsingSansErreurAttributs : public TestCase
+{
+	TestParsingSansErreurAttributs() : TestCase("Vérifie que le document XML est syntaxiquement valide (avec des attributs).") {}
+	bool operator()()
+	{
+		Document *dXML = parseXML("tests/rap3.xml");
+		if (dXML != NULL) {
+			delete dXML;
+			return true;
+		} else {
+			return false;
+		}
+	}
+};
+
 int main(int argc, char** argv)
 {
 	TestSuite suite;
@@ -179,7 +226,9 @@ int main(int argc, char** argv)
 	suite.add(new TestAffichage);
 	suite.add(new TestEnfants);
 	suite.add(new TestAttributs);
-	
+	suite.add(new TestParsingSansErreur);
+	suite.add(new TestParsingAvecErreur);
+	suite.add(new TestParsingSansErreurAttributs);
 	suite.launch();
 
 	delete singleton;
