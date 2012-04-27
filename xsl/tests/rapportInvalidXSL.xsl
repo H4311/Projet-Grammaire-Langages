@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="./html.dtd">
 
-	<xsl:template match="rapport">
+	<xsl:template match="rapport"
+	>
 		<html>
 			<body>
 				<p>Hello World !</p>

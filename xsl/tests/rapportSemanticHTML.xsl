@@ -4,7 +4,7 @@
 	<xsl:template match="rapport">
 		<html>
 			<body>
-				<p>Hello World !</p>
+				<h5>Hello World !</h5>
 			</body>
 		</html>
 	</xsl:template>

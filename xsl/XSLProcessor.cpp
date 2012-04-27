@@ -27,11 +27,20 @@
  
 using namespace std;
 
+const string xsl::XSLProcessor::ERROR_NO_DTD("No DTD. Please process a XSL DTD first.");
+const string xsl::XSLProcessor::ERROR_INVALID_XSL("Invalid or empty XSL document.");
+const string xsl::XSLProcessor::ERROR_NO_STYLESHEET("Unfound element containing the path to HTML DTD file.");
+const string xsl::XSLProcessor::ERROR_NO_XMLNS("Unfound \"xmlns:xsl\" attribute.");
+const string xsl::XSLProcessor::ERROR_INVALID_HTML_DTD("Syntax Error - Invalid, empty or unfound HTML DTD document.");
+const string xsl::XSLProcessor::ERROR_INVALID_XSL_SEMANTIC("Semantic Error - Invalid XSL file : doesn't respect the given DTD.");
+
 xsl::XSLProcessor::XSLProcessor() {
 	xslDTDdoc = NULL;
 	xslDoc = NULL;
 
 }
+
+xsl::XSLProcessor::~XSLProcessor() {}
 
 void xsl::XSLProcessor::setXslDTD(dtd::Document* newXslDTDdoc) {
 	delete xslDTDdoc;
@@ -40,10 +49,10 @@ void xsl::XSLProcessor::setXslDTD(dtd::Document* newXslDTDdoc) {
 
 
 void xsl::XSLProcessor::processXslFile(xml::Document* newXsldoc) throw (string) {
-	
+
 	// --- Checking if a DTD has been processed
 	if (xslDTDdoc == NULL) {
-		throw("<Error> No DTD. Please process a XSL DTD first.");
+		throw(ERROR_NO_DTD);
 	}
 
 	// --- Analyse the syntax of the HTML DTD file. The link to this DTD can be found into the attribute xmlns:xsl of the element xsl:stylesheet of the XSL.
@@ -51,7 +60,7 @@ void xsl::XSLProcessor::processXslFile(xml::Document* newXsldoc) throw (string) 
 	// --------- Finding the path to the HTML DTD, contained by the attribut "xmlns:xsl" of the element "xsl:stylesheet" :
 	xml::Element* rootXSL = dynamic_cast<xml::Element*>(newXsldoc->getRoot());
 	if (rootXSL == NULL) {
-		throw("<Error> Invalid or empty XSL document.");
+		throw(ERROR_INVALID_XSL);
 	}
 	
 	list<xml::Content*>::iterator itelementXSL = rootXSL->getChildren().begin();
@@ -65,18 +74,18 @@ void xsl::XSLProcessor::processXslFile(xml::Document* newXsldoc) throw (string) 
 		itelementXSL++;
 	}
 	if (itelementXSL == rootXSL->getChildren().end()) {
-		throw("<Error> Unfound element containing the path to HTML DTD file.");
+		throw(ERROR_NO_STYLESHEET);
 	}	
 	
 	string attrXMLNS = elStylesheet->getAttributeValue("xmlns:xsl");
 	if (attrXMLNS.empty()) {
-		throw("<Error> Unfound \"xmlns:xsl\" attribute.");
+		throw(ERROR_NO_XMLNS);
 	}		
 	
 	// --------- Opening, validating ant getting the structure of the HTML DTD file :
 	dtd::Document * htmlDTDdoc = parseDTD(attrXMLNS.c_str());
 	if (htmlDTDdoc == NULL) {
-		throw("<Error> Syntax Error - Invalid, empty or unfound XSL document.");
+		throw(ERROR_INVALID_HTML_DTD);
 	}	
 
 	// --- Fusion the XSL DTD and the HTML DTD into a new DTD (only valid used for this XSL) : we copy the XSL DTD into the HTML one.
@@ -90,7 +99,7 @@ void xsl::XSLProcessor::processXslFile(xml::Document* newXsldoc) throw (string) 
 	
 	// --- Semantic analysis :
 	if (Validateur::validationDocument(*htmlDTDdoc, *xslDoc)) {
-		throw("<Error> Semantic Error - Invalid XSL file : doesn't respect the given DTD.");
+		throw(ERROR_INVALID_XSL_SEMANTIC);
 	}
 	
 	// --- Everything is OK with the new XSL : we delete the ancient one and replace by the new.

@@ -1,0 +1,30 @@
+<!ELEMENT html (head, body)>
+<!ELEMENT body ( p | img | h1 | h2 | h3 | h4 | a | small | div )+>
+<!ATTLIST body
+	class CDATA #IMPLIED
+	style CDATA #IMPLIED
+>
+<!ELEMENT head ( meta | link | script | title )+>
+<!ATTLIST head
+	dir CDATA #IMPLIED
+	lang CDATA #IMPLIED
+	xml:lang CDATA #IMPLIED
+>
+<!ATTLIST meta
+	charset CDATA #IMPLIED
+	content CDATA #IMPLIED
+>
+<!ATTLIST script
+	type CDATA #REQUIRED
+	href CDATA #IMPLIED
+>
+<!ATTLIST link
+	rel CDATA #IMPLIED
+	type CDATA #IMPLIED
+	href CDATA #IMPLIED
+>
+<!ATTLIST a data-dismiss CDATA #IMPLIED>
+<!ATTLIST img
+	src CDATA #IMPLIED
+	title CDATA #IMPLIED
+>
