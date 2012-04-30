@@ -12,20 +12,20 @@
 
 #include "XSLProcessor.hpp"
 
-#include "xml/basics.h"
-#include "xml/xml_processor.h"
-#include "xml/Element.hpp"
-#include "xml/Data.hpp"
-#include "xml/EmptyElement.hpp"
-#include "xml/Document.hpp"
+#include "../xml/basics.h"
+#include "../xml/xml_processor.h"
+#include "../xml/Element.hpp"
+#include "../xml/Data.hpp"
+#include "../xml/EmptyElement.hpp"
+#include "../xml/Document.hpp"
 
-#include "dtd/Document.hpp"
-#include "dtd/Declaration.hpp"
-#include "dtd/dtd.h"
+#include "../dtd/Document.hpp"
+#include "../dtd/Declaration.hpp"
+#include "../dtd/dtd.h"
 
-#include "validation/Validateur.hpp"
+#include "../validation/Validateur.hpp"
 
-#include "xpath/XPath.hpp"
+#include "../xpath/XPath.hpp"
  
 using namespace std;
 

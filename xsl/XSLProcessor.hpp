@@ -7,16 +7,16 @@
  * 
  * Contains the functions to validate a XSL stylesheet and parse XML files into HTML using it.
  * 
- * @author Daniel BAUDRY & Benjamin Bill PLANCHE (ALdream)
+ * @author Daniel BAUDRY & Benjamin Bill PLANCHE (Aldream)
  */
 
 # include <string>
 
-# include "xml/Content.hpp"
-# include "xml/Document.hpp"
-# include "xml/Element.hpp"
+# include "../xml/Content.hpp"
+# include "../xml/Document.hpp"
+# include "../xml/Element.hpp"
 
-# include "dtd/Document.hpp"
+# include "../dtd/Document.hpp"
 
 
 using namespace std;

@@ -1,7 +1,7 @@
 CXX = g++
 LD = g++
 EXE = test_xsl
-CXXFLAGS = -g -Wall -DYYDEBUG=1 -I..
+CXXFLAGS = -g -Wall -DYYDEBUG=1 -I.
 LDFLAGS = -lboost_regex
 OBJ = XSLProcessor.o Test.o
 XML_OBJ = ../xml/*.o
