@@ -10,7 +10,8 @@
  */
 
 # include <iostream>
-
+#include <string>
+#include <sstream>
 using namespace std;
 
 #include "XSLProcessor.hpp"
@@ -20,6 +21,25 @@ using namespace std;
 using namespace xsl;
 
 # include "../tests/TestFramework.hpp"
+
+bool validationHumaineContenu() {
+	string input = "";
+	while (true) {
+	   	cout << "--------- Validez-vous ce contenu généré ? (o/n)" << endl;
+	   	getline(cin, input);
+	   	stringstream myStream(input);
+		char c = 0;
+		myStream >> c;
+	  	if (c == 'o' || c == 'O'  || c == 'y' || c == 'Y') {
+			return true;
+		}
+		else if (c == 'n' || c == 'N') {
+	     		return false;
+		}
+	   	cout << "Réponse invalide, veuillez recommencer svp." << endl;
+		
+	}
+}
 
 struct XSLProcessTest_NoXSLDTD : public TestCase
 {
@@ -111,7 +131,6 @@ struct XSLProcessTest_InvalidSemanticXSL : public TestCase
 		documentXSL = parseXML("./tests/rapportSemanticXSL.xsl");
 		dtd::Document* documentDTD = NULL;
 		documentDTD = parseDTD("./tests/xsl.dtd");
-		dtd::Document* dtdHTML = parseDTD("./tests/xsl.dtd");
 		
 		try{
 			
@@ -177,7 +196,7 @@ struct XSLProcessTest_OK : public TestCase
 			proc.setXslDTD(docDtd);
 			proc.processXslFile(docXml);
 		} catch(string s) {
-			cout << s;
+			cout << s << endl;
 			delete docXml;
 			delete docDtd;
 			return false;
@@ -229,6 +248,7 @@ struct HTMLGenerationTest_Simple : public TestCase
 			documentXML = parseXML("./tests/testSimple.xml");
 			documentHTML = xslProcessor.generateHtmlFile(documentXML);
 		}catch(string s){
+			cout << s << endl;
 			delete dtdXSL;
 			delete documentXSL;
 			delete documentXML;
@@ -237,12 +257,14 @@ struct HTMLGenerationTest_Simple : public TestCase
 		}
 		// Validation Humaine
 		cout << *documentHTML << endl;
+		cout << "--------- Ce document est valide s'il contient du HTML simple avec du contenu sans rapport avec le XML (\"Hello World !\", ...)" << endl;
+		bool ok = validationHumaineContenu();
 		delete dtdXSL;
 		delete documentXSL;
 		delete documentXML;
 		delete documentHTML;
 
-		return true;
+		return ok;
 	}
 };
 
@@ -264,26 +286,41 @@ struct HTMLGenerationTest_ApplyTemplates : public TestCase
 			documentXML = parseXML("./tests/testComplex.xml");
 			documentHTML = xslProcessor.generateHtmlFile(documentXML);
 		}catch(string s){
+			cout << s << endl;
 			delete dtdXSL;
 			delete documentXSL;
 			delete documentXML;
 			delete documentHTML;
 			return false;
 		}
-		// Validation Humaine
-		cout << documentHTML << endl;
+		bool validation = false;
+		try {
+			xml::Element * root = static_cast<xml::Element*>(documentHTML->getRoot());
+			if (root == NULL) return false;
+			xml::Element * body = static_cast<xml::Element*>( *(++root->getChildren().begin()) );
+			if (body == NULL) return false;
+			list<xml::Content*>::iterator h2Content = ++body->getChildren().begin();
+			h2Content = ++h2Content;
+			xml::Element * h2El = static_cast<xml::Element*>(*h2Content);
+			if ((h2El != NULL) && (h2El->getName() == "h2")) {
+				cout << *documentHTML << endl;
+				cout << "--------- Ce document est valide s'il contient des noeuds générés par d'autres templates que celui de la racine. Il doit donc contenir ici des noeuds de type <h2>, <p>, ..." << endl;
+				validation = validationHumaineContenu();
+
+			}
+		} catch(exception e){}		
 		delete dtdXSL;
 		delete documentXSL;
 		delete documentXML;
 		delete documentHTML;
 
-		return true;
+		return validation;
 	}
 };
 
 struct HTMLGenerationTest_Attribute : public TestCase
 {
-	HTMLGenerationTest_Attribute() : TestCase("<fr> Vérifier le HTML généré, avec un XSL contenant des noeuds attributes") {}
+	HTMLGenerationTest_Attribute() : TestCase("<fr> Vérifier le HTML généré, avec un XSL contenant des noeuds attribute") {}
 	bool operator()()
 	{
 		dtd::Document* dtdXSL = NULL;
@@ -299,22 +336,70 @@ struct HTMLGenerationTest_Attribute : public TestCase
 			documentXML = parseXML("./tests/testComplex.xml");
 			documentHTML = xslProcessor.generateHtmlFile(documentXML);
 		}catch(string s){
+			cout << s << endl;
 			delete dtdXSL;
 			delete documentXSL;
 			delete documentXML;
 			delete documentHTML;
 			return false;
 		}
-		// Validation Humaine
-		cout << documentHTML << endl;
+		bool validation = false;
+		try {
+			xml::Element * root = static_cast<xml::Element*>(documentHTML->getRoot());
+			if (root == NULL) return false;
+			xml::Element * body = static_cast<xml::Element*>( *(++root->getChildren().begin()) );
+			if (body == NULL) return false;
+			xml::EmptyElement * img = static_cast<xml::EmptyElement*>( *(++body->getChildren().begin()) );
+			if ((img != NULL) && (img->getAttributeValue("src") == "http://google.fr/img") && (img->getAttributeValue("title") == "Test !")) {
+				validation = true;
+
+			}
+		} catch(exception e){}		
 		delete dtdXSL;
 		delete documentXSL;
 		delete documentXML;
 		delete documentHTML;
 
+		return validation;
+
+	}
+};
+
+
+struct HTMLGenerationTest_ValueOf : public TestCase
+{
+	HTMLGenerationTest_ValueOf() : TestCase("<fr> Vérifier le HTML généré, avec un XSL contenant des noeuds value-of") {}
+	bool operator()()
+	{
+		dtd::Document* dtdXSL = NULL;
+		xml::Document* documentXSL = NULL;
+		xml::Document* documentXML = NULL;
+		xml::Document* documentHTML = NULL;
+		try{
+			dtdXSL = parseDTD("./tests/xsl.dtd");
+			xsl::XSLProcessor xslProcessor = XSLProcessor();
+			xslProcessor.setXslDTD(dtdXSL);
+			documentXSL = parseXML("./tests/testValueOf.xsl");
+			xslProcessor.processXslFile(documentXSL);
+			documentXML = parseXML("./tests/testComplex.xml");
+			documentHTML = xslProcessor.generateHtmlFile(documentXML);
+		}catch(string s){
+			delete documentXSL;
+			delete documentXML;
+			delete documentHTML;
+			return false;
+		}
+		// Validation Humaine
+		cout << "--------- Ce document est valide s'il contient du HTML complexe, dont le contenu couvre l'intégralité du XML donné." << endl;
+		cout << *documentHTML << endl;
+		delete documentXSL;
+		delete documentXML;
+		delete documentHTML;
 		return true;
 	}
 };
+
+
 
 struct HTMLGenerationTest_Complex : public TestCase
 {
@@ -334,20 +419,23 @@ struct HTMLGenerationTest_Complex : public TestCase
 			documentXML = parseXML("./tests/testComplex.xml");
 			documentHTML = xslProcessor.generateHtmlFile(documentXML);
 		}catch(string s){
+			cout << s << endl;
 			delete documentXSL;
 			delete documentXML;
 			delete documentHTML;
 			return false;
 		}
 		// Validation Humaine
-		cout << documentHTML << endl;
+		bool ok = false;
+		cout << "--------- Ce document est valide s'il contient du HTML complexe, dont le contenu couvre l'intégralité du XML donné." << endl;
+		cout << *documentHTML << endl;
+		ok = validationHumaineContenu();
 		delete documentXSL;
 		delete documentXML;
 		delete documentHTML;
-		return true;
+		return ok;
 	}
 };
-
 
 struct HTMLGenerationTest_NoRoot : public TestCase
 {
@@ -372,22 +460,19 @@ struct HTMLGenerationTest_NoRoot : public TestCase
 			delete documentHTML;
 			return false;
 		}
+		bool ok = false;
 		// On test si root == "null"
 		xml::Element* elRoot = dynamic_cast<xml::Element*>(documentHTML->getRoot());
-		if ((elRoot == NULL)  || (elRoot->getName() != "null")) {
-			delete documentXSL;
-			delete documentXSL;
-			delete documentXML;
-			delete documentHTML;
-			return false;
+		if ((elRoot != NULL)  || (elRoot->getName() == "null")) {
+	  		cout << *documentHTML << endl;
+			cout << "--------- Ce document est valide s'il contient une racine de type <null>, contenant les éléments fils." << endl;
+			ok = validationHumaineContenu();
 		}
-		// Validation Humaine
-		cout << documentHTML << endl;
-		delete documentXSL;
+
 		delete documentXSL;
 		delete documentXML;
 		delete documentHTML;
-		return true;
+		return ok;
 	}
 };
 
@@ -411,13 +496,15 @@ int main(int argc, char** argv)
 
 	suite.add(new HTMLGenerationTest_Simple);
 
-	suite.add(new HTMLGenerationTest_Complex);
-
 	suite.add(new HTMLGenerationTest_ApplyTemplates);
 
 	suite.add(new HTMLGenerationTest_Attribute);
 
+	suite.add(new HTMLGenerationTest_ValueOf);
+
 	suite.add(new HTMLGenerationTest_NoRoot);
+
+	suite.add(new HTMLGenerationTest_Complex);
 	
 	suite.launch();
 	

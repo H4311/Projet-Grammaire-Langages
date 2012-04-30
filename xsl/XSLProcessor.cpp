@@ -134,17 +134,24 @@ list<xml::Content*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode
 		list<xml::Content*> xslNodeChildren = xslNode->getChildren();
 		for(list<xml::Content*>::const_iterator itXSL = xslNodeChildren.begin(); itXSL != xslNodeChildren.end(); itXSL++) {
 			xml::Content* htmlChild;
-			xml::Element* itXSLEle = dynamic_cast<xml::Element*>(*itXSL);
-			if (itXSLEle != NULL) { // If it's an element 
-				
-				if (itXSLEle->getNamespace() != "xsl") { // If it's HTML :
-					htmlChild = new xml::Element();
-					((xml::Element*)htmlChild)->setName(ElementName(itXSLEle->getNamespace(), itXSLEle->getName()));
-					((xml::Element*)htmlChild)->setAttList(itXSLEle->getAttList());
-					((xml::Element*)htmlChild)->appendChildren(generateHtmlElement(itXSLEle, xmlNode, ((xml::Element*)htmlChild)));
+			xml::EmptyElement* itXSLEmp = dynamic_cast<xml::EmptyElement*>(*itXSL);
+			if (itXSLEmp != NULL) { // If it's an element 
+				if (itXSLEmp->getNamespace() != "xsl") { // If it's HTML :
+					xml::Element* itXSLEle = dynamic_cast<xml::Element*>(*itXSL);
+					if (itXSLEle == NULL) {  // If it's an empty element 
+						htmlChild = new xml::EmptyElement();
+						((xml::EmptyElement*)htmlChild)->setName(ElementName(itXSLEmp->getNamespace(), itXSLEmp->getName()));
+						((xml::EmptyElement*)htmlChild)->setAttList(itXSLEmp->getAttList());
+					}
+					else {
+						htmlChild = new xml::Element();
+						((xml::Element*)htmlChild)->setName(ElementName(itXSLEle->getNamespace(), itXSLEle->getName()));
+						((xml::Element*)htmlChild)->setAttList(itXSLEle->getAttList());
+						((xml::Element*)htmlChild)->appendChildren(generateHtmlElement(itXSLEle, xmlNode, ((xml::Element*)htmlChild)));
+					}
+					htmlNodeChildren.push_back(htmlChild);
 				}
-				else if (itXSLEle->getName() == "apply-templates") {
-					htmlChild = new xml::Element();
+				else if (itXSLEmp->getName() == "apply-templates") {
 					// For each child of the current XML node, we try to apply another template :
 					xml::Element* xmlEle = dynamic_cast<xml::Element*>(xmlNode);
 					if (xmlEle != NULL) { // If it's an element 
@@ -154,53 +161,51 @@ list<xml::Content*> xsl::XSLProcessor::generateHtmlElement(xml::Element* xslNode
 							if (itXMLEmp != NULL) { // If it's an empty element or element, we try to find a template to apply :
 								xslNodeChild = findTemplate(itXMLEmp->getName());
 							}
-							((xml::Element*)htmlChild)->appendChildren(generateHtmlElement(xslNodeChild, *itXML, ((xml::Element*)htmlChild))); // recursivity
+							list<xml::Content*> applyChildren = generateHtmlElement(xslNodeChild, *itXML, ((xml::Element*)htmlChild));
+							htmlNodeChildren.splice(htmlNodeChildren.end(), applyChildren); // recursivity
 						}
 					}
 				}
-				else if (itXSLEle->getName() == "value-of") {
+				else if (itXSLEmp->getName() == "value-of") {
 					// We'd like to get the value of an XPATH value :
 					xml::EmptyElement *elem = dynamic_cast<xml::EmptyElement*>(xmlNode);
 					if(elem != NULL) {
-						string select = itXSLEle->getAttributeValue("select");
+						string select = itXSLEmp->getAttributeValue("select");
 						string xPathResult = xpath::find(elem, select);
 						
 						// Create the data content that contains the xpath result
 						htmlChild = new xml::Data(xPathResult);
 					}
+					htmlNodeChildren.push_back(htmlChild);
 				}
-				else if (itXSLEle->getName() == "attribute") {
-					// Processing the data inside this XSL element :
-					list<xml::Content*> contentChildren = generateHtmlElement(itXSLEle, xmlNode, htmlNode);
-					// Getting its textual value :
-					string data;
-					for(list<xml::Content*>::const_iterator itHTML = contentChildren.begin(); itHTML != contentChildren.end(); itHTML++) {
-						xml::Data* htmlData = dynamic_cast<xml::Data*>(*itHTML);
-						if (htmlData != NULL) {
-							data += htmlData->getData();
+				else if (itXSLEmp->getName() == "attribute") {
+					xml::Element* itXSLEle = dynamic_cast<xml::Element*>(*itXSL);
+					if (itXSLEle != NULL) {  // If it's an empty element 
+						// Processing the data inside this XSL element :
+						list<xml::Content*> contentChildren = generateHtmlElement(itXSLEle, xmlNode, htmlNode);
+						// Getting its textual value :
+						string data;
+						for(list<xml::Content*>::const_iterator itHTML = contentChildren.begin(); itHTML != contentChildren.end(); itHTML++) {
+							xml::Data* htmlData = dynamic_cast<xml::Data*>(*itHTML);
+							if (htmlData != NULL) {
+								data += htmlData->getData();
+							}
+							delete *itHTML;
 						}
-						delete *itHTML;
+						// Adding it as an attribute into the current HTML node :
+						htmlNode->addAttribute(Attribut(itXSLEle->getAttributeValue("name"), data));
 					}
-					// Adding it as an attribute into the current HTML node :
-					htmlNode->addAttribute(Attribut(itXSLEle->getAttributeValue("name"), data));
 				}					
 			}
 			else {
-				xml::EmptyElement* itXSLEmp = dynamic_cast<xml::EmptyElement*>(*itXSL);
-				if (itXSLEmp != NULL) {  // If it's an empty element 
-					htmlChild = new xml::EmptyElement();
-					((xml::EmptyElement*)htmlChild)->setName(ElementName(itXSLEle->getNamespace(), itXSLEle->getName()));
-					((xml::EmptyElement*)htmlChild)->setAttList(itXSLEmp->getAttList());
+				xml::Data* itXSLDat = dynamic_cast<xml::Data*>(*itXSL);
+				if (itXSLDat != NULL) {  // If it's an empty element 
+					htmlChild = new xml::Data(itXSLDat->getData());
 				}
-				else {
-					xml::Data* itXSLDat = dynamic_cast<xml::Data*>(*itXSL);
-					if (itXSLDat != NULL) {  // If it's an empty element 
-						htmlChild = new xml::Data(itXSLDat->getData());
-					}
-				}
+				htmlNodeChildren.push_back(htmlChild);
 			}
 
-			htmlNodeChildren.push_back(htmlChild);
+			
 		}
 	}
 	else { // If we didn't find a template, we only past the inner data, try to apply other templates to the elements children

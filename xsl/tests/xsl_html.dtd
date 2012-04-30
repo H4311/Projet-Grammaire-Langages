@@ -1,0 +1,48 @@
+<!ELEMENT xsl:value-of EMPTY>
+<!ATTLIST xsl:value-of select CDATA #REQUIRED>
+
+<!ELEMENT xsl:stylesheet ANY >
+<!ATTLIST xsl:stylesheet
+	version CDATA #IMPLIED
+	xmlns:xsl CDATA #IMPLIED>
+
+<!ELEMENT xsl:template (PCDATA | apply-template | value-of)* >
+<!ATTLIST xsl:template match CDATA #REQUIRED>
+
+<!ELEMENT xsl:attribute (PCDATA)>
+<!ATTLIST xsl:attribute
+	name CDATA #REQUIRED
+	test CDATA #IMPLIED>
+
+<!ELEMENT xsl:apply-template EMPTY>
+
+<!ELEMENT html (head, body)>
+<!ELEMENT body ( p | img | h1 | h2 | h3 | h4 | a | small | div )+>
+<!ATTLIST body
+	class CDATA #IMPLIED
+	style CDATA #IMPLIED
+>
+<!ELEMENT head ( meta | link | script | title )+>
+<!ATTLIST head
+	dir CDATA #IMPLIED
+	lang CDATA #IMPLIED
+	xml:lang CDATA #IMPLIED
+>
+<!ATTLIST meta
+	charset CDATA #IMPLIED
+	content CDATA #IMPLIED
+>
+<!ATTLIST script
+	type CDATA #REQUIRED
+	href CDATA #IMPLIED
+>
+<!ATTLIST link
+	rel CDATA #IMPLIED
+	type CDATA #IMPLIED
+	href CDATA #IMPLIED
+>
+<!ATTLIST a data-dismiss CDATA #IMPLIED>
+<!ATTLIST img
+	src CDATA #IMPLIED
+	title CDATA #IMPLIED
+>

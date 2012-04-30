@@ -9,7 +9,7 @@
 <!ELEMENT xsl:template ANY >
 <!ATTLIST xsl:template match CDATA #REQUIRED>
 
-<!ELEMENT xsl:attribute (PCDATA)>
+<!ELEMENT xsl:attribute ANY>
 <!ATTLIST xsl:attribute
 	name CDATA #REQUIRED
 	xmlns:xsl CDATA #IMPLIED>

@@ -13,15 +13,11 @@
 			<body>
 				<div class="page-header">
 					<h1>
-						Titre - 
-						<small>Coucou</small>
+						<xsl:value-of select="./titre"/> - 
+						<small><xsl:value-of select="./auteur/prenom"/>&#32; <xsl:value-of select="./auteur/nom"/></small>
 					</h1>
 				</div>
-				<img>
-					<xsl:attribute name="src">http://google.fr/img</xsl:attribute>
-					<xsl:attribute name="title">Test !</xsl:attribute>
-				</img>
-				<p>Ce document est valide si l'element img ci-dessus contient deux attributs, src et title, avec une valeur donnee.</p>
+				<p> Blablabla </p>
 			</body>
 		</html>
 	</xsl:template>

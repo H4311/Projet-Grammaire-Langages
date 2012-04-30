@@ -6,25 +6,17 @@
   <nom>Nino</nom>
   <prenom>Silverio</prenom>
  </auteur>
- <resume>Ceci est un extrait du livre "Réaliser un compilateur: 
-	les outils Lex et Yacc" de Nino Silverio</resume>
+ <resume>Ceci est un extrait du livre "Réaliser un compilateur: les outils Lex et Yacc" de Nino Silverio</resume>
  <chapitre titre="Introduction: concepts de base">
    <section titre="Fonctions et structure d'un compilateur">
-    <p>Tout programme rédigé dans un langage de programmation de haut 
-	niveau tel que Pascal ou C ne peut être exécuté par un ordinateur 
-	que s'il est traduit en instructions exécutables par l'ordinateur, 
-	généralement des instructions en langage machine. L'ordinateur qui 
-	doit exécuter le programme ainsi traduit est appelé machine cible.
-	Un ordinateur est représenté sur l'image ci dessous : 
+    <p>Tout programme rédigé dans un langage de programmation de haut niveau tel que Pascal ou C ne peut être exécuté par un ordinateur que s'il est traduit en instructions exécutables par l'ordinateur, généralement des instructions en langage machine. L'ordinateur qui doit exécuter le programme ainsi traduit est appelé machine cible.Un ordinateur est représenté sur l'image ci dessous : 
 	<img src="ordinateur.png" title="Image"/>
 	Voilà.
 	</p>
    </section>
 
    <section titre="Réalisation d'un compilateur">
-    <p>Comme l'écriture d'un compilateur est une tâche fort complexe, 
-	le programmateur a tout intérêt à travailler en utilisant un langage 
-	de programmation de haut niveau.</p>
+    <p>Comme l'écriture d'un compilateur est une tâche fort complexe, le programmateur a tout intérêt à travailler en utilisant un langage de programmation de haut niveau.</p>
    </section>
  </chapitre>
 </rapport>
