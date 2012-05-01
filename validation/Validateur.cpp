@@ -33,7 +33,6 @@ bool Validateur::validationNode(xml::Content* content, std::list<dtd::Element*> 
 		std::string nomBalise = elem->getFullName();
 		
 		//Valider les attributs
-		//TODO: pour l'instant on ne valide que le nom de l'attribut
 		//On récupère la liste des attributs de la dtd
 		std::list<dtd::AttributeList*>::iterator itAttList;
 		std::list<dtd::Attribute*> attributes;

@@ -19,9 +19,4 @@ void xml::Content::printTabs(ostream& stream, int depth)
 	{
 		stream << "\t";	
 	}
-	/*// TODO voir si ce n'est pas possible avec fill et width.
-	stream.flags(ios::right);
-	stream.fill('\t');
-	stream.width(depth);
-	*/
 }

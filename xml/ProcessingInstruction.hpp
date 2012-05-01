@@ -26,9 +26,10 @@ namespace xml {
 		std::string endCharacter();
 
 	public:
-		// TODO
 		/**
-		@todo Rajouter des méthodes.
+		@brief Constructeur par défaut.
+
+		@param _name Nom de l'instruction de traitement.
 		*/
 		ProcessingInstruction(ElementName _name) 
 		{
