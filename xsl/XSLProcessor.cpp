@@ -7,8 +7,6 @@
 * @author Daniel BAUDRY & Benjamin Bill PLANCHE (Aldream)
 */
 
-#include <iostream>
-
 #include "XSLProcessor.hpp"
 
 #include "../xml/basics.h"
@@ -77,9 +75,13 @@ void xsl::XSLProcessor::processXslFile(xml::Document* newXslDoc) throw (string) 
 	}	
 	
 	// --------- Building a full path, by prepending the path to the folder of the XSL file to the path to the HTML DTD file (without this, if the program is running in a different folder than the XSL file, it won't be able to find the HTML DTD with the relative path of the XSL) 
-	string xslFolder = xslDoc->getFilePath().substr(0,str.find_last_of("/\\"));
-	string fullHtmlDtdPath = xslFolder + "/" + attrXMLNS;
-	
+	string xslPath = newXslDoc->getFilePath();
+	string fullHtmlDtdPath = attrXMLNS;
+	if (attrXMLNS[0] != '/') {
+		string xslFolder = xslPath.substr(0, xslPath.find_last_of("/\\"));
+		fullHtmlDtdPath = xslFolder + "/" + attrXMLNS;
+	}
+	cout << fullHtmlDtdPath;	
 	// --------- Opening, validating ant getting the structure of the HTML DTD file :
 	dtd::Document * htmlDTDdoc = parseDTD(fullHtmlDtdPath.c_str());
 	if (htmlDTDdoc == NULL) {
