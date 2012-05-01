@@ -188,7 +188,7 @@ struct TestParsingSansErreur : public TestCase
 
 struct TestParsingAvecErreur : public TestCase
 {
-	TestParsingAvecErreur() : TestCase("Vérifie que le document XML n'est pas syntaxiquement valide (commentaires dans une balise).") {}
+	TestParsingAvecErreur() : TestCase("Vérifie que le document XML n'est pas syntaxiquement valide (balise non fermée).") {}
 	bool operator()()
 	{
 		Document *dXML = parseXML("tests/rap2.xml");
