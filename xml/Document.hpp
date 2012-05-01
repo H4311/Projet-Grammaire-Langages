@@ -97,7 +97,7 @@ namespace xml {
 			/**
 			* Constructeur par défaut de l'objet, initialise les variables aux valeurs par défaut.
 			*/
-			Document() : doctype(""), xmlProlog(0), root(0), filePath() { /* empty */ }
+			Document() : doctype(""), xmlProlog(0), root(0) { /* empty */ }
 	
 			/**
 			* Affiche le contenu du document (ie l'ensemble de son arboresence) dans le flux passé.
