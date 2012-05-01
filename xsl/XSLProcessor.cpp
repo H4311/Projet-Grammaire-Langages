@@ -80,8 +80,7 @@ void xsl::XSLProcessor::processXslFile(xml::Document* newXslDoc) throw (string) 
 	if (attrXMLNS[0] != '/') {
 		string xslFolder = xslPath.substr(0, xslPath.find_last_of("/\\"));
 		fullHtmlDtdPath = xslFolder + "/" + attrXMLNS;
-	}
-	cout << fullHtmlDtdPath;	
+	}	
 	// --------- Opening, validating ant getting the structure of the HTML DTD file :
 	dtd::Document * htmlDTDdoc = parseDTD(fullHtmlDtdPath.c_str());
 	if (htmlDTDdoc == NULL) {

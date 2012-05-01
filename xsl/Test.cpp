@@ -101,7 +101,6 @@ struct XSLProcessTest_InvalidHTMLDTD : public TestCase
 		
 		docXml = parseXML("./tests/testHtmlDtdInvalid.xsl");
 		docDtd = parseDTD("./tests/xsl.dtd");
-		docXml->setFilePath("./tests/testHtmlDtdInvalid.xsl");
 		try {
 			proc.setXslDTD(docDtd);
 			proc.processXslFile(docXml);
