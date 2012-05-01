@@ -49,7 +49,7 @@ Nous partons d'un constat simple : les déclarations de contenus DTD ressemblent
 \end{itemize}
 
 \paragraph{Regex créées par les éléments dtd}
-Ces fonctions servent à créer les regex des différents éléments dtd qui servent à la validation par la suite. Tous les enfants de dtd::Children dans la hiérarchie de classes dtd possèdent une version différente. Les deux premières méthodes ne prennent pas d'arguments et renvoient une chaîne correspondant à la regex générée. Les deux dernières méthodes renseignent la méthode template dtd:ChoiceSeq:regex.
+Ces fonctions servent à créer les regex des différents éléments dtd qui servent à la validation par la suite. Tous les enfants de dtd::Children dans la hiérarchie de classes dtd possèdent une version différente. Les premières méthodes ne prennent pas d'arguments et renvoient une chaîne correspondant à la regex générée. Les deux dernières méthodes renseignent la méthode template dtd:ChoiceSeq:regex.
 
 \begin{itemize}
 \item[dtd:Name:regex] :
@@ -77,6 +77,14 @@ Ces fonctions servent à créer les regex des différents éléments dtd qui ser
 	FinSi
 	retourner regex
 \end{verbatimtab}
+\item[dtd:Any:regex] :
+\begin{verbatim}
+	retourner ".*"
+\end{verbatim}
+\item[dtd:Empty:regex] :
+\begin{verbatim}
+	retourner ""
+\end{verbatim}
 \item[dtd:Choice:getRegexSep] :
 \begin{verbatim}
 	retourner '|'
