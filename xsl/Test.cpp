@@ -71,8 +71,8 @@ struct XSLProcessTest_NoHTMLDTD : public TestCase
 		xml::Document* document = NULL;
 		dtd::Document* docDtd;
 		
-		docDtd = parseDTD("tests/html.dtd");
-		document = parseXML("tests/testNoHTMLDTD.xsl");
+		docDtd = parseDTD("./tests/html.dtd");
+		document = parseXML("./tests/testNoHTMLDTD.xsl");
 		XSLProcessor xslProcessor = XSLProcessor();
 		try{
 			xslProcessor.setXslDTD(docDtd);
@@ -101,7 +101,7 @@ struct XSLProcessTest_InvalidHTMLDTD : public TestCase
 		
 		docXml = parseXML("./tests/testHtmlDtdInvalid.xsl");
 		docDtd = parseDTD("./tests/xsl.dtd");
-		
+		docXml->setFilePath("./tests/testHtmlDtdInvalid.xsl");
 		try {
 			proc.setXslDTD(docDtd);
 			proc.processXslFile(docXml);

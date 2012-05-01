@@ -1,6 +1,5 @@
 # ifndef __DOCUMENT_H__
 # define __DOCUMENT_H__
-
 # include "ProcessingInstruction.hpp"
 # include "Content.hpp"
 # include "Comment.hpp"
@@ -26,7 +25,9 @@ namespace xml {
 		private:
 			std::string rootName;
 			std::string doctype;
-	
+
+          		std::string filePath;
+          		
 			ProcessingInstruction *xmlProlog;
 			Content *root;
 			std::list<Comment*> comments;
@@ -47,6 +48,15 @@ namespace xml {
 			{ 
 				rootName = _d.first;
 				doctype = _d.second; 
+			}
+			
+			/**
+			* Mutateur : Définit le chemin vers le fichier à l'origine de ce document.
+			* @param _d Chemin vers le fichier utilisé.
+			*/
+			void setFilePath(const char* _d) 
+			{ 
+				filePath = std::string(_d); 
 			}
 
 			/**
@@ -72,6 +82,12 @@ namespace xml {
 			* @returns L'élément racine.
 			*/
 			Content* getRoot();
+			
+			/**
+			* Accesseur : renvoie le chemin vers le fichier à l'origine de ce document.
+			* @returns L'élément racine.
+			*/
+			std::string getFilePath();
 	
 			/**
 			* Destructeur de l'objet.
@@ -81,7 +97,7 @@ namespace xml {
 			/**
 			* Constructeur par défaut de l'objet, initialise les variables aux valeurs par défaut.
 			*/
-			Document() : doctype(""), xmlProlog(0), root(0) { /* empty */ }
+			Document() : doctype(""), xmlProlog(0), root(0), filePath() { /* empty */ }
 	
 			/**
 			* Affiche le contenu du document (ie l'ensemble de son arboresence) dans le flux passé.
