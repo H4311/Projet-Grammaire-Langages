@@ -266,6 +266,9 @@ xml::Document* parseXML(const char* file)
 	fprintf(stderr, "Parse ended with %d error(s)\n", err);
 	document = NULL;
     }
+    else {
+	document->setFilePath(file);
+    }
     fclose(xmlin);
     xmllex_destroy();
   }
