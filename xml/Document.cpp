@@ -40,6 +40,10 @@ xml::Content* xml::Document::getRoot()
 	return root;
 }
 
+string xml::Document::getFilePath() {
+	return filePath;
+}
+
 ostream& xml::Document::toString(ostream& stream)
 {
 	if (!doctype.empty())
