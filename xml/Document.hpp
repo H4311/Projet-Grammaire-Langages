@@ -26,7 +26,9 @@ namespace xml {
 		private:
 			std::string rootName;
 			std::string doctype;
-	
+
+          		std::string filePath;
+          		
 			ProcessingInstruction *xmlProlog;
 			Content *root;
 			std::list<Comment*> comments;
@@ -47,6 +49,15 @@ namespace xml {
 			{ 
 				rootName = _d.first;
 				doctype = _d.second; 
+			}
+			
+			/**
+			* Mutateur : Définit le chemin vers le fichier à l'origine de ce document.
+			* @param _d Chemin vers le fichier utilisé.
+			*/
+			void setFilePath(std::string _d) 
+			{ 
+				filePath = _d;
 			}
 
 			/**
@@ -72,6 +83,12 @@ namespace xml {
 			* @returns L'élément racine.
 			*/
 			Content* getRoot();
+			
+			/**
+			* Accesseur : renvoie le chemin vers le fichier à l'origine de ce document.
+			* @returns L'élément racine.
+			*/
+			std::string getFilePath() { return filePath; };
 	
 			/**
 			* Destructeur de l'objet.
