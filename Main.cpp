@@ -37,6 +37,7 @@ int main(int ac, char * av[])
 
 		bool atLeastOneOption = false;
 		bool hasXml = false, hasDtd = false, hasXsl = false, hasXslDtd = false;
+		bool xslProcessorOwnsXslDtd = false;
 
 		xml::Document* xmlDoc = NULL;
 		if (vm.count("xml")) {
@@ -100,6 +101,7 @@ int main(int ac, char * av[])
 			else if (hasXsl && hasXslDtd) {
 				try{
 					xslProcessor.setXslDTD(xslDtdDoc);
+					xslProcessorOwnsXslDtd = true;
 					xslProcessor.processXslFile(xslDoc);
 					cout << "The XSL file is conform to the XSL-DTD file." << endl;
 					xslValidated = true;
@@ -126,6 +128,7 @@ int main(int ac, char * av[])
 				else {
 					try{
 						xslProcessor.setXslDTD(xslDtdDoc);
+						xslProcessorOwnsXslDtd = true;
 						xslProcessor.processXslFile(xslDoc);
 						xml::Document* documentHTML = xslProcessor.generateHtmlFile(xmlDoc);
 						cout << *documentHTML << endl;
@@ -146,7 +149,7 @@ int main(int ac, char * av[])
 		if (hasXml) delete xmlDoc;
 		if (hasDtd) delete dtdDoc;
 		if (hasXsl) delete xslDoc;
-		if (hasXslDtd) delete xslDtdDoc;
+		if (hasXslDtd && !xslProcessorOwnsXslDtd)  delete xslDtdDoc;
 
 		if (vm.count("help") || !atLeastOneOption) {
 			cout << desc << endl;

@@ -56,6 +56,8 @@ namespace xsl {
 			 * @brief Setter - XSL DTD
 			 * 
 			 * Set the XSL DTD attribute, with an already-processed (and validated) DTD structure.
+			 * The document is now the property of the XSLprocessor, so it will be destroyed with
+			 * the processor (no need to explicitly call delete on the dtd::Document* object).
 			 * 
 			 * @param newXslDTDdoc New DTD structure.
 			 */

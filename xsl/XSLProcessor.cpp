@@ -43,7 +43,13 @@ xsl::XSLProcessor::XSLProcessor() {
 
 }
 
-xsl::XSLProcessor::~XSLProcessor() {}
+xsl::XSLProcessor::~XSLProcessor() {
+	if(xslDTDdoc)
+	{
+		delete xslDTDdoc;
+		xslDTDdoc = NULL;
+	}
+}
 
 void xsl::XSLProcessor::setXslDTD(dtd::Document* newXslDTDdoc) {
 	delete xslDTDdoc;
@@ -81,12 +87,14 @@ void xsl::XSLProcessor::processXslFile(xml::Document* newXslDoc) throw (string) 
 	list<dtd::Declaration*>* htmlDeclarationsCopy =  new list<dtd::Declaration*>(*htmlDTDdoc->getDeclarations()); // We keep a copy of the original HTML declarations list.
 	list<dtd::Declaration*>* htmlDeclarations =  htmlDTDdoc->getDeclarations();
 	list<dtd::Declaration*>* xslDeclarations =  xslDTDdoc->getDeclarations();
-	for( list<dtd::Declaration*>::iterator it = xslDeclarations->begin();  it != xslDeclarations->end(); it++) {
+	for( list<dtd::Declaration*>::iterator it = xslDeclarations->begin();  it != xslDeclarations->end(); ++it) {
 		htmlDeclarations->push_back(*it);
 	}
 
 	// --- Semantic analysis :
 	if (!Validateur::validationDocument(*htmlDTDdoc, *newXslDoc)) {
+		htmlDTDdoc->setDeclarations(htmlDeclarationsCopy);
+		delete htmlDTDdoc;
 		throw(ERROR_INVALID_XSL_SEMANTIC);
 	}
 

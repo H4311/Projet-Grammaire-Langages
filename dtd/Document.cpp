@@ -13,16 +13,23 @@ namespace dtd {
 		: declarations(_declarations) {}
 	
 	Document::~Document() {
+		if (declarations == NULL)
+			return;
+
 		std::list<Declaration*>::iterator it;
-		for(it=declarations->begin(); it!=declarations->end(); it++) {
-			delete *it;
+		for(it=declarations->begin(); it!=declarations->end(); ++it) {
+			if (*it != NULL)
+			{
+				delete *it;
+				*it = NULL;
+			}
 		}
 		delete declarations;
 	}
 	
 	std::ostream& Document::put(std::ostream& out) {
 		std::list<Declaration*>::iterator it;
-		for(it=declarations->begin(); it!=declarations->end(); it++) {
+		for(it=declarations->begin(); it!=declarations->end(); ++it) {
 			out << *it << std::endl;
 		}
 		return out;
@@ -33,8 +40,7 @@ namespace dtd {
 	}
 
 	void Document::setDeclarations(std::list<Declaration*>* dec) {
-		// delete declarations;
+		delete declarations;
 		declarations = dec;
 	}
-
 }

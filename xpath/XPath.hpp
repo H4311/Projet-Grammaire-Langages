@@ -19,8 +19,6 @@ namespace xpath {
 	/**
 	 * @brief XPath finder
 	 * 
-	 * blabla
-	 *
 	 * @param currentElement current xml Element
 	 * @param search XPATH search string
 	 */

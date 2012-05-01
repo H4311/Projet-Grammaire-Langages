@@ -37,7 +37,6 @@ bool validationHumaineContenu() {
 	     		return false;
 		}
 	   	cout << "Réponse invalide, veuillez recommencer svp." << endl;
-		
 	}
 }
 
@@ -80,14 +79,12 @@ struct XSLProcessTest_NoHTMLDTD : public TestCase
 			xslProcessor.processXslFile(document);
 		}catch(string s){
 			delete document;
-			delete docDtd;
 			if( s == XSLProcessor::ERROR_NO_XMLNS){
 				return true;
 			}else{
 				return false;
 			}
 		}
-		delete docDtd;
 		delete document;
 		return false;
 	}
@@ -110,12 +107,10 @@ struct XSLProcessTest_InvalidHTMLDTD : public TestCase
 			proc.processXslFile(docXml);
 		} catch(std::string s) {
 			if (s == XSLProcessor::ERROR_INVALID_HTML_DTD) {
-				delete docDtd;
 				delete docXml;
 				return true;
 			}
 		}
-		delete docDtd;
 		delete docXml;
 		return false;
 	}
@@ -133,19 +128,16 @@ struct XSLProcessTest_InvalidSemanticXSL : public TestCase
 		documentDTD = parseDTD("./tests/xsl.dtd");
 		
 		try{
-			
 			XSLProcessor xslProcessor = XSLProcessor();
 			xslProcessor.setXslDTD(documentDTD);
 			xslProcessor.processXslFile(documentXSL);
-		}catch(string s) {
+		} catch(string s) {
 			if( s == XSLProcessor::ERROR_INVALID_XSL_SEMANTIC ){
 				delete documentXSL;
-				delete documentDTD;
 				return true;
 			}
 		}
 		delete documentXSL;
-		delete documentDTD;
 		return false;
 	}
 	
@@ -170,12 +162,10 @@ struct XSLProcessTest_InvalidSemanticHTML : public TestCase
 		
 			if( s == XSLProcessor::ERROR_INVALID_XSL_SEMANTIC ){
 				delete documentXSL;
-				delete documentDTD;
 				return true;
 			}
 		}
 		delete documentXSL;
-		delete documentDTD;
 		return false;
 	}
 };
@@ -198,13 +188,10 @@ struct XSLProcessTest_OK : public TestCase
 		} catch(string s) {
 			cout << s << endl;
 			delete docXml;
-			delete docDtd;
 			return false;
 		}
 		
 		delete docXml;
-		delete docDtd;
-
 		return true;
 	}
 };
@@ -249,7 +236,6 @@ struct HTMLGenerationTest_Simple : public TestCase
 			documentHTML = xslProcessor.generateHtmlFile(documentXML);
 		}catch(string s){
 			cout << s << endl;
-			delete dtdXSL;
 			delete documentXSL;
 			delete documentXML;
 			delete documentHTML;
@@ -259,7 +245,6 @@ struct HTMLGenerationTest_Simple : public TestCase
 		cout << *documentHTML << endl;
 		cout << "--------- Ce document est valide s'il contient du HTML simple avec du contenu sans rapport avec le XML (\"Hello World !\", ...)" << endl;
 		bool ok = validationHumaineContenu();
-		delete dtdXSL;
 		delete documentXSL;
 		delete documentXML;
 		delete documentHTML;
@@ -287,7 +272,6 @@ struct HTMLGenerationTest_ApplyTemplates : public TestCase
 			documentHTML = xslProcessor.generateHtmlFile(documentXML);
 		}catch(string s){
 			cout << s << endl;
-			delete dtdXSL;
 			delete documentXSL;
 			delete documentXML;
 			delete documentHTML;
@@ -309,7 +293,6 @@ struct HTMLGenerationTest_ApplyTemplates : public TestCase
 
 			}
 		} catch(exception e){}		
-		delete dtdXSL;
 		delete documentXSL;
 		delete documentXML;
 		delete documentHTML;
@@ -337,7 +320,6 @@ struct HTMLGenerationTest_Attribute : public TestCase
 			documentHTML = xslProcessor.generateHtmlFile(documentXML);
 		}catch(string s){
 			cout << s << endl;
-			delete dtdXSL;
 			delete documentXSL;
 			delete documentXML;
 			delete documentHTML;
@@ -355,7 +337,6 @@ struct HTMLGenerationTest_Attribute : public TestCase
 
 			}
 		} catch(exception e){}		
-		delete dtdXSL;
 		delete documentXSL;
 		delete documentXML;
 		delete documentHTML;
@@ -507,8 +488,5 @@ int main(int argc, char** argv)
 	suite.add(new HTMLGenerationTest_Complex);
 	
 	suite.launch();
-	
 }
-
-
 
