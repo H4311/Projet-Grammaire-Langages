@@ -44,7 +44,7 @@ const char* ERR_COMMENTAIRE = "Commentaire mal formé";
 %parse-param { xml::Document** doc } 
 
 %destructor { free($$); } <s>
-%destructor { delete $$; } <en> <c> <ee> <dt> <at> <p>
+%destructor { delete $$; } <en> <c> <ee> <dt> <at> <p> <al>
 %destructor 
 { 
 	list<xml::Comment*>::iterator it;
